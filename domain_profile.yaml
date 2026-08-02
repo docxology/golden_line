@@ -1,0 +1,33 @@
+domain: code_research
+display_name: Golden Line Evidence Instrument
+required_packages:
+  - pytest
+preferred_outputs:
+  - pdf
+  - html
+validation_gates:
+  - structural_invariants
+  - evidence_grounding
+  - artifact_chain
+  - render_validation
+  - publication_readiness
+figure_types:
+  - conceptual_diagram
+  - evidence_matrix
+  - decision_flow
+  - temporal_sweep
+  - distribution_summary
+citation_policy: official_or_scholarly
+source_policy: "Prefer project source, generated registries, tests, and scholarly sources; never infer truth from a directional status."
+review_gates:
+  - structural_invariants
+  - artifact_chain
+  - render_validation
+artifact_expectations:
+  - output/figures/figure_registry.json
+  - output/figures/golden_registry.json
+  - output/pdf/golden_line_combined.pdf
+  - output/reports/validation_report.json
+analogy_boundary:
+  allowed: "Use scholarship to situate the aspiration vocabulary and its limits."
+  forbidden: "Do not transfer a source's authority into a compliance or safety claim."

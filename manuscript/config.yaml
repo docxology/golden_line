@@ -1,0 +1,43 @@
+paper:
+  title: "Golden Line: Toward What Matters"
+  subtitle: "An Aspirational Thread for Long-Horizon Work"
+  version: "0.4.0"
+  date: "2026-07-18"
+  description: "A directional instrument for recording aspirations and movement toward them without turning aspiration into compliance."
+  cover:
+    image: "assets/golden-line-cover.png"
+
+authors:
+  - name: "Daniel Ari Friedman"
+    orcid: "0000-0001-6232-9096"
+    email: "daniel@activeinference.institute"
+    affiliation: "Active Inference Institute"
+
+publication:
+  doi: "10.5281/zenodo.21754238"
+  github_repository: "docxology/golden_line"
+  repository_url: "https://github.com/docxology/golden_line"
+
+render:
+  formats:
+    pdf: true
+    html: true
+    slides: false
+    docx: false
+    epub: false
+
+rendering:
+  cover_height_fraction: 0.66
+  # Figure plates are drawn on a 1600-unit-wide canvas and embedded at
+  # width=95%, so the printed size of every in-figure label is fixed by the
+  # width bound. A tighter height cap would bind first on the taller plates
+  # and shrink their text below the printed legibility floor; these fractions
+  # keep width binding for any canvas up to MAX_CANVAS_HEIGHT. Enforced by
+  # tests/test_figure_legibility.py.
+  figure_height_fraction: 0.86
+  front_matter_figure_height_fraction: 0.86
+
+metadata:
+  license: "CC-BY-4.0 (prose); MIT (code)"
+  status: "living document — versioned and revisable"
+  geometry: "left=0.33in,right=0.33in,top=0.58in,bottom=0.58in"

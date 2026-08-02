@@ -1,0 +1,42 @@
+# Example metadata shape for a standalone Golden Line copy.
+paper:
+  title: "Golden Line: Toward What Matters"
+  subtitle: "An Aspirational Thread for Long-Horizon Work"
+  version: "0.4.0"
+  date: ""
+  cover:
+    image: "assets/golden-line-cover.png"
+
+authors:
+  - name: "Your Name"
+    orcid: "0000-0000-0000-0000"
+    email: "your.email@example.org"
+    affiliation: "Your institution"
+
+publication:
+  github_repository: "your-org/your-golden-line-copy"
+  repository_url: "https://github.com/your-org/your-golden-line-copy"
+
+render:
+  formats:
+    pdf: true
+    html: true
+    slides: false
+    docx: false
+    epub: false
+
+rendering:
+  cover_height_fraction: 0.66
+  # Figure plates are drawn on a 1600-unit-wide canvas and embedded at
+  # width=95%, so the printed size of every in-figure label is fixed by the
+  # width bound. A tighter height cap would bind first on the taller plates and
+  # shrink their text below the printed legibility floor. Carry these two
+  # fractions into any standalone copy: tests/test_figure_legibility.py reads
+  # them, and a copy that drops them loses the print-legibility contract.
+  figure_height_fraction: 0.86
+  front_matter_figure_height_fraction: 0.86
+
+metadata:
+  license: "CC-BY-4.0 (prose); MIT (code)"
+  status: "living document — versioned and revisable"
+  geometry: "left=0.33in,right=0.33in,top=0.58in,bottom=0.58in"

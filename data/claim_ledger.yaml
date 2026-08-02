@@ -1,0 +1,174 @@
+# Implementation facts used to ground formal-method numbers in the manuscript.
+# These entries support reproducibility of the code description only; they do
+# not establish that an aspiration is true or universally valid.
+#
+# Every `kind: number` row is re-derived from its `source` by
+# tests/test_formalism_bindings.py; a row with no executable source may not be
+# added without also adding its derivation there.
+claims:
+  - id: registry_entry_count
+    kind: number
+    value: 9
+    source: src/golden_line/registry.py GOLDEN_ASPIRATIONS
+    source_tier: claim_ledger
+  - id: aspiration_field_count
+    kind: number
+    value: 6
+    source: src/golden_line/models.py Aspiration
+    source_tier: claim_ledger
+  - id: finding_field_count
+    kind: number
+    value: 12
+    source: src/golden_line/models.py HorizonFinding
+    source_tier: claim_ledger
+  - id: status_definition_count
+    kind: number
+    value: 4
+    source: src/golden_line/models.py HorizonStatus
+    source_tier: claim_ledger
+  - id: invariant_count
+    kind: number
+    value: 7
+    source: src/golden_line/invariants.py _CHECKS
+    source_tier: claim_ledger
+  - id: formal_definition_count
+    kind: number
+    value: 11
+    source: manuscript/02a_formalism.md .definition blocks
+    source_tier: claim_ledger
+  - id: formal_proposition_count
+    kind: number
+    value: 13
+    source: manuscript/02a_formalism.md .proposition blocks
+    source_tier: claim_ledger
+  # The number the renderer assigns to the def:matching block. It is not
+  # written anywhere in the manuscript source; it is recorded here so an
+  # external reference to "Definition 8" has something to check against.
+  - id: formal_matching_definition_number
+    kind: number
+    value: 8
+    source: manuscript/02a_formalism.md def:matching
+    source_tier: claim_ledger
+  - id: founding_aspiration_count
+    kind: number
+    value: 4
+    source: src/golden_line/registry.py founding_aspirations
+    source_tier: claim_ledger
+  - id: further_aspiration_count
+    kind: number
+    value: 5
+    source: src/golden_line/registry.py further_aspirations
+    source_tier: claim_ledger
+  - id: evaluator_stage_count
+    kind: number
+    value: 3
+    source: src/golden_line/progress.py EVALUATOR_STAGES
+    source_tier: claim_ledger
+  - id: signal_marker_count
+    kind: number
+    value: 18
+    source: src/golden_line/analysis.py signal_inventory
+    source_tier: claim_ledger
+  - id: signal_counter_count
+    kind: number
+    value: 9
+    source: src/golden_line/analysis.py signal_inventory
+    source_tier: claim_ledger
+  - id: currentness_stale_boundary_age
+    kind: number
+    value: 91
+    source: src/golden_line/figures/analysis_figures.py SWEEP_STALE_AFTER_DAYS + 1
+    source_tier: claim_ledger
+  - id: currentness_sweep_age_count
+    kind: number
+    value: 14
+    source: src/golden_line/figures/analysis_figures.py SWEEP_AGES
+    source_tier: claim_ledger
+  - id: registry_digest_hex_length
+    kind: number
+    value: 64
+    source: src/golden_line/serialization.py registry_digest
+    source_tier: claim_ledger
+  - id: figure_count
+    kind: number
+    value: 13
+    source: src/golden_line/figures/__init__.py FIGURES
+    source_tier: claim_ledger
+  - id: figure_golden_horizon_thread
+    kind: figure
+    value: fig:golden_horizon_thread
+    artifact_path: output/figures/golden_horizon_thread.png
+    source: output/figures/figure_registry.json
+    source_tier: generated_artifact
+  - id: figure_aspiration_registry_map
+    kind: figure
+    value: fig:aspiration_registry_map
+    artifact_path: output/figures/aspiration_registry_map.png
+    source: output/figures/figure_registry.json
+    source_tier: generated_artifact
+  - id: figure_horizon_decision_path
+    kind: figure
+    value: fig:horizon_decision_path
+    artifact_path: output/figures/horizon_decision_path.png
+    source: output/figures/figure_registry.json
+    source_tier: generated_artifact
+  - id: figure_staged_evaluation_pipeline
+    kind: figure
+    value: fig:staged_evaluation_pipeline
+    artifact_path: output/figures/staged_evaluation_pipeline.png
+    source: output/figures/figure_registry.json
+    source_tier: generated_artifact
+  - id: figure_evidence_state_matrix
+    kind: figure
+    value: fig:evidence_state_matrix
+    artifact_path: output/figures/evidence_state_matrix.png
+    source: output/figures/figure_registry.json
+    source_tier: generated_artifact
+  - id: figure_temporal_currentness_sweep
+    kind: figure
+    value: fig:temporal_currentness_sweep
+    artifact_path: output/figures/temporal_currentness_sweep.png
+    source: output/figures/figure_registry.json
+    source_tier: generated_artifact
+  - id: figure_marker_completeness
+    kind: figure
+    value: fig:marker_completeness
+    artifact_path: output/figures/marker_completeness.png
+    source: output/figures/figure_registry.json
+    source_tier: generated_artifact
+  - id: figure_finding_field_matrix
+    kind: figure
+    value: fig:finding_field_matrix
+    artifact_path: output/figures/finding_field_matrix.png
+    source: output/figures/figure_registry.json
+    source_tier: generated_artifact
+  - id: figure_signal_inventory
+    kind: figure
+    value: fig:signal_inventory
+    artifact_path: output/figures/signal_inventory.png
+    source: output/figures/figure_registry.json
+    source_tier: generated_artifact
+  - id: figure_horizon_bands
+    kind: figure
+    value: fig:horizon_bands
+    artifact_path: output/figures/horizon_bands.png
+    source: output/figures/figure_registry.json
+    source_tier: generated_artifact
+  - id: figure_currentness_lattice
+    kind: figure
+    value: fig:currentness_lattice
+    artifact_path: output/figures/currentness_lattice.png
+    source: output/figures/figure_registry.json
+    source_tier: generated_artifact
+  - id: figure_counter_signal_dominance
+    kind: figure
+    value: fig:counter_signal_dominance
+    artifact_path: output/figures/counter_signal_dominance.png
+    source: output/figures/figure_registry.json
+    source_tier: generated_artifact
+  - id: figure_batch_reading_overview
+    kind: figure
+    value: fig:batch_reading_overview
+    artifact_path: output/figures/batch_reading_overview.png
+    source: output/figures/figure_registry.json
+    source_tier: generated_artifact

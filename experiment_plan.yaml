@@ -1,0 +1,39 @@
+conditions:
+  - name: source_registry_baseline
+    role: reference
+    description: "The versioned nine-entry aspiration registry and four-status evaluator as the reference condition."
+  - name: malformed_input_guard
+    role: proposed
+    description: "Structured intake normalization sets malformed records aside and preserves the reason."
+  - name: temporal_currentness_guard
+    role: variant
+    description: "Optional temporal review prevents stale, missing, or date-un-auditable positive evidence from producing TOWARD."
+metrics:
+  primary:
+    name: contract_checks_passed
+    direction: maximize
+protocol: "Run the deterministic tests, registry invariant battery, artifact-chain validator, and rendered PDF/HTML validation; compare only reproducible contract outcomes and do not treat them as evidence that aspirations are true."
+# The full shipped figure set, in the order `golden_line.figures.FIGURES`
+# declares it. `tests/test_experiment_plan.py` derives this list from FIGURES
+# and fails if the two drift, so the plan cannot quietly describe a smaller
+# figure set than the builder produces.
+expected_figures:
+  - fig:golden_horizon_thread
+  - fig:aspiration_registry_map
+  - fig:horizon_decision_path
+  - fig:staged_evaluation_pipeline
+  - fig:evidence_state_matrix
+  - fig:temporal_currentness_sweep
+  - fig:marker_completeness
+  - fig:finding_field_matrix
+  - fig:signal_inventory
+  - fig:horizon_bands
+  - fig:currentness_lattice
+  - fig:counter_signal_dominance
+  - fig:batch_reading_overview
+expected_tables: []
+baselines:
+  - source_registry_baseline
+ablations:
+  - malformed_input_guard
+  - temporal_currentness_guard
