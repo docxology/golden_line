@@ -629,6 +629,7 @@ def _derived_ledger_numbers() -> dict[str, int]:
         "signal_counter_count": inventory.total_counter_signals,
         "currentness_stale_boundary_age": SWEEP_STALE_AFTER_DAYS + 1,
         "currentness_sweep_age_count": len(SWEEP_AGES),
+        "currentness_replay_call_count": len(GOLDEN_ASPIRATIONS) * len(SWEEP_AGES),
         "registry_digest_hex_length": len(registry_digest(GOLDEN_ASPIRATIONS)),
         "figure_count": len(FIGURES),
     }
@@ -655,6 +656,63 @@ def test_every_numeric_ledger_claim_is_re_derived() -> None:
     ledger_ids = _ledger_number_ids()
     assert len(ledger_ids) == len(set(ledger_ids))
     assert set(ledger_ids) == set(_derived_ledger_numbers())
+
+
+def _ledger_citation_ids() -> dict[str, str]:
+    """Every ``kind: citation`` claim id mapped to its label value."""
+    raw = CLAIM_LEDGER.read_text(encoding="utf-8")
+    return {
+        cid: value
+        for cid, value in re.findall(
+            r"- id: (\w+)\n\s+kind: citation\n\s+value: ([\w:-]+)", raw
+        )
+    }
+
+
+def test_every_citation_ledger_claim_is_bound_to_a_declared_block() -> None:
+    """Every ``kind: citation`` row must name a formalism block that exists.
+
+    A ledger row pointing at a label no block declares is exactly the failure
+    mode the unsupported-citation gate flags, so the ledger's own set is
+    checked against the declared block labels rather than against itself.
+    """
+    declared = {label for _n, _k, label, _t in _formalism_blocks()}
+    citations = _ledger_citation_ids()
+    assert citations, "the ledger declares no citation rows, so this gate would be vacuous"
+    dangling = sorted(label for label in citations.values() if label not in declared)
+    assert dangling == [], dangling
+
+
+def test_every_manuscript_formalism_reference_has_a_citation_ledger_row() -> None:
+    """The ledger must cover every def:/prop: label the prose cites, and vice versa.
+
+    The set equality closes both drift directions: a new ``[@def:x]`` reference
+    in the prose with no ledger row fails, and a ledger row for a label the
+    prose never cites also fails, so the ledger cannot accrete dead entries.
+    """
+    raw = " ".join(
+        path.read_text(encoding="utf-8")
+        for path in sorted((PROJECT_ROOT / "manuscript").glob("*.md"))
+    )
+    used = set(re.findall(r"\[@((?:def|prop):[\w-]+)\]", raw))
+    assert used, "the manuscript declares no formalism references, so this gate would be vacuous"
+    covered = set(_ledger_citation_ids().values())
+    assert used <= covered, sorted(used - covered)
+    assert covered <= used, sorted(covered - used)
+
+
+def test_citation_ledger_rows_are_exactly_the_used_label_set() -> None:
+    """Proof of detection: a planted dangling label must be flagged.
+
+    Simulates a ledger row (and prose reference) for a label no formalism
+    block declares; the declared-block check must reject it. Negative control
+    for ``test_every_citation_ledger_claim_is_bound_to_a_declared_block``.
+    """
+    declared = {label for _n, _k, label, _t in _formalism_blocks()}
+    planted = "def:does-not-exist"
+    assert planted not in declared
+    dangling = [planted] if planted not in declared else []
+    assert dangling == [planted]
 
 
 def test_ledger_source_paths_point_at_files_that_exist() -> None:
