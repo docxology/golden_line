@@ -33,7 +33,7 @@ from golden_line.figures.svg import (
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-MANUSCRIPT = PROJECT_ROOT / "manuscript"
+MANUSCRIPT = PROJECT_ROOT / "docs" / "manuscript"
 CONFIG = MANUSCRIPT / "config.yaml"
 
 #: US Letter, the paper the combined manuscript is rendered on. Cross-checked
@@ -51,7 +51,7 @@ POINTS_PER_INCH = 72.0
 _FONT_SIZE = re.compile(r'font-size="([\d.]+)px"')
 _SVG_HEAD = re.compile(r'<svg[^>]*width="(\d+)" height="(\d+)"')
 _EMBED = re.compile(
-    r"!\[[^\]]*\]\(\.\./output/figures/(?P<name>[\w]+)\.png\)"
+    r"!\[[^\]]*\]\((?:\.\./)+output/figures/(?P<name>[\w]+)\.png\)"
     r"\{#(?P<label>fig:[\w:-]+)(?P<attrs>[^}]*)\}"
 )
 

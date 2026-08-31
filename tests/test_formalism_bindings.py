@@ -39,7 +39,7 @@ from golden_line.serialization import report_digest
 from tests.test_formalism_syntax import declared_blocks, rendered_numbers
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-FORMALISM = PROJECT_ROOT / "manuscript" / "02a_formalism.md"
+FORMALISM = PROJECT_ROOT / "docs" / "manuscript" / "02a_formalism.md"
 INVARIANT_DOC = PROJECT_ROOT / "docs" / "invariants.md"
 CLAIM_LEDGER = PROJECT_ROOT / "data" / "claim_ledger.yaml"
 
@@ -692,7 +692,7 @@ def test_every_manuscript_formalism_reference_has_a_citation_ledger_row() -> Non
     """
     raw = " ".join(
         path.read_text(encoding="utf-8")
-        for path in sorted((PROJECT_ROOT / "manuscript").glob("*.md"))
+        for path in sorted((PROJECT_ROOT / "docs" / "manuscript").glob("*.md"))
     )
     used = set(re.findall(r"\[@((?:def|prop):[\w-]+)\]", raw))
     assert used, "the manuscript declares no formalism references, so this gate would be vacuous"
@@ -739,7 +739,7 @@ def test_ledger_source_path_check_rejects_a_retired_path() -> None:
 # ---------------------------------------------------------------------------
 
 
-_LIMITS = PROJECT_ROOT / "manuscript" / "05_limits.md"
+_LIMITS = PROJECT_ROOT / "docs" / "manuscript" / "05_limits.md"
 _LIMIT_WORDS = {2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six"}
 
 
@@ -801,7 +801,7 @@ def test_limits_split_guard_rejects_the_earlier_overclaim() -> None:
 def test_abstract_figure_count_matches_the_builder() -> None:
     """The abstract's figure count is bound to len(FIGURES), never hand-kept."""
     abstract = " ".join(
-        (PROJECT_ROOT / "manuscript" / "00_abstract.md")
+        (PROJECT_ROOT / "docs" / "manuscript" / "00_abstract.md")
         .read_text(encoding="utf-8")
         .split()
     )

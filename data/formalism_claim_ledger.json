@@ -1,0 +1,222 @@
+{
+  "claim_boundary": "Grounds the manuscript's formalism cross-references in the evidence registry. Every `kind: citation` row re-derives from a formalism block label declared in docs/manuscript/, re-derived by tests/test_formalism_claim_ledger.py. These rows support reproducibility of the code description only; they do not establish that any proposition is universally valid.",
+  "schema_version": "1.0",
+  "claims": [
+    {
+      "claim_id": "def_aspiration",
+      "kind": "citation",
+      "value": "def:aspiration",
+      "source": "docs/manuscript/02a_formalism.md: definition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "def_registry",
+      "kind": "citation",
+      "value": "def:registry",
+      "source": "docs/manuscript/02a_formalism.md: definition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "def_horizon_entry",
+      "kind": "citation",
+      "value": "def:horizon_entry",
+      "source": "docs/manuscript/02a_formalism.md: definition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "def_status_codomain",
+      "kind": "citation",
+      "value": "def:status_codomain",
+      "source": "docs/manuscript/02a_formalism.md: definition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "def_finding",
+      "kind": "citation",
+      "value": "def:finding",
+      "source": "docs/manuscript/02a_formalism.md: definition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "def_report_function",
+      "kind": "citation",
+      "value": "def:report_function",
+      "source": "docs/manuscript/02a_formalism.md: definition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "def_intake",
+      "kind": "citation",
+      "value": "def:intake",
+      "source": "docs/manuscript/02a_formalism.md: definition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "def_matching",
+      "kind": "citation",
+      "value": "def:matching",
+      "source": "docs/manuscript/02a_formalism.md: definition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "def_temporal_review",
+      "kind": "citation",
+      "value": "def:temporal_review",
+      "source": "docs/manuscript/02a_formalism.md: definition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "def_decision_rule",
+      "kind": "citation",
+      "value": "def:decision_rule",
+      "source": "docs/manuscript/02a_formalism.md: definition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_totality",
+      "kind": "citation",
+      "value": "prop:totality",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_precedence",
+      "kind": "citation",
+      "value": "prop:precedence",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_toward_exact",
+      "kind": "citation",
+      "value": "prop:toward_exact",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_temporal_inquiry",
+      "kind": "citation",
+      "value": "prop:temporal_inquiry",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_absence",
+      "kind": "citation",
+      "value": "prop:absence",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_first_wins",
+      "kind": "citation",
+      "value": "prop:first_wins",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_intake_screening_determinism",
+      "kind": "citation",
+      "value": "prop:intake-screening-determinism",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_boundary_exclusive",
+      "kind": "citation",
+      "value": "prop:boundary_exclusive",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_sweep_codomain",
+      "kind": "citation",
+      "value": "prop:sweep_codomain",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_boundary_uniform",
+      "kind": "citation",
+      "value": "prop:boundary_uniform",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_digest_order",
+      "kind": "citation",
+      "value": "prop:digest_order",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_detection",
+      "kind": "citation",
+      "value": "prop:detection",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "def_report_envelope",
+      "kind": "citation",
+      "value": "def:report_envelope",
+      "source": "docs/manuscript/02a_formalism.md: definition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_envelope_pointer",
+      "kind": "citation",
+      "value": "prop:envelope_pointer",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    }
+  ]
+}

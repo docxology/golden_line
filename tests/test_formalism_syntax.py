@@ -24,7 +24,7 @@ import re
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-MANUSCRIPT = PROJECT_ROOT / "manuscript"
+MANUSCRIPT = PROJECT_ROOT / "docs" / "manuscript"
 
 #: Class name to displayed title, matching ``DEFAULT_KINDS`` in the filter.
 #: A kind the manuscript never uses still belongs here: the literal check has

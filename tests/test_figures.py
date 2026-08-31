@@ -129,7 +129,7 @@ def test_sweep_captions_derive_from_the_sweep_constants() -> None:
     )
     assert f"{len(SWEEP_AGES)} age-labelled cells" in alt
     assert f"{SWEEP_STALE_AFTER_DAYS}-day staleness boundary" in alt
-    embed = _normalized(PROJECT_ROOT / "manuscript" / "02a_formalism.md")
+    embed = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "02a_formalism.md")
     assert (
         f"at {len(SWEEP_AGES)} observation ages with "
         f"stale_after_days = {SWEEP_STALE_AFTER_DAYS}" in embed
@@ -154,8 +154,8 @@ def test_shipped_registry_signal_literals_are_pinned() -> None:
         f"{inventory.total_markers} markers and "
         f"{inventory.total_counter_signals} counter-signals"
     )
-    assert numerals in _normalized(PROJECT_ROOT / "manuscript" / "02_method.md")
-    aspirations = _normalized(PROJECT_ROOT / "manuscript" / "03_aspirations.md")
+    assert numerals in _normalized(PROJECT_ROOT / "docs" / "manuscript" / "02_method.md")
+    aspirations = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "03_aspirations.md")
     assert numerals in aspirations
     assert (
         f"all {inventory.unique_markers} marker tokens and all "
@@ -164,10 +164,10 @@ def test_shipped_registry_signal_literals_are_pinned() -> None:
     )
     # Word-form sites pin to the same executed totals via the 18/9 equality above.
     assert "eighteen markers and nine counter-signals" in _normalized(
-        PROJECT_ROOT / "manuscript" / "05_limits.md"
+        PROJECT_ROOT / "docs" / "manuscript" / "05_limits.md"
     )
     assert "eighteen markers and nine counter-signals" in _normalized(
-        PROJECT_ROOT / "manuscript" / "04a_batch_reading.md"
+        PROJECT_ROOT / "docs" / "manuscript" / "04a_batch_reading.md"
     )
     assert (
         f"{inventory.total_markers} markers / "
@@ -189,7 +189,7 @@ def test_horizon_band_membership_counts_match_the_prose() -> None:
     counts = {band.band: len(band.aspiration_ids) for band in horizon_distribution()}
     assert sum(counts.values()) == 9
 
-    aspirations = _normalized(PROJECT_ROOT / "manuscript" / "03_aspirations.md")
+    aspirations = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "03_aspirations.md")
     assert (
         f"immediate ({counts['immediate']} aspiration, at the next decision), "
         f"recurring cycle ({counts['recurring cycle']}, at revision or tool turnover), "
@@ -235,7 +235,7 @@ def test_band_count_binding_rejects_a_planted_repartition() -> None:
         band.band: len(band.aspiration_ids) for band in horizon_distribution()
     }
     assert planted_counts != real_counts
-    aspirations = _normalized(PROJECT_ROOT / "manuscript" / "03_aspirations.md")
+    aspirations = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "03_aspirations.md")
     assert (
         f"recurring cycle ({planted_counts['recurring cycle']}, at revision or tool turnover)"
         not in aspirations
@@ -458,7 +458,7 @@ def test_batch_overview_caption_and_manuscript_match_execution() -> None:
     assert partition in caption
     assert f"{overview.intake_note_count} intake set-asides" in caption
 
-    text = _normalized(PROJECT_ROOT / "manuscript" / "04a_batch_reading.md")
+    text = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "04a_batch_reading.md")
     assert "batch_reading_overview.png" in text
     assert "#fig:batch_reading_overview" in text
     assert f"{partition} across {len(report.findings)} findings" in text
@@ -661,7 +661,7 @@ def test_field_matrix_manuscript_literals_match_the_replay() -> None:
     rows = field_matrix_rows()
     always = always_carried_fields(rows)
     words = {3: "Three", 6: "six", 9: "nine", 12: "twelve"}
-    text = _normalized(PROJECT_ROOT / "manuscript" / "02c_evidence_protocol.md")
+    text = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "02c_evidence_protocol.md")
     assert (
         f"The {words[len(rows)]} structured fields of a finding against "
         f"{words[len(FIELD_MATRIX_CONDITIONS)]} evidence conditions" in text
@@ -674,9 +674,9 @@ def test_new_replay_figures_are_registered_and_embedded() -> None:
     """Both new panels ship in the builder and are cited by the manuscript."""
     names = {entry[0] for entry in FIGURES}
     assert {"marker_completeness", "finding_field_matrix"} <= names
-    formalism = _normalized(PROJECT_ROOT / "manuscript" / "02a_formalism.md")
+    formalism = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "02a_formalism.md")
     assert "marker_completeness.png" in formalism
     assert "@fig:marker_completeness" in formalism
-    evidence = _normalized(PROJECT_ROOT / "manuscript" / "02c_evidence_protocol.md")
+    evidence = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "02c_evidence_protocol.md")
     assert "finding_field_matrix.png" in evidence
     assert "@fig:finding_field_matrix" in evidence

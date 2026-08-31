@@ -34,12 +34,12 @@ claims:
   - id: formal_definition_count
     kind: number
     value: 11
-    source: manuscript/02a_formalism.md .definition blocks
+    source: docs/manuscript/02a_formalism.md .definition blocks
     source_tier: claim_ledger
   - id: formal_proposition_count
     kind: number
     value: 13
-    source: manuscript/02a_formalism.md .proposition blocks
+    source: docs/manuscript/02a_formalism.md .proposition blocks
     source_tier: claim_ledger
   # The number the renderer assigns to the def:matching block. It is not
   # written anywhere in the manuscript source; it is recorded here so an
@@ -47,7 +47,7 @@ claims:
   - id: formal_matching_definition_number
     kind: number
     value: 8
-    source: manuscript/02a_formalism.md def:matching
+    source: docs/manuscript/02a_formalism.md def:matching
     source_tier: claim_ledger
   - id: founding_aspiration_count
     kind: number
@@ -180,120 +180,120 @@ claims:
   - id: formal_ref_def_aspiration
     kind: citation
     value: def:aspiration
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_def_registry
     kind: citation
     value: def:registry
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_def_horizon_entry
     kind: citation
     value: def:horizon_entry
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_def_status_codomain
     kind: citation
     value: def:status_codomain
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_def_finding
     kind: citation
     value: def:finding
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_def_report_function
     kind: citation
     value: def:report_function
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_def_intake
     kind: citation
     value: def:intake
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_def_matching
     kind: citation
     value: def:matching
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_def_temporal_review
     kind: citation
     value: def:temporal_review
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_def_decision_rule
     kind: citation
     value: def:decision_rule
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_def_report_envelope
     kind: citation
     value: def:report_envelope
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_prop_totality
     kind: citation
     value: prop:totality
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_prop_precedence
     kind: citation
     value: prop:precedence
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_prop_toward_exact
     kind: citation
     value: prop:toward_exact
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_prop_temporal_inquiry
     kind: citation
     value: prop:temporal_inquiry
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_prop_absence
     kind: citation
     value: prop:absence
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_prop_first_wins
     kind: citation
     value: prop:first_wins
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_prop_intake_screening_determinism
     kind: citation
     value: prop:intake-screening-determinism
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_prop_boundary_exclusive
     kind: citation
     value: prop:boundary_exclusive
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_prop_sweep_codomain
     kind: citation
     value: prop:sweep_codomain
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_prop_boundary_uniform
     kind: citation
     value: prop:boundary_uniform
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_prop_digest_order
     kind: citation
     value: prop:digest_order
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_prop_detection
     kind: citation
     value: prop:detection
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger
   - id: formal_ref_prop_envelope_pointer
     kind: citation
     value: prop:envelope_pointer
-    source: manuscript/02a_formalism.md
+    source: docs/manuscript/02a_formalism.md
     source_tier: claim_ledger

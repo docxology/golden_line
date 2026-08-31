@@ -77,15 +77,15 @@ validator or describe this project as published; use the local artifact gate
 plus the rendered PDF/HTML validation above.
 
 The manuscript keeps its compact publication geometry in
-`manuscript/config.yaml` (`metadata.geometry: "left=0.33in,right=0.33in,top=0.58in,bottom=0.58in"`).
+`docs/manuscript/config.yaml` (`metadata.geometry: "left=0.33in,right=0.33in,top=0.58in,bottom=0.58in"`).
 The founding-four
 visual is intentionally source-derived and interpretive: its loop and symbols
 make the aspirations more memorable without turning them into a ranking or an
 empirical result.
 
 The publication cover is configured in the same file under
-`paper.cover.image`, relative to `manuscript/`. The checked-in cover is a text-
-free, full-frame illustration in `manuscript/assets/`; its visual motifs are
+`paper.cover.image`, relative to `docs/manuscript/`. The checked-in cover is a text-
+free, full-frame illustration in `docs/manuscript/assets/`; its visual motifs are
 documented there so the art remains relevant to the instrument rather than
 decorative metadata. `rendering.cover_height_fraction` gives it deliberate
 title-page presence while leaving the manuscript's compact geometry separate.

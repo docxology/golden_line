@@ -35,7 +35,7 @@ engine at [`docxology/template`](https://github.com/docxology/template), which
 you clone wherever you like — see `docs/development.md` for the
 path-independent invocation. The generated publishing-status block in
 `README.md` is produced by that same toolchain and cannot be regenerated from
-this repository; `manuscript/config.yaml` is the source of truth it renders.
+this repository; `docs/manuscript/config.yaml` is the source of truth it renders.
 
 That is a declared external dependency. It is not evidence that the evaluator
 or manuscript is unsound, and the absence of a rendered PDF is not a failing
@@ -52,7 +52,7 @@ or permission mechanism. See `README.md`, `AGENTS.md`, and
 
 Copy or clone the repository whole; there is no extraction step and no helper
 from another checkout to run. Do not copy a rendering engine into this tree.
-After copying, update `manuscript/config.yaml` and the publication metadata
+After copying, update `docs/manuscript/config.yaml` and the publication metadata
 before release, and check that every cross-work reference still names a
 repository rather than a relative path out of this one.
 

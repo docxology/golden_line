@@ -98,7 +98,7 @@ a score:
 figures: `signal_inventory`, `horizon_bands`, `temporal_currentness_sweep`,
 `currentness_lattice`, and `batch_reading_overview`. The layer is wired
 into the method (`domain_profile.yaml` gates and `experiment_plan.yaml`
-conditions are named in `manuscript/02_method.md`).
+conditions are named in `docs/manuscript/02_method.md`).
 
 ## Figure package
 

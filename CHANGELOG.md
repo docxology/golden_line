@@ -16,7 +16,7 @@ formalism, version bumped with the window as TODO promised.
   instrument's own vocabulary — Golden Line has no single overall verdict, and
   the envelope does not invent an aggregate. `envelope_matches_report` is the
   read-back check for an archived pair.
-- `manuscript/02a_formalism.md` gained `def:report_envelope` and
+- `docs/manuscript/02a_formalism.md` gained `def:report_envelope` and
   `prop:envelope_pointer` with binding-table rows, two new binding tests proven
   to bite via planted drifts, and claim-ledger block counts moved.
 - Re-rendered with zero undefined references.

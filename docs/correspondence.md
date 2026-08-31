@@ -72,7 +72,7 @@ surface exists before the prose that formalizes it.
 ### Wave-3 update (2026-07-29, later the same day)
 
 The deferred manuscript window landed: `def:report_envelope` and
-`prop:envelope_pointer` in `manuscript/02a_formalism.md` with binding-table
+`prop:envelope_pointer` in `docs/manuscript/02a_formalism.md` with binding-table
 rows, two new binding tests proven to bite via planted drifts, claim-ledger
 block counts moved, and the version bump 0.3.0 -> 0.4.0 taken with the
 window as this file promised. Re-rendered with zero undefined references.

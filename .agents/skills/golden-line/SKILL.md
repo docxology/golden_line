@@ -109,11 +109,11 @@ report_overview(report)     # regroups an existing report by status with intake/
 
 These map to figures `signal_inventory`, `horizon_bands`,
 `temporal_currentness_sweep`, `currentness_lattice`, and
-`batch_reading_overview`, embedded in `manuscript/03_aspirations.md`,
+`batch_reading_overview`, embedded in `docs/manuscript/03_aspirations.md`,
 `02a_formalism.md`, and `04a_batch_reading.md`. Bands widen reach; the order is
 a reading aid, never a rank. The lattice replays the sweep for all nine
 aspirations at once, and `counter_signal_dominance` in
-`manuscript/04_examples.md` replays clause precedence for all nine — both are
+`docs/manuscript/04_examples.md` replays clause precedence for all nine — both are
 executed evaluator output, not drawn assertions.
 
 ## The report envelope (cross-instrument transport)
@@ -145,12 +145,12 @@ and drift-detection handle with no safety or attestation semantics.
 
 ## Gotchas
 
-- Version authority is `manuscript/config.yaml`. The literal is unavoidably
+- Version authority is `docs/manuscript/config.yaml`. The literal is unavoidably
   duplicated in `pyproject.toml` and `src/golden_line/version.py`, so bump all
   three together; `tests/test_api.py::test_version_markers_agree_with_the_declared_authority`
   compares the copies to the authority and fails if one lags.
 - New figure files must be BOTH built by `scripts/build_figures.py` AND embedded
-  in a `manuscript/*.md`; `check_artifacts.py` fails on stale/uncited figures.
+  in a `docs/manuscript/*.md`; `check_artifacts.py` fails on stale/uncited figures.
 - Standalone invariant: never copy prose, registry entries, or code from Red,
   Black, or White Line, and never import them. They are separate repositories
   and are referenced by URL, never by a relative path out of this one.

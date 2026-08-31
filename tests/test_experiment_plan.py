@@ -19,7 +19,7 @@ from golden_line.figures import FIGURES
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 PLAN = PROJECT_ROOT / "experiment_plan.yaml"
 PROFILE = PROJECT_ROOT / "domain_profile.yaml"
-METHOD = PROJECT_ROOT / "manuscript" / "02_method.md"
+METHOD = PROJECT_ROOT / "docs" / "manuscript" / "02_method.md"
 
 
 def _yaml_list(path: Path, key: str) -> list[str]:

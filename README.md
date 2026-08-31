@@ -86,8 +86,8 @@ those instruments.
 
 ## Configuration and source of truth
 
-The live metadata is in `manuscript/config.yaml`; its standalone shape is shown
-in `manuscript/config.yaml.example`. Registry and evaluator truth lives in
+The live metadata is in `docs/manuscript/config.yaml`; its standalone shape is shown
+in `docs/manuscript/config.yaml.example`. Registry and evaluator truth lives in
 `src/golden_line/`, while generated figures and registry snapshots live under
 `output/figures/` and must be rebuilt rather than hand-edited.
 
@@ -122,7 +122,7 @@ permission decision.
 The table below is generated, and its regeneration command belongs to the
 external [`docxology/template`](https://github.com/docxology/template)
 toolchain, not to this repository — a checkout without that toolchain cannot
-refresh it. `manuscript/config.yaml` is the source of truth either way: the
+refresh it. `docs/manuscript/config.yaml` is the source of truth either way: the
 block is a rendering of that file, so read the config when the two could have
 drifted.
 
@@ -154,7 +154,7 @@ Publishing surface — 20 platforms, 0 published:
 | stripe | documented | 🟡 planned | — | `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY` |
 | ingramspark | documented | 🟡 planned | — | `INGRAMSPARK_CLIENT_ID`, `INGRAMSPARK_CLIENT_SECRET` |
 
-_Status legend: ✅ published (durable identifier recorded in `config.yaml`) · 🔵 reserved (identifier reserved but not yet registered by final publication) · ⚪ available (adapter implemented and locally verifiable) · 🟡 planned. This block is generated — edit `manuscript/config.yaml`, then regenerate with `uv run python -m infrastructure.publishing.status_report --project <path> --write`._
+_Status legend: ✅ published (durable identifier recorded in `config.yaml`) · 🔵 reserved (identifier reserved but not yet registered by final publication) · ⚪ available (adapter implemented and locally verifiable) · 🟡 planned. This block is generated — edit `docs/manuscript/config.yaml`, then regenerate with `uv run python -m infrastructure.publishing.status_report --project <path> --write`._
 <!-- PUBLISHING-STATUS:END -->
 
 ## Quick start

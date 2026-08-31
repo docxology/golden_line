@@ -2,14 +2,14 @@
 
 ## Completed — 2026-08-01 figure-geometry consistency pass
 
-- [x] Figure-geometry claim drift fixed and gated. `manuscript/config.yaml` had
+- [x] Figure-geometry claim drift fixed and gated. `docs/manuscript/config.yaml` had
       moved to a four-sided `metadata.geometry`
       (`left=0.33in,right=0.33in,top=0.58in,bottom=0.58in`), but
       `tests/test_figure_legibility.py`'s `_page_margin_inches()` still parsed a
       single `margin=…in` form, so five tests failed (the print-floor gate, its
       two proof-of-detection cases, the measured-floor check, and the
       rendered-log cross-check); `docs/development.md` and
-      `manuscript/config.yaml.example` still carried the stale single-margin
+      `docs/manuscript/config.yaml.example` still carried the stale single-margin
       form. `_page_margins_inches()` now parses the four-sided geometry into
       horizontal/vertical per-side margins, matching the rendered LaTeX log
       (textwidth 566.60pt, textheight 711.14pt). The example and docs were
@@ -51,7 +51,7 @@
 
 ## Completed — 2026-07-29 second window: the envelope stated formally
 
-- [x] `manuscript/02a_formalism.md` gains "The report envelope":
+- [x] `docs/manuscript/02a_formalism.md` gains "The report envelope":
       `def:report_envelope` (the ten fields in order, bound to
       `dataclasses.fields(ReportEnvelope)`; `native_status` the complete
       ordered per-aspiration pairs, never a summary — the aggregate this
@@ -67,7 +67,7 @@
       restoration. The claim ledger's formal block counts moved 10 → 11
       definitions and 11 → 12 propositions.
 - [x] Version bump 0.3.0 → 0.4.0 taken with the window, in the four bound
-      sites (version.py, pyproject.toml, manuscript/config.yaml, README).
+      sites (version.py, pyproject.toml, docs/manuscript/config.yaml, README).
 - [x] Measured at close (2026-07-29, my own runs): 259 tests passed
       (257 + 2), total branch coverage 99.56%, registry battery 7/7 PASS at
       digest `3e0a7e38ecec…`, figure build 13/13, artifact chain PASS,

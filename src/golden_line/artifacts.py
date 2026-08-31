@@ -77,7 +77,13 @@ def check_artifacts(project_root: Path | None = None) -> list[str]:
 
     manuscript_text = "\n".join(
         path.read_text(encoding="utf-8")
-        for path in sorted((root / "manuscript").glob("*.md"))
+        for path in sorted(
+            (
+                root / "docs" / "manuscript"
+                if (root / "docs" / "manuscript").is_dir()
+                else root / "manuscript"
+            ).glob("*.md")
+        )
     )
     described = {label: (caption, alt) for _, label, _, caption, alt in FIGURES}
     for record in records:

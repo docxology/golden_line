@@ -38,7 +38,7 @@ def test_figures_module_exports_its_public_names() -> None:
 
 def _config_version() -> str:
     """Read ``paper.version`` from the declared version authority."""
-    raw = (PROJECT_ROOT / "manuscript" / "config.yaml").read_text(encoding="utf-8")
+    raw = (PROJECT_ROOT / "docs" / "manuscript" / "config.yaml").read_text(encoding="utf-8")
     match = re.search(r'^\s+version:\s*"([^"]+)"\s*$', raw, flags=re.MULTILINE)
     assert match is not None, "manuscript/config.yaml declares no paper.version"
     return match.group(1)
