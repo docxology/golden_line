@@ -20,7 +20,7 @@ from golden_line import HorizonStatus, temporal_currentness_sweep
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SKILL = PROJECT_ROOT / ".agents" / "skills" / "golden-line" / "SKILL.md"
 
-_PYTHON_BLOCK = re.compile(r"```python\n(.*?)```", re.S)
+_PYTHON_BLOCK = re.compile(r"```python\n(.*?)```", re.DOTALL)
 
 
 def _blocks() -> list[str]:

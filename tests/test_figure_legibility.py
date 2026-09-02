@@ -295,11 +295,13 @@ def test_standalone_config_example_carries_the_legibility_geometry() -> None:
     assert example.is_file()
     live_text = CONFIG.read_text(encoding="utf-8")
     example_text = example.read_text(encoding="utf-8")
-    keys = re.findall(r"^\s+(\w*height_fraction):\s*([\d.]+)\s*$", live_text, re.M)
+    keys = re.findall(
+        r"^\s+(\w*height_fraction):\s*([\d.]+)\s*$", live_text, re.MULTILINE
+    )
     assert keys, "the live config declares no height fractions; gate is vacuous"
     for key, value in keys:
         pattern = rf"^\s+{re.escape(key)}:\s*{re.escape(value)}\s*$"
-        assert re.search(pattern, example_text, re.M), key
+        assert re.search(pattern, example_text, re.MULTILINE), key
 
 
 def test_declared_page_geometry_matches_the_rendered_log() -> None:

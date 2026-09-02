@@ -63,7 +63,7 @@ from .serialization import (
 )
 from .version import REGISTRY_VERSION, __version__
 
-__all__ = [
+__all__ = [  # noqa: RUF022  # isort-style order conflicts with the repo's plain-sorted() gate
     "Aspiration",
     "ENVELOPE_SCHEMA",
     "EVALUATOR_STAGES",

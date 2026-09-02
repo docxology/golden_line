@@ -6,6 +6,7 @@ script re-derives the whole declaration from the manuscript's formalism blocks
 and writes ``data/formalism_claim_ledger.json``. Tests re-derive the same set,
 so a block added, renamed, or removed without regenerating fails the suite.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -18,7 +19,8 @@ ROOT = Path(__file__).resolve().parent.parent
 MS = ROOT / "docs" / "manuscript"
 
 _LAB = re.compile(
-    r"^::: \{[^}]*#((?:def|prop|thm|lem|cor|rem|ax|clm|ex):[a-zA-Z0-9_-]+)", re.M
+    r"^::: \{[^}]*#((?:def|prop|thm|lem|cor|rem|ax|clm|ex):[a-zA-Z0-9_-]+)",
+    re.MULTILINE,
 )
 
 
@@ -33,7 +35,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
-    args = parser.parse_args(argv)
+    parser.parse_args(argv)
 
     claims = []
     for f in sorted(MS.glob("*.md")):

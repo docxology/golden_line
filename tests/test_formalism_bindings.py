@@ -32,8 +32,7 @@ from golden_line import (
     progress_report,
     registry_digest,
 )
-from golden_line.analysis import signal_inventory
-from golden_line.analysis import temporal_currentness_sweep
+from golden_line.analysis import signal_inventory, temporal_currentness_sweep
 from golden_line.figures import FIGURES, SWEEP_AGES, SWEEP_STALE_AFTER_DAYS
 from golden_line.serialization import report_digest
 from tests.test_formalism_syntax import declared_blocks, rendered_numbers
@@ -509,7 +508,7 @@ def test_currentness_boundary_constants_match_manuscript() -> None:
     """The 90/91 boundary is derived, exclusive, and stated."""
     tau = 90
     points = temporal_currentness_sweep(
-        ATTENTION.id, range(0, 120), as_of=REVIEW, stale_after_days=tau
+        ATTENTION.id, range(120), as_of=REVIEW, stale_after_days=tau
     )
     toward_ages = [p.age_days for p in points if p.status is HorizonStatus.TOWARD]
     stale_ages = [p.age_days for p in points if p.status is HorizonStatus.INQUIRY]
@@ -678,7 +677,9 @@ def test_every_citation_ledger_claim_is_bound_to_a_declared_block() -> None:
     """
     declared = {label for _n, _k, label, _t in _formalism_blocks()}
     citations = _ledger_citation_ids()
-    assert citations, "the ledger declares no citation rows, so this gate would be vacuous"
+    assert citations, (
+        "the ledger declares no citation rows, so this gate would be vacuous"
+    )
     dangling = sorted(label for label in citations.values() if label not in declared)
     assert dangling == [], dangling
 
@@ -695,7 +696,9 @@ def test_every_manuscript_formalism_reference_has_a_citation_ledger_row() -> Non
         for path in sorted((PROJECT_ROOT / "docs" / "manuscript").glob("*.md"))
     )
     used = set(re.findall(r"\[@((?:def|prop):[\w-]+)\]", raw))
-    assert used, "the manuscript declares no formalism references, so this gate would be vacuous"
+    assert used, (
+        "the manuscript declares no formalism references, so this gate would be vacuous"
+    )
     covered = set(_ledger_citation_ids().values())
     assert used <= covered, sorted(used - covered)
     assert covered <= used, sorted(covered - used)

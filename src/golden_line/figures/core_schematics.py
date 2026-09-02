@@ -32,7 +32,6 @@ from .svg import (
     _wrap,
 )
 
-
 #: Interpretive icon and colour for each founding aspiration, keyed by
 #: identifier. Keying by id rather than by registry position means a registry
 #: reorder can never hand one aspiration another's symbol; a founding entry

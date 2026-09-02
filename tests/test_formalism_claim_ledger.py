@@ -21,11 +21,9 @@ _ms = ROOT / "docs" / "manuscript"
 MANUSCRIPT = _ms
 LEDGER = ROOT / "data" / "formalism_claim_ledger.json"
 
-_BLOCK = re.compile(r"^::: \{(?P<attrs>[^}]*)\}\s*$", re.M)
+_BLOCK = re.compile(r"^::: \{(?P<attrs>[^}]*)\}\s*$", re.MULTILINE)
 _LABEL = re.compile(r"#([a-z]+:[a-zA-Z0-9_-]+)")
-_REFERENCE = re.compile(
-    r"\[@((?:def|prop|thm|lem|cor|rem|ax|clm|ex):[a-z0-9-]+)\]"
-)
+_REFERENCE = re.compile(r"\[@((?:def|prop|thm|lem|cor|rem|ax|clm|ex):[a-z0-9-]+)\]")
 
 
 def _body_files() -> list[Path]:
@@ -100,6 +98,6 @@ def test_ledger_claim_ids_are_unique() -> None:
 
 def test_negative_control_label_gap_fails() -> None:
     ledger = _ledger()
-    kept = [row for row in ledger["claims"] if row["value"] != sorted(_declared_labels())[0]]
+    kept = [row for row in ledger["claims"] if row["value"] != min(_declared_labels())]
     citations = {row["value"] for row in kept if row["kind"] == "citation"}
     assert citations != _declared_labels()

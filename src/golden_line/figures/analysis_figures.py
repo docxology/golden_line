@@ -36,7 +36,6 @@ from .svg import (
     _wrap,
 )
 
-
 # The sweep review context is derived from the registry version date so the
 # figure is deterministic and re-derivable, never tied to the build day.
 SWEEP_AS_OF = REGISTRY_VERSION.replace(".", "-")

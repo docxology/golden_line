@@ -12,7 +12,6 @@ from __future__ import annotations
 
 from .models import Aspiration
 
-
 GOLDEN_ASPIRATIONS: tuple[Aspiration, ...] = (
     Aspiration(
         "attention-before-output",

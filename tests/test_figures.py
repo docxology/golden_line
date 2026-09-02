@@ -154,8 +154,12 @@ def test_shipped_registry_signal_literals_are_pinned() -> None:
         f"{inventory.total_markers} markers and "
         f"{inventory.total_counter_signals} counter-signals"
     )
-    assert numerals in _normalized(PROJECT_ROOT / "docs" / "manuscript" / "02_method.md")
-    aspirations = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "03_aspirations.md")
+    assert numerals in _normalized(
+        PROJECT_ROOT / "docs" / "manuscript" / "02_method.md"
+    )
+    aspirations = _normalized(
+        PROJECT_ROOT / "docs" / "manuscript" / "03_aspirations.md"
+    )
     assert numerals in aspirations
     assert (
         f"all {inventory.unique_markers} marker tokens and all "
@@ -189,7 +193,9 @@ def test_horizon_band_membership_counts_match_the_prose() -> None:
     counts = {band.band: len(band.aspiration_ids) for band in horizon_distribution()}
     assert sum(counts.values()) == 9
 
-    aspirations = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "03_aspirations.md")
+    aspirations = _normalized(
+        PROJECT_ROOT / "docs" / "manuscript" / "03_aspirations.md"
+    )
     assert (
         f"immediate ({counts['immediate']} aspiration, at the next decision), "
         f"recurring cycle ({counts['recurring cycle']}, at revision or tool turnover), "
@@ -235,7 +241,9 @@ def test_band_count_binding_rejects_a_planted_repartition() -> None:
         band.band: len(band.aspiration_ids) for band in horizon_distribution()
     }
     assert planted_counts != real_counts
-    aspirations = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "03_aspirations.md")
+    aspirations = _normalized(
+        PROJECT_ROOT / "docs" / "manuscript" / "03_aspirations.md"
+    )
     assert (
         f"recurring cycle ({planted_counts['recurring cycle']}, at revision or tool turnover)"
         not in aspirations
@@ -661,7 +669,9 @@ def test_field_matrix_manuscript_literals_match_the_replay() -> None:
     rows = field_matrix_rows()
     always = always_carried_fields(rows)
     words = {3: "Three", 6: "six", 9: "nine", 12: "twelve"}
-    text = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "02c_evidence_protocol.md")
+    text = _normalized(
+        PROJECT_ROOT / "docs" / "manuscript" / "02c_evidence_protocol.md"
+    )
     assert (
         f"The {words[len(rows)]} structured fields of a finding against "
         f"{words[len(FIELD_MATRIX_CONDITIONS)]} evidence conditions" in text
@@ -677,6 +687,8 @@ def test_new_replay_figures_are_registered_and_embedded() -> None:
     formalism = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "02a_formalism.md")
     assert "marker_completeness.png" in formalism
     assert "@fig:marker_completeness" in formalism
-    evidence = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "02c_evidence_protocol.md")
+    evidence = _normalized(
+        PROJECT_ROOT / "docs" / "manuscript" / "02c_evidence_protocol.md"
+    )
     assert "finding_field_matrix.png" in evidence
     assert "@fig:finding_field_matrix" in evidence

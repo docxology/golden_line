@@ -27,7 +27,6 @@ from .registry import GOLDEN_ASPIRATIONS
 from .serialization import registry_digest
 from .version import REGISTRY_VERSION
 
-
 #: The stages :func:`progress_report` runs, in order. Named here so the count
 #: quoted in the manuscript, the evidence ledger, and the pipeline figure all
 #: read one source instead of three hand-kept copies.
@@ -55,7 +54,9 @@ class IntakeClassification:
 def _review_date(as_of: str | date | None) -> date:
     """Resolve the review date; a string must be a valid ISO date."""
     if as_of is None:
-        return date.today()
+        # Deliberate local calendar date: a review date is a local-day fact,
+        # not an instant, so timezone semantics do not apply.
+        return date.today()  # noqa: DTZ011
     if isinstance(as_of, str):
         return date.fromisoformat(as_of)
     if isinstance(as_of, date):
@@ -254,8 +255,10 @@ def _staleness(
         return (
             True,
             (
-                f"observation from {entry.observed_on} is older than {stale_after_days} days; "
-                "movement must be re-observed",
+                (
+                    f"observation from {entry.observed_on} is older than {stale_after_days} days; "
+                    "movement must be re-observed"
+                ),
             ),
             False,
         )

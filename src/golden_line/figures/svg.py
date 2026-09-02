@@ -15,7 +15,6 @@ from __future__ import annotations
 
 from golden_line.models import HorizonStatus
 
-
 PAPER = "#f5f0e7"
 INK = "#282421"
 MUTED = "#6d645a"
@@ -107,9 +106,11 @@ def _canvas(
     a11y_parts: list[str] = []
     if title is not None or desc is not None:
         a11y_parts = [
-            '<svg xmlns="http://www.w3.org/2000/svg"'
-            f' role="img" aria-labelledby="fig-title fig-desc"'
-            f' width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
+            (
+                '<svg xmlns="http://www.w3.org/2000/svg"'
+                f' role="img" aria-labelledby="fig-title fig-desc"'
+                f' width="{width}" height="{height}" viewBox="0 0 {width} {height}">'
+            ),
         ]
         if title is not None:
             a11y_parts.append(f'<title id="fig-title">{_esc(title)}</title>')

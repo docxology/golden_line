@@ -6,13 +6,13 @@ from pathlib import Path
 
 import pytest
 
-from golden_line import analysis
 from golden_line import (
     GOLDEN_ASPIRATIONS,
     HORIZON_BANDS,
     Aspiration,
     HorizonEntry,
     HorizonStatus,
+    analysis,
     horizon_distribution,
     progress_report,
     report_overview,

@@ -38,17 +38,27 @@ GOLDEN_LINE_ID = "golden_line"
 #: from the README, ``manuscript/05_limits.md``, and
 #: ``docs/evidence-protocol.md`` in transportable form.
 SCOPE_AND_NONCLAIMS: tuple[str, ...] = (
-    "records directional readings of aspiration records against a versioned "
-    "registry at a stated review date",
-    "statuses describe a record, not a person; they are not a safety score, "
-    "accreditation, moral authority, or permission mechanism",
-    "NOT_OBSERVED means no valid entry was admitted; it does not mean that "
-    "nobody looked",
-    "TOWARD says only that declared markers were observed with no recorded "
-    "counter-signal; it does not prove the work good, safe, lawful, or "
-    "beneficial",
-    "aspiration is not authorization: no reading here overrides a refusal, "
-    "discipline, or absence instrument",
+    (
+        "records directional readings of aspiration records against a versioned "
+        "registry at a stated review date"
+    ),
+    (
+        "statuses describe a record, not a person; they are not a safety score, "
+        "accreditation, moral authority, or permission mechanism"
+    ),
+    (
+        "NOT_OBSERVED means no valid entry was admitted; it does not mean that "
+        "nobody looked"
+    ),
+    (
+        "TOWARD says only that declared markers were observed with no recorded "
+        "counter-signal; it does not prove the work good, safe, lawful, or "
+        "beneficial"
+    ),
+    (
+        "aspiration is not authorization: no reading here overrides a refusal, "
+        "discipline, or absence instrument"
+    ),
     "does not rank, merge, or evaluate the other line instruments",
 )
 
@@ -162,7 +172,7 @@ def envelope_matches_report(envelope: ReportEnvelope, report: HorizonReport) -> 
     )
 
 
-__all__ = [
+__all__ = [  # noqa: RUF022  # isort-style order conflicts with the repo's plain-sorted() gate
     "ENVELOPE_SCHEMA",
     "GOLDEN_LINE_ID",
     "ReportEnvelope",
