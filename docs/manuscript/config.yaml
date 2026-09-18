@@ -1,8 +1,8 @@
 paper:
   title: "Golden Line: Toward What Matters"
   subtitle: "An Aspirational Thread for Long-Horizon Work"
-  version: "0.4.0"
-  date: "2026-07-18"
+  version: "0.4.1"
+  date: "2026-09-18"
   description: "A directional instrument for recording aspirations and movement toward them without turning aspiration into compliance."
   cover:
     image: "assets/golden-line-cover.png"
@@ -14,7 +14,7 @@ authors:
     affiliation: "Active Inference Institute"
 
 publication:
-  doi: "10.5281/zenodo.21754238"
+  doi: "10.5281/zenodo.22833506"
   github_repository: "docxology/golden_line"
   repository_url: "https://github.com/docxology/golden_line"
 
