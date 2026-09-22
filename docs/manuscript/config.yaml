@@ -6,6 +6,7 @@ paper:
   description: "A directional instrument for recording aspirations and movement toward them without turning aspiration into compliance."
   cover:
     image: "assets/golden-line-cover.png"
+    alt: "Cover art for Golden Line: a golden thread rising across a dark field toward a distant horizon"
 
 authors:
   - name: "Daniel Ari Friedman"
@@ -24,7 +25,7 @@ render:
     html: true
     slides: false
     docx: false
-    epub: false
+    epub: true
 
 rendering:
   cover_height_fraction: 0.66
