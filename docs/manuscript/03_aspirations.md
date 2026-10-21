@@ -46,9 +46,9 @@ one of its conditions, or find that two aspirations pull against each other. The
 useful question is therefore not *How high are we?* but *What does this record
 make visible, and what remains unasked?*
 
-![The four founding aspirations held in a revisable loop. Titles, horizons, and marker/counter-signal counts are source-derived; the connecting loop and icons are interpretive. The loop is direction, not a score or ranking.](../output/figures/golden_horizon_thread.png){#fig:golden_horizon_thread width=95%}
+![The four founding aspirations held in a revisable loop. Titles, horizons, and marker/counter-signal counts are source-derived; the connecting loop and icons are interpretive. The loop is direction, not a score or ranking.](../../output/figures/golden_horizon_thread.png){#fig:golden_horizon_thread width=95%}
 
-![The full nine-entry aspiration registry: four founding aspirations and five further entries, drawn from the versioned source. Each row shows its horizon and declared marker/counter-signal counts; the layout is a taxonomy for review, not a performance scale.](../output/figures/aspiration_registry_map.png){#fig:aspiration_registry_map width=95%}
+![The full nine-entry aspiration registry: four founding aspirations and five further entries, drawn from the versioned source. Each row shows its horizon and declared marker/counter-signal counts; the layout is a taxonomy for review, not a performance scale.](../../output/figures/aspiration_registry_map.png){#fig:aspiration_registry_map width=95%}
 
 ## The signal vocabulary in aggregate
 
@@ -63,7 +63,7 @@ observed marker can never accidentally support two directions at once. The
 blocks are vocabulary the evaluator can match, never observations and never
 points.
 
-![The aggregate declared-signal vocabulary of the registry, one unit block per token: filled blocks for markers, outlined blocks for counter-signals. The counts describe what the evaluator can match, never fulfilment or performance.](../output/figures/signal_inventory.png){#fig:signal_inventory width=95%}
+![The aggregate declared-signal vocabulary of the registry, one unit block per token: filled blocks for markers, outlined blocks for counter-signals. The counts describe what the evaluator can match, never fulfilment or performance.](../../output/figures/signal_inventory.png){#fig:signal_inventory width=95%}
 
 ## The reach of the nine horizons
 
@@ -77,7 +77,7 @@ horizon the map does not classify. [@fig:horizon_bands] shows the grouping.
 The bands are a reading aid declared outside the registry contract: band order
 widens reach, and a wider horizon is not a higher rank.
 
-![The nine aspiration horizons grouped into four temporal-reach bands — immediate, recurring cycle, at handoff, and open-ended. An interpretive reading aid, not a maturity ladder and not part of the registry contract.](../output/figures/horizon_bands.png){#fig:horizon_bands width=95%}
+![The nine aspiration horizons grouped into four temporal-reach bands — immediate, recurring cycle, at handoff, and open-ended. An interpretive reading aid, not a maturity ladder and not part of the registry contract.](../../output/figures/horizon_bands.png){#fig:horizon_bands width=95%}
 
 The aspirations are exercised in [the worked examples](#sec:examples) and
 [the batch reading](#sec:batch-reading).

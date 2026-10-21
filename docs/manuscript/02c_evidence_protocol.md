@@ -19,13 +19,13 @@ names of the four statuses. They are versioned design decisions, not universal
 truths. A future registry may revise them, but it must revise the digest,
 figures, tests, and manuscript together.
 
-![The four HorizonStatus readings mapped to bounded evidence conditions: no admitted entry; incomplete, stale, or unauditable evidence; a declared counter-signal; and complete current/auditable evidence. The matrix is not a ranking.](../output/figures/evidence_state_matrix.png){#fig:evidence_state_matrix width=95%}
+![The four HorizonStatus readings mapped to bounded evidence conditions: no admitted entry; incomplete, stale, or unauditable evidence; a declared counter-signal; and complete current/auditable evidence. The matrix is not a ranking.](../../output/figures/evidence_state_matrix.png){#fig:evidence_state_matrix width=95%}
 
 ## Statuses as bounded claims
 
 `NOT_OBSERVED` means that no valid entry was admitted. `INQUIRY` means that an
 entry exists but does not support a complete current positive reading. `DRIFTING`
-means that a declared counter-signal was recorded and takes precedence over
+means that a declared counter-signal in the admitted record takes precedence over
 markers. `TOWARD` means that every declared marker was observed, no declared
 counter-signal was recorded, and the observation was current when temporal
 review was enabled. None of these readings is a grade, a diagnosis, a safety
@@ -44,7 +44,7 @@ the reasons trail — so no reading arrives unexplained, and the remaining nine
 are carried exactly when the record supplied something for them. An empty field
 is an absent observation and nothing more.
 
-![The twelve structured fields of a finding against six evidence conditions, one executed progress_report call per column. Filled cells are fields the returned record carries and outlined cells are empty, and every cell prints which it is. A carried temporal flag records a currentness problem, not a good result; an empty field records an absent observation and never asserts that what it names is false.](../output/figures/finding_field_matrix.png){#fig:finding_field_matrix width=95%}
+![The twelve structured fields of a finding against six evidence conditions, one executed progress_report call per column. Filled cells are fields the returned record carries and outlined cells are empty, and every cell prints which it is. A carried temporal flag records a currentness problem, not a good result; an empty field records an absent observation and never asserts that what it names is false.](../../output/figures/finding_field_matrix.png){#fig:finding_field_matrix width=95%}
 
 ## Source to publication
 
@@ -63,7 +63,18 @@ template PDF/HTML render and release audit
 ```
 
 `check_artifacts.py` verifies the registry version and digest, the expected
-figure inventory, SVG/PNG pairs, generator identity, and figure-label citations
+exact figure inventory, SVG source bytes, PNG source replay and checksums,
+converter identity, generator identity, and figure-label citations
 in the manuscript. It is a consistency gate, not independent truth
 verification. A rendered artifact still needs visual and publication validation
 in the sibling template checkout.
+
+Optional observation provenance records retain self-report versus independent
+observation, observer role, collection method, review scope, token-to-source
+references, contestation and supersession. References do not verify source
+contents. Separate human-reviewed conflict records retain affected perspectives,
+alternatives and a human decision owner. Worked records preserve commons return
+versus confidentiality, usefulness versus unhurried inquiry, and flourishing
+versus locally adverse effects. They are illustrative records, not empirical
+results. Neither record type changes a finding, resolves disagreement by voting,
+grants permission, or overrides consent, absence, or stewardship instruments.

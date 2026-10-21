@@ -160,7 +160,7 @@ def _sweep_review_date(as_of: str | date) -> date:
     """Resolve the sweep's review date; sweeps never default to today."""
     if isinstance(as_of, str):
         return date.fromisoformat(as_of)
-    if isinstance(as_of, date):
+    if type(as_of) is date:
         return as_of
     raise TypeError("as_of must be an ISO date string or a date")
 
@@ -193,7 +193,11 @@ def temporal_currentness_sweep(
 
     points: list[SweepPoint] = []
     for age in ages:
-        observed_on = (review_date - timedelta(days=int(age))).isoformat()
+        if type(age) is not int:
+            raise ValueError(
+                "ages must contain exact integer days, without bool or coercion"
+            )
+        observed_on = (review_date - timedelta(days=age)).isoformat()
         entry = HorizonEntry(
             aspiration_id=aspiration.id,
             observed_markers=frozenset(aspiration.markers),
@@ -208,7 +212,7 @@ def temporal_currentness_sweep(
         finding = report.findings[0]
         points.append(
             SweepPoint(
-                age_days=int(age),
+                age_days=age,
                 observed_on=observed_on,
                 status=finding.status,
                 stale=finding.stale,

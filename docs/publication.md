@@ -5,8 +5,8 @@
 Cite this work via its minted DOI or repository:
 
 > Friedman, D. A. (2026). *Golden Line: Toward What Matters* (version
-> 0.4.0) [Software and manuscript]. Zenodo.
-> <https://doi.org/10.5281/zenodo.21754238>
+> 0.5.0) [Software and manuscript]. GitHub.
+> <https://github.com/docxology/golden_line/tree/v0.5.0>
 
 BibTeX:
 
@@ -14,20 +14,25 @@ BibTeX:
 @software{friedman_golden_line_2026,
   author  = {Friedman, Daniel Ari},
   title   = {Golden Line: Toward What Matters},
-  version = {0.4.0},
+  version = {0.5.0},
   year    = {2026},
-  doi     = {10.5281/zenodo.21754238}
+  url     = {https://github.com/docxology/golden_line/tree/v0.5.0}
 }
 ```
 
-`CITATION.cff` carries the same metadata in machine-readable form, and
-`.zenodo.json` carries the deposit metadata. All three are generated from
+The last verified Zenodo edition is 0.4.1, DOI
+`10.5281/zenodo.22833506`, verified against the Zenodo API on 2026-10-21.
+That DOI is retained in publication metadata pending Daniel's reserve-first
+new-version deposition. It does not identify a newly minted 0.5.0 deposit.
+
+`CITATION.cff` carries the release metadata in machine-readable form, and
+`.zenodo.json` carries the deposit metadata. The version authority is
 `docs/manuscript/config.yaml`; `tests/test_publication_metadata.py` fails if they
 disagree.
 
 ## Persistent Identifiers and Verification
 
-This repository carries an asserted, verified Zenodo DOI (`10.5281/zenodo.21754238`).
+This repository retains its last verified Zenodo DOI (`10.5281/zenodo.22833506`).
 `tests/test_publication_metadata.py` refuses any unverified DOI-shaped string in
 the citation metadata unless that exact DOI is listed as verified inside the test
 itself. A placeholder DOI that renders like a real one is worse than no DOI: it
@@ -47,8 +52,10 @@ survives copy-and-paste into someone else's bibliography and points nowhere.
 
 ## The other works
 
-This work is one of six. They reference each other by name, repository URL, and
-verified DOI. No work imports another, and the shared report-envelope schema
+This work belongs to eight instruments, their reader, and a witness register.
+The founding four are historical origin. Known verified DOI references below
+are retained; the remaining instrument references use repository URLs rather
+than invented identifiers. No work imports another, and the shared report-envelope schema
 string is aligned by published convention rather than by dependency.
 
 | Work | Role | Repository | DOI |
@@ -58,6 +65,10 @@ string is aligned by published convention rather than by dependency.
 | `white_line` | line — what is absent, withheld, or unknowable (absence ledger) | <https://github.com/docxology/white_line> | `https://doi.org/10.5281/zenodo.21754242` |
 | `line_set` | the reader that declares the set and checks vocabulary separation | <https://github.com/docxology/line_set> | `https://doi.org/10.5281/zenodo.21754244` |
 | `witness_register` | companion beside the set — co-registration without aggregation | <https://github.com/docxology/witness_register> | `https://doi.org/10.5281/zenodo.21754246` |
+| `green_line` | developed capacity | <https://github.com/docxology/green_line> | not asserted here |
+| `blue_line` | maintained commitment | <https://github.com/docxology/blue_line> | not asserted here |
+| `violet_line` | affected-party consent | <https://github.com/docxology/violet_line> | not asserted here |
+| `silver_line` | stewardship | <https://github.com/docxology/silver_line> | not asserted here |
 
 ## Before the repository goes public
 

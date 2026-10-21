@@ -5,6 +5,6 @@ revision of the aspiration registry so a digest can be discussed against a
 named revision rather than a floating tuple.
 """
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 
 REGISTRY_VERSION = "2026.07.18"

@@ -1,0 +1,217 @@
+{
+  "report": {
+    "as_of": "2026-07-29",
+    "counts": {
+      "DRIFTING": 0,
+      "INQUIRY": 0,
+      "NOT_OBSERVED": 9,
+      "TOWARD": 0
+    },
+    "findings": [
+      {
+        "aspiration_id": "attention-before-output",
+        "countered": [],
+        "date_issue": false,
+        "ignored_counter_signals": [],
+        "ignored_markers": [],
+        "note": "",
+        "observed": [],
+        "observed_on": "",
+        "reasons": [
+          "no admitted horizon entry was available"
+        ],
+        "stale": false,
+        "status": "NOT_OBSERVED",
+        "unmet": []
+      },
+      {
+        "aspiration_id": "commons-returned",
+        "countered": [],
+        "date_issue": false,
+        "ignored_counter_signals": [],
+        "ignored_markers": [],
+        "note": "",
+        "observed": [],
+        "observed_on": "",
+        "reasons": [
+          "no admitted horizon entry was available"
+        ],
+        "stale": false,
+        "status": "NOT_OBSERVED",
+        "unmet": []
+      },
+      {
+        "aspiration_id": "durable-understanding",
+        "countered": [],
+        "date_issue": false,
+        "ignored_counter_signals": [],
+        "ignored_markers": [],
+        "note": "",
+        "observed": [],
+        "observed_on": "",
+        "reasons": [
+          "no admitted horizon entry was available"
+        ],
+        "stale": false,
+        "status": "NOT_OBSERVED",
+        "unmet": []
+      },
+      {
+        "aspiration_id": "honest-uncertainty",
+        "countered": [],
+        "date_issue": false,
+        "ignored_counter_signals": [],
+        "ignored_markers": [],
+        "note": "",
+        "observed": [],
+        "observed_on": "",
+        "reasons": [
+          "no admitted horizon entry was available"
+        ],
+        "stale": false,
+        "status": "NOT_OBSERVED",
+        "unmet": []
+      },
+      {
+        "aspiration_id": "repairable-systems",
+        "countered": [],
+        "date_issue": false,
+        "ignored_counter_signals": [],
+        "ignored_markers": [],
+        "note": "",
+        "observed": [],
+        "observed_on": "",
+        "reasons": [
+          "no admitted horizon entry was available"
+        ],
+        "stale": false,
+        "status": "NOT_OBSERVED",
+        "unmet": []
+      },
+      {
+        "aspiration_id": "teachable-craft",
+        "countered": [],
+        "date_issue": false,
+        "ignored_counter_signals": [],
+        "ignored_markers": [],
+        "note": "",
+        "observed": [],
+        "observed_on": "",
+        "reasons": [
+          "no admitted horizon entry was available"
+        ],
+        "stale": false,
+        "status": "NOT_OBSERVED",
+        "unmet": []
+      },
+      {
+        "aspiration_id": "unhurried-questions",
+        "countered": [],
+        "date_issue": false,
+        "ignored_counter_signals": [],
+        "ignored_markers": [],
+        "note": "",
+        "observed": [],
+        "observed_on": "",
+        "reasons": [
+          "no admitted horizon entry was available"
+        ],
+        "stale": false,
+        "status": "NOT_OBSERVED",
+        "unmet": []
+      },
+      {
+        "aspiration_id": "useful-to-others",
+        "countered": [],
+        "date_issue": false,
+        "ignored_counter_signals": [],
+        "ignored_markers": [],
+        "note": "",
+        "observed": [],
+        "observed_on": "",
+        "reasons": [
+          "no admitted horizon entry was available"
+        ],
+        "stale": false,
+        "status": "NOT_OBSERVED",
+        "unmet": []
+      },
+      {
+        "aspiration_id": "wide-human-flourishing",
+        "countered": [],
+        "date_issue": false,
+        "ignored_counter_signals": [],
+        "ignored_markers": [],
+        "note": "",
+        "observed": [],
+        "observed_on": "",
+        "reasons": [
+          "no admitted horizon entry was available"
+        ],
+        "stale": false,
+        "status": "NOT_OBSERVED",
+        "unmet": []
+      }
+    ],
+    "intake_notes": [],
+    "registry_digest": "3e0a7e38ececb156336d57ed7cc60b6bf08a3d8f2edfc678270c307820df57e3",
+    "registry_version": "2026.07.18",
+    "stale_after_days": null
+  },
+  "envelope": {
+    "line_id": "golden_line",
+    "native_status": [
+      [
+        "attention-before-output",
+        "NOT_OBSERVED"
+      ],
+      [
+        "useful-to-others",
+        "NOT_OBSERVED"
+      ],
+      [
+        "repairable-systems",
+        "NOT_OBSERVED"
+      ],
+      [
+        "wide-human-flourishing",
+        "NOT_OBSERVED"
+      ],
+      [
+        "durable-understanding",
+        "NOT_OBSERVED"
+      ],
+      [
+        "teachable-craft",
+        "NOT_OBSERVED"
+      ],
+      [
+        "honest-uncertainty",
+        "NOT_OBSERVED"
+      ],
+      [
+        "unhurried-questions",
+        "NOT_OBSERVED"
+      ],
+      [
+        "commons-returned",
+        "NOT_OBSERVED"
+      ]
+    ],
+    "registry_digest": "3e0a7e38ececb156336d57ed7cc60b6bf08a3d8f2edfc678270c307820df57e3",
+    "registry_version": "2026.07.18",
+    "report_ref": "40d373b94662327658a54503c7619558308144f24e94120b043e6efecde688ab",
+    "review_date": "2026-07-29",
+    "schema_version": "line.report-envelope/1.0",
+    "scope_and_nonclaims": [
+      "records directional readings of aspiration records against a versioned registry at a stated review date",
+      "statuses describe a record, not a person; they are not a safety score, accreditation, moral authority, or permission mechanism",
+      "NOT_OBSERVED means no valid entry was admitted; it does not mean that nobody looked",
+      "TOWARD says only that declared markers were observed with no recorded counter-signal; it does not prove the work good, safe, lawful, or beneficial",
+      "aspiration is not authorization: no reading here overrides a refusal, discipline, or absence instrument",
+      "does not rank, merge, or evaluate the other line instruments"
+    ],
+    "source_snapshot_refs": [],
+    "subject_id": ""
+  }
+}

@@ -10,6 +10,10 @@ observable movement toward it. It emits one of four directional readings per
 aspiration and never a grade. A reading describes a *record*, not a person,
 project, virtue, safety state, legality, or permission.
 
+The founding four describe the origin; the current family has eight instruments,
+one reader, and one witness register. Golden direction does not establish Green
+capacity, Blue commitment, or Violet consent.
+
 ## What the instrument is (and is not)
 
 - IS: a directional record over a versioned nine-entry aspiration registry, plus
@@ -64,8 +68,9 @@ recover the derivation. The report also records `registry_version`,
 
 ## Staged intake semantics
 
-`progress_report` runs three stages and never raises on malformed or hostile
-input — it *records* the problem:
+`progress_report` runs three stages and records supported malformed passive
+entry data. Arbitrary executable iterators and invalid controls are outside
+that promise; see [claim boundaries](../../../docs/claim_boundaries.md).
 
 1. **Intake screening** — one entry per known id (first valid wins); unknown ids,
    duplicates, and malformed records are set aside and named in `intake_notes`.
@@ -131,6 +136,18 @@ report by SHA-256. `native_status` is the complete ordered per-aspiration
 readings — no aggregate is invented — and the instrument's non-claims travel
 inside the record. Never compare, rank, average, or merge `native_status`
 across lines.
+
+`validate_instrument_envelope` checks identity and mandatory non-claims separately
+from correspondence. Agreement does not prove an unedited archive. The unchanged
+native serialization sorts findings by ID; `canonical_archive` retains rejected
+intake separately, and `decode_archive` restores order through an envelope ID
+bijection. Source references remain unverified caller metadata; tuple/list
+reference order and duplicates are preserved.
+
+Custom registries must pass `validate_registry`; empty scopes and one-shot
+signal iterators are rejected. Their version is explicitly labelled custom.
+Optional provenance/conflict side records preserve human disagreement without
+changing readings; see [evidence records](../../../docs/evidence-records.md).
 
 ## Invariant battery
 

@@ -21,8 +21,9 @@ Golden Line is a small, inspectable directional instrument. The registry is in
   pre-publication checklist.
 - [releases/v0.4.0.md](releases/v0.4.0.md) — release packet for version 0.4.0.
 
-The relationship among the four standalone works is declared in the fifth work
-of the set, [`line_set`](https://github.com/docxology/line_set). The other three
+The founding four describe the origin of the current family of eight
+instruments, a reader, and a register. Their relationships are declared in
+[`line_set`](https://github.com/docxology/line_set). The original companions
 are [`docxology/red_line`](https://github.com/docxology/red_line),
 [`docxology/black_line`](https://github.com/docxology/black_line), and
 [`docxology/white_line`](https://github.com/docxology/white_line). Each is a

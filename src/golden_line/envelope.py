@@ -22,10 +22,11 @@ averaged, or merged on it. An envelope is a witness record, not a score.
 from __future__ import annotations
 
 import json
-from collections.abc import Iterable
+import re
 from dataclasses import dataclass
+from datetime import date
 
-from .models import HorizonReport
+from .models import HorizonReport, HorizonStatus
 from .serialization import report_digest
 
 #: The cross-instrument envelope shape this module exports.
@@ -94,7 +95,7 @@ class ReportEnvelope:
 def report_envelope(
     report: HorizonReport,
     subject_id: str = "",
-    source_snapshot_refs: Iterable[str] = (),
+    source_snapshot_refs: tuple[str, ...] | list[str] = (),
 ) -> ReportEnvelope:
     """Wrap a report in the common envelope, pointing at — never re-reading —
     its complete canonical form.
@@ -105,6 +106,11 @@ def report_envelope(
     point at the derivation that produced its readings.
     """
 
+    if (
+        type(source_snapshot_refs) not in (tuple, list)
+        or len(source_snapshot_refs) > 4096
+    ):
+        raise TypeError("source_snapshot_refs must be a finite tuple or list")
     refs = tuple(source_snapshot_refs)
     if not all(isinstance(ref, str) and ref.strip() for ref in refs):
         raise ValueError("source_snapshot_refs must be non-blank strings")
@@ -156,8 +162,8 @@ def envelope_matches_report(envelope: ReportEnvelope, report: HorizonReport) -> 
 
     This is the read-back check for an archived pair: the digest, the review
     date, the registry version and digest, and the per-aspiration readings
-    must all agree. A mismatch means one of the two was edited after export;
-    the check cannot say which, and it says nothing about the truth of either.
+    must all agree now. Consistent rewriting and rehashing can still pass;
+    this predicate cannot establish history, authenticity, or truth.
     """
 
     return (
@@ -172,6 +178,70 @@ def envelope_matches_report(envelope: ReportEnvelope, report: HorizonReport) -> 
     )
 
 
+def validate_instrument_envelope(envelope: object) -> tuple[str, ...]:
+    """Return shape/identity/nonclaim issues, independently of correspondence.
+
+    Subject and source references remain unverified caller metadata even when
+    this validator and the report correspondence predicate both pass.
+    """
+    if type(envelope) is not ReportEnvelope:
+        return ("expected ReportEnvelope",)
+    issues: list[str] = []
+    if envelope.schema_version != ENVELOPE_SCHEMA:
+        issues.append("unsupported schema_version")
+    if envelope.line_id != GOLDEN_LINE_ID:
+        issues.append("incorrect line_id")
+    if envelope.scope_and_nonclaims != SCOPE_AND_NONCLAIMS:
+        issues.append("mandatory scope_and_nonclaims differ")
+    if type(envelope.subject_id) is not str:
+        issues.append("subject_id must be text (unverified caller metadata)")
+    for name in ("registry_digest", "report_ref"):
+        value = getattr(envelope, name)
+        if type(value) is not str or re.fullmatch(r"[0-9a-f]{64}", value) is None:
+            issues.append(f"{name} must be a SHA-256 hex string")
+    if (
+        type(envelope.registry_version) is not str
+        or not envelope.registry_version.strip()
+    ):
+        issues.append("registry_version must be nonblank text")
+    try:
+        if (
+            type(envelope.review_date) is not str
+            or date.fromisoformat(envelope.review_date).isoformat()
+            != envelope.review_date
+        ):
+            raise ValueError
+    except ValueError:
+        issues.append("review_date must be an ISO calendar date")
+    refs = envelope.source_snapshot_refs
+    if (
+        type(refs) is not tuple
+        or len(refs) > 4096
+        or any(type(ref) is not str or not ref.strip() for ref in refs)
+    ):
+        issues.append(
+            "source_snapshot_refs must be a finite tuple of nonblank text (unverified)"
+        )
+    rows = envelope.native_status
+    if (
+        type(rows) is not tuple
+        or not rows
+        or any(
+            type(row) is not tuple
+            or len(row) != 2
+            or type(row[0]) is not str
+            or not row[0].strip()
+            or type(row[1]) is not str
+            or row[1] not in {status.value for status in HorizonStatus}
+            for row in rows
+        )
+    ):
+        issues.append("native_status must contain identifier/status pairs")
+    elif len({row[0] for row in rows}) != len(rows):
+        issues.append("native_status has duplicate identifiers")
+    return tuple(issues)
+
+
 __all__ = [  # noqa: RUF022  # isort-style order conflicts with the repo's plain-sorted() gate
     "ENVELOPE_SCHEMA",
     "GOLDEN_LINE_ID",
@@ -180,4 +250,5 @@ __all__ = [  # noqa: RUF022  # isort-style order conflicts with the repo's plain
     "canonical_envelope",
     "envelope_matches_report",
     "report_envelope",
+    "validate_instrument_envelope",
 ]

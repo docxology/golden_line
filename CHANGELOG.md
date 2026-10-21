@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.5.0 — 2026-10-21
+
+Implement the October review across registry/input boundaries, strict instrument
+envelopes, order-aware archive reconstruction, retained intake contradictions,
+source-replayed artifact integrity, exact-revision release evidence, and optional
+human provenance/conflict records. Preserve the four directional statuses,
+first-valid intake, existing native report digests, and the non-compensation
+boundary. Custom registries are explicit; malformed containers and timestamp
+controls fail predictably.
+
+Synchronize the manuscript, figures, family descriptions, metadata and tested
+claim boundaries. Add standalone CI, mypy, generated-ledger verification, a
+legacy-format fixture, and mutation controls. The new archive sidecar is versioned
+separately from the unchanged native serialization. See
+[the full disposition](docs/reviews/2026-10-20.md) for G1–G11 and adaptations.
+
+The existing verified Zenodo DOI is retained; a new deposition requires Daniel's
+reserve-first step. The dated release packet records the actual gates and render
+checksums.
+
 ## 0.4.0 — 2026-07-29
 
 The envelope window: the cross-instrument report envelope plus its manuscript

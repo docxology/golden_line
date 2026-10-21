@@ -8,6 +8,7 @@ from pathlib import Path
 from golden_line.artifacts import check_artifacts
 from golden_line.figures import (
     BUILD_PROVENANCE,
+    FIGURE_REGISTRY_SCHEMA,
     FIGURES,
     GOLDEN_REGISTRY_SCHEMA,
     build_figures,
@@ -95,7 +96,7 @@ def test_figure_registry_header_mismatches_are_reported(tmp_path: Path) -> None:
     payload["status_values"] = ["BROKEN"]
     _write_json(_figure_registry_path(root), payload)
     assert check_artifacts(root) == [
-        "figure registry schema is not 1.2",
+        f"figure registry schema is not {FIGURE_REGISTRY_SCHEMA}",
         "figure registry version does not match source",
         "figure registry digest does not match source",
         "figure registry status values do not match source",
@@ -123,10 +124,8 @@ def test_figure_registry_filename_and_label_sets_must_match_builders(
     assert check_artifacts(root) == [
         "figure registry filenames do not match the figure builders",
         "figure registry labels do not match the figure builders",
-        "missing generated PNG: wrong.png",
-        "missing generated SVG: wrong.svg",
-        "figure label is not embedded by the manuscript: fig:not-the-real-label",
-        "figure label has no prose cross-reference: fig:not-the-real-label",
+        "figure filename/label pair does not match source: 'wrong.png', 'fig:golden_horizon_thread'",
+        f"figure filename/label pair does not match source: '{FIGURES[1][0]}.png', 'fig:not-the-real-label'",
     ]
 
 
@@ -142,7 +141,10 @@ def test_missing_png_is_reported(tmp_path: Path) -> None:
 def test_missing_svg_is_reported(tmp_path: Path) -> None:
     root = _artifact_root(tmp_path)
     (root / "output" / "figures" / "golden_horizon_thread.svg").unlink()
-    assert check_artifacts(root) == ["missing generated SVG: golden_horizon_thread.svg"]
+    assert check_artifacts(root) == [
+        "missing generated SVG: golden_horizon_thread.svg",
+        "output/figures contains stale or unexpected SVG files",
+    ]
 
 
 def test_uncited_label_is_reported(tmp_path: Path) -> None:

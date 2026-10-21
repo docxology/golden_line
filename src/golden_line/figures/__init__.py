@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
-import shutil
-import subprocess
 from pathlib import Path
 
 from golden_line.analysis import horizon_distribution
 from golden_line.models import HorizonStatus
 from golden_line.paths import PROJECT_ROOT
+from golden_line.raster import raster_bytes, renderer_provenance
 from golden_line.registry import (
     GOLDEN_ASPIRATIONS,
     founding_aspirations,
@@ -67,7 +67,7 @@ BUILD_PROVENANCE = "scripts/build_figures.py"
 #: Schema markers stamped into the two generated registries. The artifact gate
 #: imports these rather than hardcoding a literal, so a bump has one home.
 GOLDEN_REGISTRY_SCHEMA = "1.0"
-FIGURE_REGISTRY_SCHEMA = "1.2"
+FIGURE_REGISTRY_SCHEMA = "1.3"
 
 
 # Executed once at import so the two replay figures below can quote their own
@@ -243,19 +243,17 @@ def build_figures(project_root: Path | None = None) -> list[Path]:
     root = project_root or ROOT
     figure_dir = root / "output" / "figures"
     figure_dir.mkdir(parents=True, exist_ok=True)
-    converter = shutil.which("rsvg-convert")
-    if converter is None:
-        raise RuntimeError(
-            "rsvg-convert is required to build deterministic PNG figures"
-        )
+    converter, renderer = renderer_provenance()
 
     png_paths: list[Path] = []
     figure_records = []
     for name, label, builder, caption, alt in FIGURES:
         svg_path = figure_dir / f"{name}.svg"
         png_path = figure_dir / f"{name}.png"
-        svg_path.write_text(builder(), encoding="utf-8")
-        subprocess.run([converter, "-o", str(png_path), str(svg_path)], check=True)
+        svg = builder().encode("utf-8")
+        png = raster_bytes(svg, converter, renderer)
+        svg_path.write_bytes(svg)
+        png_path.write_bytes(png)
         png_paths.append(png_path)
         figure_records.append(
             {
@@ -266,6 +264,8 @@ def build_figures(project_root: Path | None = None) -> list[Path]:
                 "source": "golden_line aspiration registry and status enum",
                 "generated_by": BUILD_PROVENANCE,
                 "format": "PNG rasterized from deterministic SVG",
+                "svg_sha256": hashlib.sha256(svg).hexdigest(),
+                "png_sha256": hashlib.sha256(png).hexdigest(),
             }
         )
 
@@ -293,6 +293,7 @@ def build_figures(project_root: Path | None = None) -> list[Path]:
                 "registry_version": REGISTRY_VERSION,
                 "registry_digest": registry_digest(GOLDEN_ASPIRATIONS),
                 "status_values": [status.value for status in HorizonStatus],
+                "renderer": renderer,
                 "figures": figure_records,
             },
             indent=2,

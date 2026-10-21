@@ -86,3 +86,13 @@ For security boundaries, use Red Line. For how the work was performed, use Black
 Line. For what is missing, withheld, unobserved, or ethically left unclaimed, use
 White Line. A horizon report must never be used to bypass those scopes, and a
 `TOWARD` on any Golden Line aspiration can never authorize what Red Line refuses.
+
+The strengthened archive and artifact checks narrow technical ambiguity, not
+these substantive limits. A consistent rewrite and rehash still passes report
+correspondence. Optional provenance records preserve asserted authorship and
+disagreement, without verifying source contents. Human-owned conflict records
+can retain locally adverse effects alongside claimed flourishing; they cannot
+resolve the tension automatically. Counter-signal precedence applies within the
+admitted record; first-wins duplicates remain inspectable in the intake sidecar.
+Byte integrity, source consistency, visual quality, and substantive truth are
+separate evidential questions.

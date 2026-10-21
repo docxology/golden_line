@@ -348,7 +348,7 @@ def test_intake_screening_never_raises_on_hostile_input() -> None:
     assert {finding.status for finding in report.findings} == {
         HorizonStatus.NOT_OBSERVED
     }
-    assert "Screening never raises on malformed or unexpected input" in _normalized()
+    assert "Screening never raises on supported malformed passive data" in _normalized()
 
 
 def test_matching_set_operations_match_manuscript() -> None:
@@ -595,7 +595,7 @@ def test_intake_screening_is_deterministic_on_all_input() -> None:
 
     text = _normalized()
     assert "intake screening function" in text
-    assert "never raises on malformed or unexpected input" in text
+    assert "never raises on supported malformed passive data" in text
 
 
 # ---------------------------------------------------------------------------
@@ -878,4 +878,7 @@ def test_envelope_pointer_matches_manuscript() -> None:
         assert not envelope_matches_report(edited, report)
     text = _normalized()
     assert "editing any of them afterwards makes the check return false" in text
-    assert "says nothing about the truth of the report" in text
+    assert (
+        "agreement proves neither an unedited archive nor authenticity, truth, or merit"
+        in text
+    )

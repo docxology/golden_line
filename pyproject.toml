@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "golden_line"
-version = "0.4.0"
+version = "0.5.0"
 description = "An aspirational thread and long-horizon direction for personal work"
 authors = [{name = "Daniel Ari Friedman", email = "daniel@activeinference.institute"}]
 requires-python = ">=3.10"
 dependencies = []
 
 [dependency-groups]
-dev = ["pytest>=7.4.0", "pytest-cov>=4.1.0", "ruff>=0.13.0"]
+dev = ["pytest>=7.4.0", "pytest-cov>=4.1.0", "ruff>=0.13.0", "mypy>=1.15"]
 
 [tool.pytest.ini_options]
 pythonpath = [".", "src"]
@@ -23,6 +23,11 @@ addopts = "-v --tb=short --strict-markers"
 [tool.coverage.run]
 source = ["src"]
 branch = true
+
+[tool.mypy]
+mypy_path = "src"
+explicit_package_bases = true
+check_untyped_defs = true
 
 [tool.coverage.report]
 fail_under = 90

@@ -12,6 +12,7 @@ from .analysis import (
     signal_inventory,
     temporal_currentness_sweep,
 )
+from .archive import ARCHIVE_SCHEMA, canonical_archive, decode_archive, intake_digest
 from .envelope import (
     ENVELOPE_SCHEMA,
     GOLDEN_LINE_ID,
@@ -20,6 +21,13 @@ from .envelope import (
     canonical_envelope,
     envelope_matches_report,
     report_envelope,
+    validate_instrument_envelope,
+)
+from .evidence_records import (
+    AspirationConflict,
+    ObservationProvenance,
+    canonical_evidence_records,
+    worked_evidence_records,
 )
 from .invariants import (
     SoundnessResult,
@@ -39,6 +47,7 @@ from .models import (
     HorizonFinding,
     HorizonReport,
     HorizonStatus,
+    IntakeDisposition,
 )
 from .progress import (
     EVALUATOR_STAGES,
@@ -61,10 +70,13 @@ from .serialization import (
     registry_digest,
     report_digest,
 )
+from .validation import RegistryValidationError, ValidationIssue, validate_registry
 from .version import REGISTRY_VERSION, __version__
 
 __all__ = [  # noqa: RUF022  # isort-style order conflicts with the repo's plain-sorted() gate
+    "ARCHIVE_SCHEMA",
     "Aspiration",
+    "AspirationConflict",
     "ENVELOPE_SCHEMA",
     "EVALUATOR_STAGES",
     "FOUNDING_IDS",
@@ -77,8 +89,11 @@ __all__ = [  # noqa: RUF022  # isort-style order conflicts with the repo's plain
     "HorizonReport",
     "HorizonStatus",
     "IntakeClassification",
+    "IntakeDisposition",
     "IntakeSetAsideReason",
+    "ObservationProvenance",
     "REGISTRY_VERSION",
+    "RegistryValidationError",
     "ReportEnvelope",
     "ReportOverview",
     "SCOPE_AND_NONCLAIMS",
@@ -86,10 +101,13 @@ __all__ = [  # noqa: RUF022  # isort-style order conflicts with the repo's plain
     "SignalInventory",
     "SoundnessResult",
     "SweepPoint",
+    "ValidationIssue",
     "__version__",
     "all_invariants",
     "aspiration_ids",
+    "canonical_archive",
     "canonical_envelope",
+    "canonical_evidence_records",
     "canonical_registry",
     "canonical_report",
     "check_digest_stability",
@@ -100,11 +118,13 @@ __all__ = [  # noqa: RUF022  # isort-style order conflicts with the repo's plain
     "check_signal_text",
     "check_signal_uniqueness",
     "classify_intake_entries",
+    "decode_archive",
     "envelope_matches_report",
     "find_aspiration",
     "founding_aspirations",
     "further_aspirations",
     "horizon_distribution",
+    "intake_digest",
     "progress_report",
     "registry_digest",
     "registry_sound",
@@ -113,4 +133,7 @@ __all__ = [  # noqa: RUF022  # isort-style order conflicts with the repo's plain
     "report_overview",
     "signal_inventory",
     "temporal_currentness_sweep",
+    "validate_instrument_envelope",
+    "validate_registry",
+    "worked_evidence_records",
 ]

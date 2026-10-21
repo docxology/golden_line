@@ -14,7 +14,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date
 from enum import Enum
-from typing import Any
+from typing import Any, TypedDict
 
 from .models import (
     Aspiration,
@@ -22,15 +22,29 @@ from .models import (
     HorizonFinding,
     HorizonReport,
     HorizonStatus,
+    IntakeDisposition,
 )
 from .registry import GOLDEN_ASPIRATIONS
 from .serialization import registry_digest
+from .validation import MAX_COLLECTION_SIZE, validate_registry
 from .version import REGISTRY_VERSION
 
 #: The stages :func:`progress_report` runs, in order. Named here so the count
 #: quoted in the manuscript, the evidence ledger, and the pipeline figure all
 #: read one source instead of three hand-kept copies.
 EVALUATOR_STAGES: tuple[str, ...] = ("intake screening", "matching", "decision")
+
+
+class _FindingFields(TypedDict):
+    observed: tuple[str, ...]
+    unmet: tuple[str, ...]
+    countered: tuple[str, ...]
+    ignored_markers: tuple[str, ...]
+    ignored_counter_signals: tuple[str, ...]
+    note: str
+    observed_on: str
+    stale: bool
+    date_issue: bool
 
 
 class IntakeSetAsideReason(str, Enum):
@@ -59,7 +73,7 @@ def _review_date(as_of: str | date | None) -> date:
         return date.today()  # noqa: DTZ011
     if isinstance(as_of, str):
         return date.fromisoformat(as_of)
-    if isinstance(as_of, date):
+    if type(as_of) is date:
         return as_of
     raise TypeError("as_of must be an ISO date string, a date, or None")
 
@@ -108,6 +122,11 @@ def _normalise_entry(entry: Any, index: int) -> tuple[HorizonEntry | None, str |
                 f"{field_name} must be an iterable of text tokens"
             )
         try:
+            if (
+                type(value) not in (tuple, list, set, frozenset)
+                or len(value) > MAX_COLLECTION_SIZE
+            ):
+                raise TypeError
             tokens = tuple(value)
             if not all(isinstance(token, str) for token in tokens):
                 raise TypeError
@@ -130,13 +149,27 @@ def _normalise_entry(entry: Any, index: int) -> tuple[HorizonEntry | None, str |
 
 
 def _screen_entries(
-    entries: Iterable[HorizonEntry],
+    entries: Iterable[object],
     known_ids: frozenset[str],
-) -> tuple[dict[str, HorizonEntry], tuple[str, ...]]:
+) -> tuple[dict[str, HorizonEntry], tuple[str, ...], tuple[IntakeDisposition, ...]]:
     """Accept one normalized entry per known aspiration; note everything else."""
     accepted: dict[str, HorizonEntry] = {}
     notes: list[str] = []
-    for classification in _classify_intake_entries(entries, known_ids):
+    archive: list[IntakeDisposition] = []
+    for ordinal, classification in enumerate(
+        _classify_intake_entries(entries, known_ids), start=1
+    ):
+        archive.append(
+            IntakeDisposition(
+                ordinal,
+                classification.entry,
+                classification.admitted,
+                classification.set_aside_reason.value
+                if classification.set_aside_reason
+                else None,
+                classification.note,
+            )
+        )
         if classification.note is not None:
             notes.append(classification.note)
         if not classification.admitted:
@@ -146,11 +179,11 @@ def _screen_entries(
                 "admitted intake classification is missing its normalized HorizonEntry"
             )
         accepted[classification.entry.aspiration_id] = classification.entry
-    return accepted, tuple(notes)
+    return accepted, tuple(notes), tuple(archive)
 
 
 def _classify_intake_entries(
-    entries: Iterable[HorizonEntry],
+    entries: Iterable[object],
     known_ids: frozenset[str],
 ) -> tuple[IntakeClassification, ...]:
     """Classify every submitted record under the first-wins intake rule."""
@@ -203,11 +236,11 @@ def _classify_intake_entries(
 
 
 def classify_intake_entries(
-    entries: Iterable[HorizonEntry],
-    aspirations: Iterable[Aspiration] = GOLDEN_ASPIRATIONS,
+    entries: Iterable[object],
+    aspirations: tuple[Aspiration, ...] | list[Aspiration] = GOLDEN_ASPIRATIONS,
 ) -> tuple[IntakeClassification, ...]:
     """Replay the public intake rule and return one classification per record."""
-    aspiration_list = tuple(aspirations)
+    aspiration_list = validate_registry(aspirations)
     return _classify_intake_entries(
         entries, frozenset(item.id for item in aspiration_list)
     )
@@ -296,7 +329,7 @@ def _finding(
     unmet = tuple(sorted(declared_markers - entry.observed_markers))
     countered = tuple(sorted(entry.counter_signals & declared_counters))
 
-    common = {
+    common: _FindingFields = {
         "observed": observed,
         "unmet": unmet,
         "countered": countered,
@@ -351,8 +384,8 @@ def _finding(
 
 
 def progress_report(
-    entries: Iterable[HorizonEntry],
-    aspirations: Iterable[Aspiration] = GOLDEN_ASPIRATIONS,
+    entries: Iterable[object],
+    aspirations: tuple[Aspiration, ...] | list[Aspiration] = GOLDEN_ASPIRATIONS,
     *,
     as_of: str | date | None = None,
     stale_after_days: int | None = None,
@@ -363,10 +396,10 @@ def progress_report(
     staleness parameters add temporal review, while the returned report always
     records registry and review provenance for reproducible comparison.
     """
-    aspiration_list = tuple(aspirations)
+    aspiration_list = validate_registry(aspirations)
     _validate_staleness_threshold(stale_after_days)
     review_date = _review_date(as_of)
-    accepted, notes = _screen_entries(
+    accepted, notes, archive = _screen_entries(
         entries, frozenset(item.id for item in aspiration_list)
     )
     findings = tuple(
@@ -376,8 +409,11 @@ def progress_report(
     return HorizonReport(
         findings,
         notes,
-        REGISTRY_VERSION,
+        REGISTRY_VERSION
+        if aspiration_list == GOLDEN_ASPIRATIONS
+        else f"custom:{REGISTRY_VERSION}",
         registry_digest(aspiration_list),
         review_date.isoformat(),
         stale_after_days,
+        archive,
     )

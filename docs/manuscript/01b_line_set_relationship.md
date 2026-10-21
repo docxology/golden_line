@@ -1,15 +1,22 @@
 # Relationship to the line set {#sec:line-set-relationship}
 
-Golden Line is the aspirational work in the four-line set, whose declaration
+Golden Line is the aspirational work among the founding four, whose declaration
 lives in the companion work [`line_set`](https://github.com/docxology/line_set).
 Red Line is the personal security boundary and explicit No document. Black
 Line is positive operating discipline. White Line records absence, restraint,
 and negative space. Golden Line does not copy their registries or evaluators,
 and a directional finding is never a compliance verdict.
 
-A fifth work, `line_set`, is a thin reader that declares the set and checks that
+The current family comprises eight instruments, the `line_set` reader, and the
+`witness_register` companion. Historically the fifth work, `line_set` is a thin reader that declares the set and checks that
 no two lines gave the same spelling to different things; it adds no substantive
 instrument, and Golden Line does not import, depend on, or defer to it.
+
+A useful direction does not show developed capacity: Green Line records that
+separate question. A wish to sustain inquiry does not show a maintained
+commitment: Blue Line records that question. A flourishing marker does not
+show affected-party consent: Violet Line records that question. None of these
+separate records is imported, scored, or overridden by Golden Line.
 
 ## Note on the name
 

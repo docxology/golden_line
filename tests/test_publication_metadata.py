@@ -24,7 +24,17 @@ CONFIG = ROOT / "docs" / "manuscript" / "config.yaml"
 LICENSE = ROOT / "LICENSE"
 
 SELF = "golden_line"
-SIBLINGS = ("red_line", "black_line", "white_line", "line_set", "witness_register")
+SIBLINGS = (
+    "red_line",
+    "black_line",
+    "white_line",
+    "green_line",
+    "blue_line",
+    "violet_line",
+    "silver_line",
+    "line_set",
+    "witness_register",
+)
 
 #: The six real DOIs of the line-set works (this work + five siblings),
 #: asserted real and reserved via Zenodo. Adding any other DOI-shaped string to
@@ -37,6 +47,10 @@ VERIFIED_DOIS: tuple[str, ...] = (
     "10.5281/zenodo.21754242",
     "10.5281/zenodo.21754244",
     "10.5281/zenodo.21754246",
+    "10.5281/zenodo.22833506",
+    "10.5281/zenodo.22833503",
+    "10.5281/zenodo.22833507",
+    "10.5281/zenodo.22833511",
 )
 
 #: A DOI as the registries publish them.
@@ -96,7 +110,9 @@ def test_every_sibling_is_referenced_by_its_exact_public_url() -> None:
         url = f"https://github.com/docxology/{sibling}"
         assert f'repository-code: "{url}"' in citation, sibling
         assert url in identifiers, sibling
-    assert len(SIBLINGS) == 5, "the set is six works; each names the other five"
+    assert len(SIBLINGS) == 9, (
+        "the current family has ten works; each names the other nine"
+    )
 
 
 def test_no_unverified_doi_appears_in_metadata() -> None:

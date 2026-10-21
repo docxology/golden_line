@@ -7,9 +7,14 @@ uv run pytest tests/ --cov=src --cov-branch --cov-report=term-missing
 uv run python scripts/check_registry.py
 uv run python scripts/build_figures.py
 uv run python scripts/check_artifacts.py
+uv run ruff check src tests scripts
+uv run ruff format --check src tests scripts
+uv run mypy src/golden_line
+uv run python scripts/gen_formalism_ledger.py --check
 ```
 
-These four commands are the canonical local validation surface. They run from
+The first four commands remain the core local validation surface; lint, format,
+type and generated-ledger checks complete the release gate surface. They run from
 this repository alone, offline, with no sibling project present. Rebuild the
 ignored generated outputs before running `check_artifacts.py`; never hand-edit
 files under `output/`.
@@ -34,6 +39,30 @@ Five of the thirteen — `signal_inventory`, `horizon_bands`,
 missing, associated with the wrong registry digest, carrying a hand-edited
 caption, embedded without a prose cross-reference, or cross-referenced without
 being embedded.
+
+The gate also validates exact manifest cardinality, filename/label pairing,
+safe basenames and path containment, SVG bytes replayed from source, PNG bytes
+replayed through the current converter, and manifest checksums. The manifest
+records the full converter/library version output and executable SHA-256.
+A changed renderer is reported as a rebuild requirement. An editable manifest
+hash alone is insufficient: the gate independently replays source. These checks
+establish source consistency and byte integrity, not visual quality or truth.
+
+## Release evidence and CI
+
+`uv run python -m golden_line.release_evidence` executes the complete local
+surface and writes `output/evidence/manifest.json` and per-command logs. It
+records source commit, tracked-dirty state, Python runtime, lock digest, renderer
+identity, registry digest, and artifact hashes. Every failed exit status is
+retained and prevents success; dirty or changing tracked source also prevents
+success. Run it on the committed release tree. Rendering is recorded as
+`not_run` by this local runner and requires a separate external-toolchain receipt.
+
+The no-sibling-checkout CI matrix runs the declared supported Python releases
+with a locked dependency resolution and archives evidence keyed by source SHA,
+including failed runs. A fresh checkout needs only this repository, uv, and
+librsvg for local validation. Coverage measures exercised code, not semantic
+completeness or the truth of observations.
 
 ## Rendering the manuscript (external toolchain)
 

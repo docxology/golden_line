@@ -644,7 +644,7 @@ def _svg_pipeline() -> str:
             _text(
                 70,
                 172,
-                "Malformed or unexpected input is recorded, never raised;",
+                "Supported malformed passive data is recorded;",
                 20,
                 MUTED,
             ),
@@ -733,7 +733,7 @@ def _svg_pipeline() -> str:
         _text(
             chan_x + 22,
             chan_y + chan_h - 22,
-            "set aside, named, and counted — never silent",
+            "set aside; normalized payloads archived",
             20,
             MUTED,
         )

@@ -1,6 +1,7 @@
 """Guards that this repository stays readable and runnable on its own.
 
-Golden Line is one work of five, each now in its own repository. The set's
+Golden Line belongs to a family of eight instruments, a reader, and a register,
+each in its own repository. The set's
 standalone rule is explicit: "Each project has its own source of truth, Python
 package, tests, documentation, manuscript, references, figures, and rendered
 artifacts. A separated copy must still explain its own purpose and limits.
@@ -138,7 +139,9 @@ def test_every_relative_link_resolves_to_a_file_that_ships() -> None:
 def _required_system_tool() -> str:
     """Read the external binary name out of the figure builder's own source."""
 
-    source = FIGURES_INIT.read_text(encoding="utf-8")
+    source = (PROJECT_ROOT / "src" / "golden_line" / "raster.py").read_text(
+        encoding="utf-8"
+    )
     match = re.search(r"shutil\.which\(\s*\"(?P<tool>[^\"]+)\"", source)
     assert match is not None, f"{FIGURES_INIT.name} names no external tool to require"
     return match.group("tool")

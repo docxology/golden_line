@@ -57,6 +57,15 @@ class HorizonEntry:
 
 
 @dataclass(frozen=True)
+class IntakeDisposition:
+    ordinal: int
+    entry: HorizonEntry | None
+    admitted: bool
+    set_aside_reason: str | None = None
+    note: str | None = None
+
+
+@dataclass(frozen=True)
 class HorizonFinding:
     """The directional reading for one aspiration, with its full reasons trail.
 
@@ -95,6 +104,11 @@ class HorizonReport:
     registry_digest: str = ""
     as_of: str = ""
     stale_after_days: int | None = None
+    intake_archive: tuple[IntakeDisposition, ...] = ()
+
+    @property
+    def currentness_evaluated(self) -> bool:
+        return self.stale_after_days is not None
 
     def counts(self) -> dict[str, int]:
         """Tally findings per status value; a summary, not a score."""

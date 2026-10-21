@@ -99,9 +99,11 @@ evaluator or manuscript is unsound.
 
 ## Integrity and template-status gaps
 
-No external attestation or independent observation provenance is claimed. The
-project is its own repository, but no release packet with attached report
-outputs has been published yet.
+No external attestation or verification of observation authorship is claimed.
+The 2026-10-21 review implementation adds optional provenance/conflict formats
+and an exact-revision release evidence collector. Current release disposition
+is recorded in `docs/reviews/2026-10-20.md`; earlier counts above remain dated
+historical evidence, not results of this release.
 
 ## Configurable-surface gaps
 
@@ -111,7 +113,7 @@ provenance contract.
 
 ## Documentation and signposting gaps
 
-The four-line set remains cross-linked by repository references; it is not
+The founding four and current eight-instrument family remain cross-linked by repository references; they are not
 merged into one evaluator. Keep those references current when the companion
 repositories change, and never let one become a relative path out of this
 repository.
@@ -121,29 +123,19 @@ repository.
 The evaluator does not independently verify who supplied an observation or
 whether a marker is true in the world.
 
-- [Low] `mypy` is not configured for this repository (no `[tool.mypy]`, no
-  `mypy.ini`/`.mypy.ini`/`setup.cfg`, and `mypy` absent from the dev
-  dependency group), so `uv run mypy` is not part of the local gate; the
-  canonical surface is the four commands in `docs/development.md` plus ruff
-  (see `scripts/AGENTS.md`). Running mypy on the src-layout package currently
-  reports only src-layout module-resolution noise (`import-not-found`,
-  duplicate-module), not type errors. If type-checking is desired, wire a
-  `[tool.mypy]`/`MYPYPATH=src` config and add `mypy` to `[dependency-groups]
-  dev` — affected paths: `pyproject.toml`, `src/golden_line/`. Not done this
-  window to avoid adding an unrequested gate.
+- [x] Configure mypy for the src layout, add its locked development dependency,
+  expose the typed package marker, and run it over the complete package. The
+  canonical release commands now include it in `docs/development.md`.
 
 ## Ordered improvement ladder
 
 1. Preserve the structural and artifact gates.
-2. Add independently authored observation provenance only with a testable
-   contract.
-3. Add a human-reviewed conflict record without introducing an aggregate score.
+2. [x] Add an optional observation provenance record with a tested export
+   contract, preserving asserted authorship without independently verifying it.
+3. [x] Add a human-reviewed conflict record without an aggregate score.
 
-- Add an independently authored observation ledger format when the surrounding
-  DAF workflow has a stable provenance requirement; the current package accepts
-  caller-supplied `HorizonEntry` records but does not verify who observed them.
-- Add a separate, human-reviewed conflict record for cases where two
-  aspirations pull in opposite directions; the evaluator intentionally refuses
-  to aggregate or resolve those tensions.
+- Optional record contracts and worked examples now live in
+  `docs/evidence-records.md`. Real observation authorship and source contents
+  still require human review; the evaluator does not aggregate disagreements.
 - Run the external publication engine's rendered PDF/HTML audit whenever the
   manuscript is published or that engine changes.

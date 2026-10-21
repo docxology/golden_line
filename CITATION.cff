@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use or refer to this work, please cite it as below."
 type: software
 title: "Golden Line: Toward What Matters"
-version: "0.4.1"
-date-released: "2026-09-18"
+version: "0.5.0"
+date-released: "2026-10-21"
 authors:
   - family-names: "Friedman"
     given-names: "Daniel Ari"
@@ -35,6 +35,18 @@ abstract: >-
   computes no aggregate: there is no virtue score, and NOT_OBSERVED means
   no valid entry was admitted rather than that nobody looked.
 references:
+  - type: software
+    title: "green_line"
+    repository-code: "https://github.com/docxology/green_line"
+  - type: software
+    title: "blue_line"
+    repository-code: "https://github.com/docxology/blue_line"
+  - type: software
+    title: "violet_line"
+    repository-code: "https://github.com/docxology/violet_line"
+  - type: software
+    title: "silver_line"
+    repository-code: "https://github.com/docxology/silver_line"
   - type: software
     title: "red_line"
     authors:

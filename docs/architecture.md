@@ -3,6 +3,10 @@
 Golden Line is a small modular package. Each module answers one question and
 none of them import any other line project.
 
+The founding four describe origin; the current family has eight instruments,
+one reader, and one witness register. Direction does not establish developed
+capacity (Green), maintained commitment (Blue), or affected-party consent (Violet).
+
 | Module | Question it answers |
 | --- | --- |
 | `src/golden_line/version.py` | Which package and registry revision is this? |
@@ -12,6 +16,11 @@ none of them import any other line project.
 | `src/golden_line/progress.py` | How is a directional report produced, and how is a record admitted or set aside? |
 | `src/golden_line/serialization.py` | What is the canonical form and digest of a registry or report? |
 | `src/golden_line/envelope.py` | How does a complete report travel to a co-registration layer without being reinterpreted? |
+| `src/golden_line/validation.py` | Which immutable registry data may enter evaluation? |
+| `src/golden_line/archive.py` | How are native order and rejected intake reconstructed without changing old digests? |
+| `src/golden_line/evidence_records.py` | How are authorship, contestation, and human-owned conflicts retained separately? |
+| `src/golden_line/raster.py` | Which converter identity and raster bytes correspond to source SVG? |
+| `src/golden_line/release_evidence.py` | Which commands passed on an exact clean source revision? |
 | `src/golden_line/invariants.py` | Is the registry structurally sound? |
 | `src/golden_line/analysis.py` | What does the registry vocabulary and the evaluator's behaviour look like? |
 | `src/golden_line/figures/` | How is each figure drawn deterministically from source? |
@@ -65,10 +74,18 @@ frozen record whose `report_ref` is the SHA-256 of `canonical_report`, whose
 instrument has no single overall verdict and none is invented), and whose
 `scope_and_nonclaims` carries the instrument boundary inside the record.
 `canonical_envelope` gives the stable JSON archive form and
-`envelope_matches_report` verifies an archived pair. The envelope points at
+`envelope_matches_report` checks present report correspondence; it cannot
+authenticate history. `validate_instrument_envelope` separately validates
+identity, mandatory non-claims, and field shapes. The envelope points at
 the native report and never reinterprets it; sibling instruments export the
 same shape by publishing the same schema string, never by import. Design
 provenance is recorded in [correspondence.md](correspondence.md).
+
+The native serialization remains unchanged and sorts findings by ID. The
+versioned archive sidecar records intake dispositions and its own digest;
+`decode_archive` restores native presentation order using the envelope's
+identifier bijection. A consistent rewrite and rehash can still pass.
+See [claim boundaries](claim_boundaries.md) and [evidence records](evidence-records.md).
 
 ## Structural soundness
 

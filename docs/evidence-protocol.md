@@ -57,7 +57,16 @@ template PDF/HTML rendering and release audit
 
 Run `uv run python scripts/build_figures.py` and then
 `uv run python scripts/check_artifacts.py`. The gate checks registry version and
-digest, expected figure inventory, SVG/PNG presence, generator identity, and
+digest, exact filename/label inventory, SVG source bytes, replayed PNG bytes,
+manifest checksums, converter version/binary identity, generator identity, and
 manuscript figure-label citations. A passing local gate still does not prove
 the prose claims are true or that a rendered document is visually perfect;
 the sibling template's rendered-artifact audit remains necessary.
+
+Counter-signal precedence is local to the admitted record. First-wins preserves
+order sensitivity; normalized rejected duplicates remain in a separately hashed
+intake sidecar. Source metadata, including subject and snapshot references, is
+unverified. A consistent rewrite and rehash can pass correspondence, so hashes
+do not authenticate archive history. The supported data domain is documented in
+[claim boundaries](claim_boundaries.md); optional authorship and conflict records
+are specified in [evidence records](evidence-records.md).

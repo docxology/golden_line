@@ -15,6 +15,7 @@ from dataclasses import dataclass
 from .models import Aspiration
 from .registry import GOLDEN_ASPIRATIONS
 from .serialization import canonical_registry, registry_digest
+from .validation import RegistryValidationError, validate_registry
 
 
 @dataclass(frozen=True)
@@ -94,6 +95,8 @@ def check_signal_text(aspirations: tuple[Aspiration, ...]) -> SoundnessResult:
             continue
         for field_name in ("markers", "counter_signals"):
             try:
+                if type(getattr(item, field_name)) not in (tuple, list):
+                    raise TypeError
                 tokens = tuple(getattr(item, field_name))
             except TypeError:
                 bad.append(f"{item.id}:{field_name} is not iterable")
@@ -116,6 +119,8 @@ def check_signal_uniqueness(aspirations: tuple[Aspiration, ...]) -> SoundnessRes
             continue
         for field_name in ("markers", "counter_signals"):
             try:
+                if type(getattr(item, field_name)) not in (tuple, list):
+                    raise TypeError
                 tokens = tuple(getattr(item, field_name))
             except TypeError:
                 duplicates.append(f"{item.id}:{field_name}")
@@ -142,6 +147,10 @@ def check_signal_disjointness(aspirations: tuple[Aspiration, ...]) -> SoundnessR
             tangled.append(f"index {index}")
             continue
         try:
+            if type(item.markers) not in (tuple, list) or type(
+                item.counter_signals
+            ) not in (tuple, list):
+                raise TypeError
             markers = tuple(item.markers)
             counters = tuple(item.counter_signals)
         except TypeError:
@@ -164,6 +173,15 @@ def check_signal_disjointness(aspirations: tuple[Aspiration, ...]) -> SoundnessR
 def check_digest_stability(aspirations: tuple[Aspiration, ...]) -> SoundnessResult:
     """The canonical form must serialize, and its digest must ignore order."""
     try:
+        if any(
+            isinstance(item, Aspiration)
+            and (
+                type(item.markers) not in (tuple, list)
+                or type(item.counter_signals) not in (tuple, list)
+            )
+            for item in aspirations
+        ):
+            raise TypeError("unsupported signal container")
         json.loads(canonical_registry(tuple(aspirations)))
         forward = registry_digest(tuple(aspirations))
         reverse = registry_digest(tuple(reversed(tuple(aspirations))))
@@ -192,7 +210,14 @@ def all_invariants(
     aspirations: tuple[Aspiration, ...] = GOLDEN_ASPIRATIONS,
 ) -> tuple[SoundnessResult, ...]:
     """Run every structural check over ``aspirations`` and return the battery."""
-    return tuple(check(aspirations) for check in _CHECKS)
+    try:
+        normalized = validate_registry(aspirations)
+    except RegistryValidationError as exc:
+        return tuple(
+            SoundnessResult(check.__name__.removeprefix("check_"), False, str(exc))
+            for check in _CHECKS
+        )
+    return tuple(check(normalized) for check in _CHECKS)
 
 
 def registry_sound(aspirations: tuple[Aspiration, ...] = GOLDEN_ASPIRATIONS) -> bool:

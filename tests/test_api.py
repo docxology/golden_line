@@ -80,10 +80,17 @@ def test_project_root_falls_back_when_no_pyproject_is_above(tmp_path: Path) -> N
     ``next(..., default)`` default is not a separate statement — so the
     fallback needs a test that actually walks a tree without a marker file.
     """
-    deep = tmp_path / "a" / "b" / "c" / "d"
-    deep.mkdir(parents=True)
+    from uuid import uuid4
+
+    deep = (
+        Path(Path.cwd().anchor)
+        / f"golden-line-absent-{uuid4().hex}"
+        / "a"
+        / "b"
+        / "c"
+        / "d"
+    )
     module = deep / "module.py"
-    module.write_text("", encoding="utf-8")
     assert not any(
         (parent / "pyproject.toml").is_file() for parent in module.resolve().parents
     )

@@ -76,9 +76,12 @@ first-wins rule. Iterating $E$, a record with the wrong type or malformed
 fields is set aside with an intake note; an entry whose
 $\mathrm{aid} \notin \mathrm{ids}(R)$ is set aside with an unknown-id note; an
 entry whose $\mathrm{aid}$ is already in $A$ is set aside with a duplicate note
-and the first valid entry stands; otherwise the entry is admitted. Iterable
-text-token fields are normalized to sets. Screening never raises on malformed
-or unexpected input. It is a pure function of the pair $(E, \mathrm{ids}(R))$:
+and the first valid entry stands; otherwise the entry is admitted. Built-in
+tuple/list/set/frozenset text-token fields are normalized to sets, subject to
+the source-defined collection bound. Screening never raises on supported
+malformed passive data. Token iterators, mappings, and scalar strings are
+rejected without iteration. Failure of an outer batch iterator is outside
+this passive-data promise. It is a pure function of the pair $(E, \mathrm{ids}(R))$:
 records are tested in a fixed order — shape, then registry membership, then
 prior admission — and iteration follows the order of $E$ with indices counted
 from 1 in the intake notes.
@@ -185,11 +188,11 @@ Malformed input is set aside deterministically: a record with the wrong type
 or malformed fields always gets a malformed note, an entry whose
 $\mathrm{aid} \notin \mathrm{ids}(R)$ always gets an unknown-id note, and
 an entry whose $\mathrm{aid}$ is already in $A$ always gets a duplicate note.
-Screening never raises on malformed or unexpected input — it is a pure
+Screening never raises on supported malformed passive data — it is a pure
 computation, and its determinism is separate from the first-wins semantics
 of [@prop:first_wins], which covers which entry stands when multiple valid
 entries share an identifier. Intake screening determinism covers the
-screening function's behavior on all input, including malformed records.
+screening function's behavior on supported passive input, including malformed records.
 :::
 
 ::: {.proposition #prop:boundary_exclusive title="The currentness boundary is exclusive"}
@@ -201,7 +204,7 @@ The threshold is the caller's review-cadence choice; nothing in the evaluator
 endorses any particular number of days as a natural constant.
 :::
 
-![The evaluator's ordered decision rule. Counter-signal precedence is explicit; TOWARD requires complete markers and auditable currentness when temporal review is enabled. The path reads a record; it is not a compliance verdict.](../output/figures/horizon_decision_path.png){#fig:horizon_decision_path width=95%}
+![The evaluator's ordered decision rule. Counter-signal precedence is explicit; TOWARD requires complete markers and auditable currentness when temporal review is enabled. The path reads a record; it is not a compliance verdict.](../../output/figures/horizon_decision_path.png){#fig:horizon_decision_path width=95%}
 
 The ordered clauses and the four readings they terminate in are drawn from the
 `HorizonStatus` enumeration — the decision rule's codomain, not the registry —
@@ -218,7 +221,7 @@ $\texttt{TOWARD}$; a single missing marker holds the direction open at
 $\texttt{INQUIRY}$, exactly as an empty entry does. The panel characterizes the
 clause order, not any observed practice.
 
-![Every observed-marker subset for every aspiration, filed as an entry and evaluated. Each cell prints the status progress_report returned and the count of markers still unmet, so the grid reads without colour; only the complete subset reaches TOWARD, and one missing marker reads exactly as none. Marker completeness is a property of the record, never a measure of the work.](../output/figures/marker_completeness.png){#fig:marker_completeness width=95%}
+![Every observed-marker subset for every aspiration, filed as an entry and evaluated. Each cell prints the status progress_report returned and the count of markers still unmet, so the grid reads without colour; only the complete subset reaches TOWARD, and one missing marker reads exactly as none. Marker completeness is a property of the record, never a measure of the work.](../../output/figures/marker_completeness.png){#fig:marker_completeness width=95%}
 
 ### The temporal half of the rule
 
@@ -232,7 +235,7 @@ likewise reads $\texttt{INQUIRY}$. Every cell in
 illustration of one; the sweep observes the evaluator and never re-implements
 it.
 
-![A fully-marked entry replayed through the real evaluator at 14 observation ages with stale_after_days = 90. Every cell names the status progress_report actually returned, so nothing here is carried by colour alone: TOWARD through age 90, INQUIRY from age 91 and for future-dated observations. Age reopens the question; it never manufactures drift.](../output/figures/temporal_currentness_sweep.png){#fig:temporal_currentness_sweep width=95%}
+![A fully-marked entry replayed through the real evaluator at 14 observation ages with stale_after_days = 90. Every cell names the status progress_report actually returned, so nothing here is carried by colour alone: TOWARD through age 90, INQUIRY from age 91 and for future-dated observations. Age reopens the question; it never manufactures drift.](../../output/figures/temporal_currentness_sweep.png){#fig:temporal_currentness_sweep width=95%}
 
 ::: {.proposition #prop:sweep_codomain title="Sweep delegation and codomain"}
 The sweep computes no status of its own: its only status-producing call is
@@ -267,7 +270,7 @@ and a count of rows that differ. Uniformity here is a fact about the code path;
 it says nothing about how any aspiration is actually served.
 :::
 
-![The same currentness replay run across the whole registry: 9 aspiration rows by 14 observation ages, 126 executed progress_report calls at stale_after_days = 90. Filled cells are TOWARD and outlined cells are INQUIRY, so the grid reads without colour; the FLIPS AT column gives each row's own transition age and the footer counts rows that differ. Uniform ageing is a fact about the evaluator's code path, not evidence that any aspiration is being served.](../output/figures/currentness_lattice.png){#fig:currentness_lattice width=95%}
+![The same currentness replay run across the whole registry: 9 aspiration rows by 14 observation ages, 126 executed progress_report calls at stale_after_days = 90. Filled cells are TOWARD and outlined cells are INQUIRY, so the grid reads without colour; the FLIPS AT column gives each row's own transition age and the footer counts rows that differ. Uniform ageing is a fact about the evaluator's code path, not evidence that any aspiration is being served.](../../output/figures/currentness_lattice.png){#fig:currentness_lattice width=95%}
 
 ## Structural invariants
 
@@ -296,7 +299,7 @@ $\mathrm{registry\_digest}(R) = \mathrm{registry\_digest}(\pi(R))$ for every
 permutation $\pi$ of $R$, and the digest is exactly 64 lowercase hexadecimal
 characters (SHA-256). Two readers comparing digests are comparing registry
 content, never the order in which they happened to list it — and a matching
-digest attests only sameness of content, not soundness or merit.
+digest compares supplied content, not soundness, merit, or archive history.
 :::
 
 ::: {.proposition #prop:detection title="Proof of detection"}
@@ -331,7 +334,7 @@ virtue score this instrument refuses everywhere else.
 
 ::: {.definition #def:report_envelope title="Report envelope"}
 The report envelope is the frozen record
-$v = (\mathrm{schema\_version},\ \mathrm{line\_id},\ \mathrm{subject\_id},\ \mathrm{review\_date},\ \mathrm{registry\_version},\ \mathrm{registry\_digest},\ \mathrm{native\_status},\ \mathrm{report\_ref},\ \mathrm{source\_snapshot\_refs},\ \mathrm{scope\_and\_nonclaims})$
+$v = (\mathrm{schema\_version},\ \allowbreak \mathrm{line\_id},\ \allowbreak \mathrm{subject\_id},\ \allowbreak \mathrm{review\_date},\ \allowbreak \mathrm{registry\_version},\ \allowbreak \mathrm{registry\_digest},\ \allowbreak \mathrm{native\_status},\ \allowbreak \mathrm{report\_ref},\ \allowbreak \mathrm{source\_snapshot\_refs},\ \allowbreak \mathrm{scope\_and\_nonclaims})$
 with exactly those ten fields, in order, exported under the schema string
 `line.report-envelope/1.0`. $\mathrm{native\_status}$ is the complete ordered
 sequence of $(\mathrm{aspiration\_id}, \mathrm{status})$ pairs from the
@@ -356,10 +359,36 @@ with the report they were exported from, and editing any of them afterwards
 makes the check return false. The envelope ([@def:report_envelope]) adds no field the report does not
 determine except the caller-supplied $\mathrm{subject\_id}$ and
 $\mathrm{source\_snapshot\_refs}$, which the evaluator stores and does not
-verify. A matching envelope attests that the pair was archived unedited; it
-says nothing about the truth of the report or the merit of anything the
-report read.
+verify. A matching envelope establishes only that the supplied representations
+agree now. A pair can be consistently rewritten and rehashed and still pass;
+agreement proves neither an unedited archive nor authenticity, truth, or merit.
+`validate_instrument_envelope` separately rejects malformed shape, wrong schema
+or line identity, and changed mandatory non-claims. Subject and source references
+remain unverified caller metadata after either check.
 :::
+
+Native canonical reports retain their original byte contract: findings are
+sorted by identifier, so finding permutations share a digest. Envelopes retain
+presentation order and can therefore differ for the same native digest.
+`decode_archive` reconstructs typed findings in envelope order after checking
+an identifier bijection, status agreement, counts, and report-bound fields.
+It accepts original native JSON and the explicit `golden-line.archive/1.0`
+sidecar format; historical native digests are not silently migrated.
+
+The sidecar contains a separately hashed `golden-line.intake/1.0` log of
+normalized admitted, unknown, and duplicate payloads and malformed disposition
+notes. A positive first record followed by a countered duplicate still reads
+`TOWARD`; reversing them reads `DRIFTING`. Changing a discarded payload changes
+`intake_digest` even if the native report is unchanged. Malformed raw payloads
+must be preserved separately by the caller. Counter-signal precedence is a rule
+within the admitted record, never a claim about all submitted observations.
+
+Before intake, `validate_registry` rejects empty scopes, duplicate or blank IDs,
+malformed entries, empty/overlapping/repeated signals, and scalar/mapping/iterator
+signal fields. Accepted tuple/list registries become immutable tuples. Custom
+registries are labelled `custom:` with content digest authoritative. Calendar
+dates exclude timestamps; sweep ages exclude bool and lossy numeric coercion.
+`currentness_evaluated` is false when temporal review is disabled.
 
 ## Formalism-to-test bindings
 
@@ -387,7 +416,7 @@ what each result does *not* claim.
 | [@def:status_codomain] | exactly the four `HorizonStatus` values, in enum order | `tests/test_formalism_bindings.py::test_status_codomain_matches_the_enumeration` | four readings, not a scale from bad to good |
 | [@def:finding] | twelve fields, ignored markers kept apart from ignored counter-signals | `tests/test_formalism_bindings.py::test_finding_tuple_matches_the_dataclass` | exposes a derivation, not a justification |
 | [@def:report_function] | four parameters, two keyword-only; three named stages | `tests/test_formalism_bindings.py::test_report_function_signature_matches_manuscript` | a call shape, not a guarantee about inputs |
-| [@def:intake] | shape, then membership, then prior admission; notes indexed from 1; never raises | `tests/test_formalism_bindings.py::test_intake_screening_tests_records_in_the_stated_order`, `tests/test_formalism_bindings.py::test_intake_screening_never_raises_on_hostile_input`, `tests/test_formalism_bindings.py::test_intake_first_wins_and_replay_determinism_match_manuscript` | screening judges records, never their authors |
+| [@def:intake] | shape, then membership, then prior admission; notes indexed from 1; supported passive data only | `tests/test_formalism_bindings.py::test_intake_screening_tests_records_in_the_stated_order`, `tests/test_formalism_bindings.py::test_intake_screening_never_raises_on_hostile_input`, `tests/test_formalism_bindings.py::test_intake_first_wins_and_replay_determinism_match_manuscript` | screening judges records, never their authors |
 | [@def:matching] | the three set operations, and undeclared tokens discarded | `tests/test_formalism_bindings.py::test_matching_set_operations_match_manuscript` | set membership, not sufficiency of evidence |
 | [@def:temporal_review] | enabled iff $\tau$ is set; missing or unparseable dates flag rather than fail | `tests/test_formalism_bindings.py::test_temporal_review_rule_matches_manuscript` | a data-quality window, not a decay law |
 | [@def:decision_rule] | six clauses, first match wins | `tests/test_formalism_bindings.py::test_decision_clauses_fire_in_the_stated_order` | clause order, not moral order |
@@ -400,7 +429,7 @@ what each result does *not* claim.
 | [@prop:temporal_inquiry] | temporal uncertainty yields `INQUIRY`, never `DRIFTING` | `tests/test_progress.py::test_stale_observation_reverts_toward_to_inquiry`, `tests/test_progress.py::test_undated_entry_cannot_certify_currentness` | age reopens a question, never condemns |
 | [@prop:absence] | `NOT_OBSERVED` arises solely from no admitted entry | `tests/test_progress.py::test_unknown_aspiration_id_is_noted_not_fatal`, `tests/test_progress.py::test_empty_entries_yield_all_not_observed` | absence of signal is not evidence of drift |
 | [@prop:first_wins] | first valid entry per id stands; identical calls reproduce identical reports | `tests/test_progress.py::test_duplicate_entries_first_wins_and_is_noted`, `tests/test_formalism_bindings.py::test_intake_first_wins_and_replay_determinism_match_manuscript` | determinism of the reading, not truth of the records |
-| [@prop:intake-screening-determinism] | screening is a pure function of (E, ids(R)); malformed input is set aside deterministically; never raises | `tests/test_formalism_bindings.py::test_intake_screening_never_raises_on_hostile_input`, `tests/test_formalism_bindings.py::test_intake_screening_is_deterministic_on_all_input` | determinism of the screening function, not truth of records |
+| [@prop:intake-screening-determinism] | screening is a pure function of (E, ids(R)); malformed input is set aside deterministically; supported passive data only | `tests/test_formalism_bindings.py::test_intake_screening_never_raises_on_hostile_input`, `tests/test_formalism_bindings.py::test_intake_screening_is_deterministic_on_all_input` | determinism of the screening function, not truth of records |
 | [@prop:boundary_exclusive] | staleness is strict: `TOWARD` at age $\tau$, stale from $\tau + 1$ | `tests/test_progress.py::test_observation_exactly_at_staleness_boundary_stays_fresh`, `tests/test_progress.py::test_observation_one_day_past_staleness_boundary_is_stale`, `tests/test_formalism_bindings.py::test_currentness_boundary_constants_match_manuscript` | the threshold is a review-cadence choice, not a decay law |
 | [@prop:sweep_codomain] | sweep delegates to `progress_report` and computes no status; codomain is `TOWARD`/`INQUIRY` only | `tests/test_analysis.py::test_sweep_module_constructs_no_status_of_its_own`, `tests/test_analysis.py::test_sweep_never_produces_drifting_or_not_observed`, `tests/test_formalism_bindings.py::test_sweep_codomain_matches_manuscript` | characterizes the instrument, not any observed practice |
 | [@prop:boundary_uniform] | every aspiration's reading flips at the same observation age | `tests/test_figures.py::test_lattice_cells_are_executed_evaluator_readings`, `tests/test_figures.py::test_lattice_reports_a_uniform_flip_age`, `tests/test_figures.py::test_lattice_deviation_count_detects_a_planted_outlier` | uniformity of the code path, not of any practice |

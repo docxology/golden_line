@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import re
+from pathlib import Path
 
 from golden_line.paths import PROJECT_ROOT
 
@@ -22,11 +23,11 @@ _LAB = re.compile(
 )
 
 
-def build_ledger() -> str:
+def build_ledger(*, check: bool = False, project_root: Path = PROJECT_ROOT) -> str:
     """Derive every citation row, write the ledger, and return the summary line."""
 
     claims = []
-    for f in sorted(MS.glob("*.md")):
+    for f in sorted((project_root / "docs" / "manuscript").glob("*.md")):
         for label in _LAB.findall(f.read_text(encoding="utf-8")):
             cid = label.replace(":", "_").replace("-", "_")
             kind_word = "definition" if label.startswith("def:") else "proposition"
@@ -56,6 +57,11 @@ def build_ledger() -> str:
         "schema_version": "1.0",
         "claims": claims,
     }
-    out = PROJECT_ROOT / "data" / "formalism_claim_ledger.json"
-    out.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
+    out = project_root / "data" / "formalism_claim_ledger.json"
+    text = json.dumps(doc, indent=2) + "\n"
+    if check:
+        if out.read_text(encoding="utf-8") != text:
+            raise ValueError("formalism ledger differs from source; regenerate it")
+        return f"verified {len(claims)} citation rows"
+    out.write_text(text, encoding="utf-8")
     return f"wrote {out} with {len(claims)} citation rows"

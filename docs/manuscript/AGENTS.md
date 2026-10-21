@@ -14,7 +14,7 @@ and cover-asset reference surface for this project.
 
 ## Invariants
 
-- Do not hand-edit generated files under `output/`; cite figures here as `../output/figures/<name>.png` and rebuild them from source.
+- Do not hand-edit generated files under `output/`; cite figures here as `../../output/figures/<name>.png` and rebuild them from source.
 - Figure labels cited in these section files are checked by `check_artifacts()`. If a `fig:` label or figure filename changes, rebuild and rerun the artifact gate in the same patch.
 - Keep claims and terminology aligned with the non-compliance boundary used by the evaluator code and project root guidance.
 

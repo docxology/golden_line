@@ -44,4 +44,4 @@ the `daf-golden-line` skill in DAF's private daf-skills toolchain: this paper
 states what the instrument means and why, and the skill is how a horizon entry
 is actually filed.
 
-The paper is organised as follows. [Section @sec:method](#sec:method) defines the method and evidence protocol. [Section @sec:formalism](#sec:formalism) states the evaluator formally. [Section @sec:aspirations](#sec:aspirations) presents the four aspirations. [Section @sec:examples](#sec:examples) walks through worked examples, and [Section @sec:limits](#sec:limits) closes with limits and epistemic boundaries.
+The paper is organised as follows. [The method section](#sec:method) defines the method and evidence protocol. [The formalism](#sec:formalism) states the evaluator formally. [The aspiration section](#sec:aspirations) presents the founding and further aspirations. [The worked examples](#sec:examples) exercise records, and [the limits section](#sec:limits) closes with epistemic boundaries.

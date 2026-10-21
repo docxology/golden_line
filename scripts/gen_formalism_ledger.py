@@ -16,15 +16,17 @@ from golden_line.formalism_ledger import build_ledger
 def build_parser() -> argparse.ArgumentParser:
     """The CLI: no arguments are honoured besides ``--help``."""
 
-    return argparse.ArgumentParser(
+    parser = argparse.ArgumentParser(
         prog="gen_formalism_ledger.py",
         description="Regenerate data/formalism_claim_ledger.json.",
     )
+    parser.add_argument("--check", action="store_true")
+    return parser
 
 
 def main(argv: list[str] | None = None) -> int:
-    build_parser().parse_args(argv)
-    print(build_ledger())
+    args = build_parser().parse_args(argv)
+    print(build_ledger(check=args.check))
     return 0
 
 

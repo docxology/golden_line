@@ -95,7 +95,7 @@ replays exactly this batch through `progress_report` and `report_overview`, so
 every count, grouping, and quoted intake note in the picture is the evaluator's
 actual output for the code block above, not an illustration of it.
 
-![The 6-entry worked batch of this section replayed through the real evaluator: 2 TOWARD, 1 INQUIRY, 1 DRIFTING, and 5 NOT_OBSERVED across 9 findings — one per registry aspiration whether or not an entry was filed — with 2 intake set-asides and 1 ignored undeclared token quoted verbatim from the report. The groupings count readings in this record; they do not grade the work or the people behind it.](../output/figures/batch_reading_overview.png){#fig:batch_reading_overview width=95%}
+![The 6-entry worked batch of this section replayed through the real evaluator: 2 TOWARD, 1 INQUIRY, 1 DRIFTING, and 5 NOT_OBSERVED across 9 findings — one per registry aspiration whether or not an entry was filed — with 2 intake set-asides and 1 ignored undeclared token quoted verbatim from the report. The groupings count readings in this record; they do not grade the work or the people behind it.](../../output/figures/batch_reading_overview.png){#fig:batch_reading_overview width=95%}
 
 ## Vocabulary and reach as reading context
 

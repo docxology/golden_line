@@ -1,8 +1,8 @@
 paper:
   title: "Golden Line: Toward What Matters"
   subtitle: "An Aspirational Thread for Long-Horizon Work"
-  version: "0.4.1"
-  date: "2026-09-18"
+  version: "0.5.0"
+  date: "2026-10-21"
   description: "A directional instrument for recording aspirations and movement toward them without turning aspiration into compliance."
   cover:
     image: "assets/golden-line-cover.png"
