@@ -20,6 +20,7 @@ Golden Line is a small, inspectable directional instrument. The registry is in
 - [publication.md](publication.md) — citation instructions, DOI policy, and
   pre-publication checklist.
 - [releases/v0.4.0.md](releases/v0.4.0.md) — release packet for version 0.4.0.
+- [releases/v0.5.0.md](releases/v0.5.0.md) — October review dispositions and release evidence.
 
 The founding four describe the origin of the current family of eight
 instruments, a reader, and a register. Their relationships are declared in
