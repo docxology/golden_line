@@ -83,20 +83,24 @@ TEMPLATE_ROOT=${TEMPLATE_ROOT:-$HOME/src/template}
 git clone https://github.com/docxology/template.git "${TEMPLATE_ROOT}"   # once
 
 # Make this repository visible to the engine under a qualified project name.
-# A direct child of projects/ with src/ and tests/ is discovered by its bare
-# directory name, so the qualified name here is simply `golden_line`.
-ln -sfn "${GOLDEN_LINE_ROOT}" "${TEMPLATE_ROOT}/projects/golden_line"
+# External sources require a managed lifecycle leaf for provenance validation.
+mkdir -p "${TEMPLATE_ROOT}/projects/working"
+ln -sfn "${GOLDEN_LINE_ROOT}" "${TEMPLATE_ROOT}/projects/working/golden_line"
 
 cd "${TEMPLATE_ROOT}"
-uv run python scripts/pipeline/stage_03_render.py --project golden_line
-uv run python scripts/pipeline/stage_04_validate.py --project golden_line
+uv run python scripts/pipeline/stage_03_render.py --project working/golden_line
+uv run python scripts/pipeline/stage_04_validate.py --project working/golden_line
 uv run python -m infrastructure.validation.cli pdf \
-  projects/golden_line/output/pdf/golden_line_combined.pdf
+  projects/working/golden_line/output/pdf/golden_line_combined.pdf
 ```
 
-If instead you link this repository through the engine's private-projects root,
-the qualified name becomes the path under `projects/` that the link produced
-(for example `working/golden_line`); pass that name to the same commands.
+The qualified name is the path under `projects/` (`working/golden_line` here).
+The lifecycle alias supplies a repository boundary for rendered provenance;
+it does not change this repository's public visibility. A bare direct-child
+link can render but fails the current engine's provenance validation.
+Use a Git-backed checkout or detached worktree of the engine: current rendered
+provenance also binds cached stage implementation files, which an archive-only
+export cannot supply.
 
 The engine's strict `publication-audit` and rendered methods gates are
 public-release checks that run in the engine checkout, not here. Their

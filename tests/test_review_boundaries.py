@@ -53,7 +53,7 @@ def test_subset_identity_and_immutable_replay():
 
 @pytest.mark.parametrize("window", [None, 30])
 def test_date_only_rejects_timestamp_in_both_modes(window):
-    with pytest.raises(TypeError, match="date"):
+    with pytest.raises(TypeError, match="as_of must be an ISO date string"):
         progress_report(
             [HorizonEntry(A.id, observed_on="2026-10-20")],
             as_of=datetime(2026, 10, 20, 12, tzinfo=timezone.utc),

@@ -30,8 +30,10 @@ trail plus structured derivation fields so no reading arrives unexplained.
    shape and against the known aspiration identifiers. An entry for an unknown
    aspiration is set aside with a note; a second valid entry for an aspiration
    already seen is set aside, and the first entry stands. JSON-like token lists
-   are normalized to sets. Malformed or hostile input is *recorded*, never
-   raised. A sloppy record cannot crash the report or vanish silently.
+   are normalized to sets. Malformed passive records in the supported input
+   domain are recorded as intake notes. Unsupported token iterators are rejected
+   without consumption. Exceptions raised by an outer batch iterator or by
+   executable object behavior are outside this passive-data guarantee.
 2. **Matching.** For each aspiration, the observed markers are intersected with
    the declared markers, and the observed counter-signals with the declared
    counter-signals. Tokens the observer supplied that the registry never

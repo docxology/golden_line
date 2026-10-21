@@ -37,15 +37,31 @@ abstract: >-
 references:
   - type: software
     title: "green_line"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+        orcid: "https://orcid.org/0000-0001-6232-9096"
     repository-code: "https://github.com/docxology/green_line"
   - type: software
     title: "blue_line"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+        orcid: "https://orcid.org/0000-0001-6232-9096"
     repository-code: "https://github.com/docxology/blue_line"
   - type: software
     title: "violet_line"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+        orcid: "https://orcid.org/0000-0001-6232-9096"
     repository-code: "https://github.com/docxology/violet_line"
   - type: software
     title: "silver_line"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+        orcid: "https://orcid.org/0000-0001-6232-9096"
     repository-code: "https://github.com/docxology/silver_line"
   - type: software
     title: "red_line"

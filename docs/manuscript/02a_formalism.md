@@ -442,7 +442,7 @@ rows sit in their own table, in the same document order:
 | Envelope block | Statement essence | Verifying test | Boundary |
 | --- | --- | --- | --- |
 | [@def:report_envelope] | ten fields, `native_status` the complete ordered per-aspiration pairs | `tests/test_formalism_bindings.py::test_report_envelope_tuple_matches_the_dataclass` | a data contract, not a summary and not a score |
-| [@prop:envelope_pointer] | the envelope agrees with its report field for field; any post-export edit is visible | `tests/test_formalism_bindings.py::test_envelope_pointer_matches_manuscript`, `tests/test_report_envelope.py::test_envelope_matches_report_verifies_an_archived_pair` | archival agreement, not truth of the report |
+| [@prop:envelope_pointer] | the envelope agrees with its report-bound fields; inconsistent edits to those fields are visible | `tests/test_formalism_bindings.py::test_envelope_pointer_matches_manuscript`, `tests/test_report_envelope.py::test_envelope_matches_report_verifies_an_archived_pair` | archival agreement; caller metadata remains unverified, as does truth of the report |
 
 The bindings are themselves code behavior: they show which claims the suite
 would catch, not that the registry's aspirations are wise or well served.

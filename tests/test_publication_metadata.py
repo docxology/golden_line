@@ -36,10 +36,6 @@ SIBLINGS = (
     "witness_register",
 )
 
-#: The six real DOIs of the line-set works (this work + five siblings),
-#: asserted real and reserved via Zenodo. Adding any other DOI-shaped string to
-#: the metadata surfaces fails test_no_unverified_doi_appears_in_metadata.
-#: copy-and-paste into a bibliography and points nowhere.
 VERIFIED_DOIS: tuple[str, ...] = (
     "10.5281/zenodo.21754236",
     "10.5281/zenodo.21754238",
@@ -101,8 +97,6 @@ def test_the_citation_names_this_repository_exactly() -> None:
 
 
 def test_every_sibling_is_referenced_by_its_exact_public_url() -> None:
-    """All five siblings, each exactly once, at the canonical URL."""
-
     citation = CITATION.read_text(encoding="utf-8")
     zenodo = json.loads(ZENODO.read_text(encoding="utf-8"))
     identifiers = {item["identifier"] for item in zenodo["related_identifiers"]}
