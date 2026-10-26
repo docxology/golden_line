@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+Maintenance pass, no behavior change: CI action majors current
+(`actions/checkout@v7`, `astral-sh/setup-uv@v10`,
+`actions/upload-artifact@v7`), development floors raised to the versions the
+locked tree is validated against (`pytest`, `pytest-cov`, `ruff`, `mypy`,
+`jsonschema`, `pyyaml`, build `setuptools`), and documentation corrected
+(package/test module maps, the `gen_formalism_ledger.py --check` flag, sibling
+DOIs aligned with `CITATION.cff`). Evaluator, registry, figures, and the four
+statuses unchanged.
+
 ## 0.5.0 — 2026-10-21
 
 Implement the October review across registry/input boundaries, strict instrument
@@ -19,6 +30,12 @@ separately from the unchanged native serialization. See
 The existing verified Zenodo DOI is retained; a new deposition requires Daniel's
 reserve-first step. The dated release packet records the actual gates and render
 checksums.
+
+## 0.4.1 — 2026-09-18
+
+Publication reversion: the 0.4.x tree was re-deposited under the new Zenodo
+version DOI `10.5281/zenodo.22833506`, updating `CITATION.cff` and
+`docs/manuscript/config.yaml` only. No evaluator, registry, or figure change.
 
 ## 0.4.0 — 2026-07-29
 

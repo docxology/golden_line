@@ -23,6 +23,7 @@ capacity (Green), maintained commitment (Blue), or affected-party consent (Viole
 | `src/golden_line/release_evidence.py` | Which commands passed on an exact clean source revision? |
 | `src/golden_line/invariants.py` | Is the registry structurally sound? |
 | `src/golden_line/analysis.py` | What does the registry vocabulary and the evaluator's behaviour look like? |
+| `src/golden_line/formalism_ledger.py` | How are the manuscript's formalism labels derived into the generated claim ledger? |
 | `src/golden_line/figures/` | How is each figure drawn deterministically from source? |
 | `src/golden_line/artifacts.py` | Do the generated artifacts still agree with the source? |
 

@@ -81,6 +81,21 @@
       "identifier": "10.5281/zenodo.21754246",
       "relation": "cites",
       "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.22833503",
+      "relation": "cites",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.22833507",
+      "relation": "cites",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.22833511",
+      "relation": "cites",
+      "scheme": "doi"
     }
   ],
   "notes": "One of ten related works: eight instruments, their reader, and a witness register. Known sibling DOIs are retained in related_identifiers; this work's last verified DOI is recorded in CITATION.cff. A new version DOI requires Daniel's reserve-first publication step."
