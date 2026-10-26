@@ -54,7 +54,8 @@ survives copy-and-paste into someone else's bibliography and points nowhere.
 
 This work belongs to eight instruments, their reader, and a witness register.
 The founding four are historical origin. Known verified DOI references below
-are retained; the remaining instrument references use repository URLs rather
+are retained, each naming that work's latest verified Zenodo edition; the
+remaining instrument references use repository URLs rather
 than invented identifiers. No work imports another, and the shared report-envelope schema
 string is aligned by published convention rather than by dependency.
 
@@ -70,7 +71,10 @@ string is aligned by published convention rather than by dependency.
 | `violet_line` | affected-party consent | <https://github.com/docxology/violet_line> | not asserted here |
 | `silver_line` | stewardship | <https://github.com/docxology/silver_line> | not asserted here |
 
-## Before the repository goes public
+## Publication-readiness audit
+
+The repository is public; this list stands as the audit to re-run before each
+release, not as a step still pending.
 
 - [ ] Every gate in `AGENTS.md` green on a clean checkout.
 - [ ] `LICENSE` present and accurate.
