@@ -40,6 +40,10 @@ def built_artifacts(tmp_path_factory):
         "renderer",
         "golden-list",
         "golden-null",
+        "legacy-alt",
+        "missing-alt",
+        "caption-as-alt",
+        "changed-alt",
     ],
 )
 def test_artifact_gate_rejects_mutated_data_without_crashing(
@@ -80,6 +84,16 @@ def test_artifact_gate_rejects_mutated_data_without_crashing(
             ).hexdigest()
     elif mutation == "renderer":
         payload["renderer"] = {"version": "different toolchain"}
+    elif mutation == "legacy-alt":
+        record = payload["figures"][0]
+        record["alt"] = record.pop("alt_text")
+    elif mutation == "missing-alt":
+        del payload["figures"][0]["alt_text"]
+    elif mutation == "caption-as-alt":
+        record = payload["figures"][0]
+        record["alt_text"] = record["caption"]
+    elif mutation == "changed-alt":
+        payload["figures"][0]["alt_text"] = "A different illustration."
     else:
         (directory / "golden_registry.json").write_text(
             json.dumps([] if mutation == "golden-list" else None)

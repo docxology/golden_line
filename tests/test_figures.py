@@ -1,19 +1,28 @@
 import dataclasses
+import json
 from pathlib import Path
 
 import pytest
 
 from golden_line import IntakeSetAsideReason, classify_intake_entries
 from golden_line.artifacts import check_artifacts
-from golden_line.figures import FIGURES, build_figures
+from golden_line.figures import FIGURE_REGISTRY_SCHEMA, FIGURES, build_figures
 
 
 def test_figure_builder_is_deterministic(tmp_path: Path) -> None:
     first = build_figures(tmp_path)
-    bytes_first = {path.name: path.read_bytes() for path in first}
-    second = build_figures(tmp_path)
-    assert {path.name: path.read_bytes() for path in second} == bytes_first
+    directory = tmp_path / "output" / "figures"
+    bytes_first = {path.name: path.read_bytes() for path in directory.iterdir()}
+    build_figures(tmp_path)
+    assert {path.name: path.read_bytes() for path in directory.iterdir()} == bytes_first
     assert first[0].read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+    registry = json.loads((directory / "figure_registry.json").read_text())
+    assert registry["schema_version"] == FIGURE_REGISTRY_SCHEMA == "2.0"
+    assert len(registry["figures"]) == len(FIGURES)
+    for record, (_, _, _, caption, alt_text) in zip(registry["figures"], FIGURES):
+        assert record["alt_text"] == alt_text
+        assert record["alt_text"] != caption
+        assert "alt" not in record
 
 
 def test_generated_artifact_chain_is_self_consistent(tmp_path: Path) -> None:

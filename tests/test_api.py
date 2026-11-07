@@ -67,13 +67,6 @@ def test_version_markers_agree_with_the_declared_authority() -> None:
     assert golden_line.REGISTRY_VERSION == "2026.07.18"
 
 
-def test_version_agreement_check_rejects_a_planted_drift() -> None:
-    """Proof of detection: a copy that disagrees with the authority is caught."""
-    authority = _config_version()
-    planted = authority + "-drifted"
-    assert planted != authority
-
-
 def test_project_root_falls_back_when_no_pyproject_is_above(tmp_path: Path) -> None:
     """The documented depth-independent fallback is exercised, not assumed.
 

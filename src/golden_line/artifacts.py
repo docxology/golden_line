@@ -151,7 +151,7 @@ def check_artifacts(project_root: Path | None = None) -> list[str]:
             caption, alt = described[label]
             if record.get("caption") != caption:
                 issues.append(f"figure record caption does not match source: {label}")
-            if record.get("alt") != alt:
+            if record.get("alt_text") != alt:
                 issues.append(f"figure record alt text does not match source: {label}")
         svg = builders[filename][1]().encode("utf-8")
         try:

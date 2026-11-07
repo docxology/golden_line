@@ -67,7 +67,7 @@ BUILD_PROVENANCE = "scripts/build_figures.py"
 #: Schema markers stamped into the two generated registries. The artifact gate
 #: imports these rather than hardcoding a literal, so a bump has one home.
 GOLDEN_REGISTRY_SCHEMA = "1.0"
-FIGURE_REGISTRY_SCHEMA = "1.3"
+FIGURE_REGISTRY_SCHEMA = "2.0"
 
 
 # Executed once at import so the two replay figures below can quote their own
@@ -260,7 +260,7 @@ def build_figures(project_root: Path | None = None) -> list[Path]:
                 "label": label,
                 "filename": png_path.name,
                 "caption": caption,
-                "alt": alt,
+                "alt_text": alt,
                 "source": "golden_line aspiration registry and status enum",
                 "generated_by": BUILD_PROVENANCE,
                 "format": "PNG rasterized from deterministic SVG",

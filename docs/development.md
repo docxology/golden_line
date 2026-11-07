@@ -29,6 +29,10 @@ needs the tool too.
 
 The figure builder writes thirteen SVG/PNG pairs, the source-derived registry
 snapshot, and a provenance-bearing figure registry under `output/figures/`.
+The figure registry uses metadata schema `2.0`: every figure carries its
+authored `alt_text`, distinct from its caption. There is no serialized `alt`
+alias or caption fallback. The artifact gate checks the authored description,
+so legacy-only, absent, or changed alternative text requires regeneration.
 Five of the thirteen — `signal_inventory`, `horizon_bands`,
 `temporal_currentness_sweep`, `currentness_lattice`, and
 `batch_reading_overview` — are drawn from the descriptive-analysis layer in
@@ -87,8 +91,9 @@ The figure build requires librsvg as described above.
 Keep their original wording and identities, including original British spelling.
 Likewise, `tests/fixtures/native_report_v040.json` is a historical digest-bound
 native report and the CFF schema fixture retains its external enum identities.
-The noncanonical top-level `manuscript/02a_formalism.md` is retained legacy
-source, not the current evaluator contract; use `docs/manuscript/` for current
+The noncanonical `docs/releases/legacy-manuscript/02a_formalism.md` is retained
+legacy source outside renderer discovery, not the current evaluator contract;
+use `docs/manuscript/` for current
 prose. Do not rewrite these records or imply that regenerating current artifacts
 refreshes an old release's evidence.
 

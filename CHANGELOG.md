@@ -13,6 +13,17 @@ aggregate digest, including dirty working source. Source stability is measured
 independently of cleanliness; dirty source, changed source, partial commands, or
 any failed gate still cannot pass.
 
+Preserve the noncanonical root formalism file under
+`docs/releases/legacy-manuscript/` instead of the renderer's discovery root.
+The configured current manuscript must not be shadowed by legacy source.
+
+Emit figure registry 2.0 with the canonical `alt_text` accessibility field and
+validate that field against the authored descriptions. Generation determinism
+covers both registries and all SVG/PNG bytes; mutation controls reject legacy-only,
+missing, caption-substituted, and changed alternative text. The external renderer
+must not infer alternative text from captions. Historical registries and native
+evaluation, archive, envelope, and vocabulary schemas retain their identities.
+
 Preserve normalized rejected contrary intake in the primary archive/envelope
 transport examples and distinguish original-source and optional evidence-record
 custody. Clarify no admission versus valid-empty evidence, admitted-record-only

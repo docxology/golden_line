@@ -194,21 +194,6 @@ def test_golden_registry_schema_mismatch_is_reported(tmp_path: Path) -> None:
     ]
 
 
-def test_hand_edited_caption_and_alt_are_reported(tmp_path: Path) -> None:
-    """caption/alt are a description surface, so they are compared to source."""
-    root = _artifact_root(tmp_path)
-    payload = _load_json(_figure_registry_path(root))
-    records = payload["figures"]
-    assert isinstance(records, list)
-    records[0]["caption"] = "a caption nobody generated"
-    records[1]["alt"] = "alt text nobody generated"
-    _write_json(_figure_registry_path(root), payload)
-    assert check_artifacts(root) == [
-        f"figure record caption does not match source: {FIGURES[0][1]}",
-        f"figure record alt text does not match source: {FIGURES[1][1]}",
-    ]
-
-
 def test_unexpected_generated_by_is_reported(tmp_path: Path) -> None:
     root = _artifact_root(tmp_path)
     payload = _load_json(_figure_registry_path(root))
