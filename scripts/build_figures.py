@@ -13,7 +13,7 @@ def main() -> None:
 
     The builder takes no options. It still parses its command line, because a
     build that silently ignores an argument it was given cannot be told apart
-    from one that honoured it: a mistyped flag would otherwise look like a
+    from one that honored it: a mistyped flag would otherwise look like a
     successful build of something other than what was asked for.
     """
     argparse.ArgumentParser(description=__doc__).parse_args()

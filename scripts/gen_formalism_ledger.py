@@ -14,7 +14,7 @@ from golden_line.formalism_ledger import build_ledger
 
 
 def build_parser() -> argparse.ArgumentParser:
-    """The CLI: no arguments are honoured besides ``--help``."""
+    """The CLI accepts ``--check`` and the standard ``--help`` option."""
 
     parser = argparse.ArgumentParser(
         prog="gen_formalism_ledger.py",

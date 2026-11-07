@@ -52,17 +52,45 @@ establish source consistency and byte integrity, not visual quality or truth.
 
 `uv run python -m golden_line.release_evidence` executes the complete local
 surface and writes `output/evidence/manifest.json` and per-command logs. It
-records source commit, tracked-dirty state, Python runtime, lock digest, renderer
-identity, registry digest, and artifact hashes. Every failed exit status is
-retained and prevents success; dirty or changing tracked source also prevents
-success. Run it on the committed release tree. Rendering is recorded as
-`not_run` by this local runner and requires a separate external-toolchain receipt.
+records source commit, dirty state, current source-file and aggregate SHA-256
+bindings, Python runtime, lock digest, renderer identity, registry digest, and
+artifact hashes. The working-source binding identifies uncommitted bytes without
+claiming a clean revision. Every failed exit status is retained and prevents
+success; dirty or changing source also prevents success. Source stability is
+reported separately from cleanliness. Run it on the committed release tree.
+Rendering is recorded as `not_run` by this local runner and requires a separate
+external-toolchain receipt.
 
 The no-sibling-checkout CI matrix runs the declared supported Python releases
 with a locked dependency resolution and archives evidence keyed by source SHA,
 including failed runs. A fresh checkout needs only this repository, uv, and
 librsvg for local validation. Coverage measures exercised code, not semantic
 completeness or the truth of observations.
+
+The release-evidence regression snapshots current working source into a clean
+temporary Git repository with its own package environment and import path, then
+runs the complete real command surface. It deliberately gives pytest an invalid
+option and requires the remaining gates to succeed while the evidence manifest
+still records failure. Install the locked development environment before running
+the suite; missing dependencies are not evidence that this failure control
+exercised pytest. The original checkout is neither committed nor modified.
+
+### Current outputs and retained history
+
+`output/figures/` and `data/formalism_claim_ledger.json` are current generated
+artifacts. Refresh them with `uv run python scripts/build_figures.py` and
+`uv run python scripts/gen_formalism_ledger.py`; do not edit their bytes by hand.
+The figure build requires librsvg as described above.
+
+`docs/releases/v0.4.0.md`, `docs/releases/v0.5.0.md`, and
+`docs/reviews/2026-10-20.md` are historical receipts, not current verification.
+Keep their original wording and identities, including original British spelling.
+Likewise, `tests/fixtures/native_report_v040.json` is a historical digest-bound
+native report and the CFF schema fixture retains its external enum identities.
+The noncanonical top-level `manuscript/02a_formalism.md` is retained legacy
+source, not the current evaluator contract; use `docs/manuscript/` for current
+prose. Do not rewrite these records or imply that regenerating current artifacts
+refreshes an old release's evidence.
 
 ## Rendering the manuscript (external toolchain)
 

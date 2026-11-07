@@ -13,6 +13,8 @@ project, virtue, safety state, legality, or permission.
 The founding four describe the origin; the current family has eight instruments,
 one reader, and one witness register. Golden direction does not establish Green
 capacity, Blue commitment, or Violet consent.
+Sibling source availability and access controls are separate from this declared
+roster; no sibling source is required to operate Golden Line.
 
 ## What the instrument is (and is not)
 
@@ -59,12 +61,13 @@ recover the derivation. The report also records `registry_version`,
 ## The four readings (decision order — first match wins)
 
 1. `NOT_OBSERVED` — no admitted entry for that aspiration.
-2. `DRIFTING` — a declared counter-signal was recorded. Precedence is absolute:
-   a positive marker can never launder a recorded drift, even when stale.
-3. `INQUIRY` — named but evidence is empty, partial, stale, or not
-   currentness-auditable. Uncertainty reopens the question; it never condemns.
-4. `TOWARD` — every declared marker observed, no counter-signal, and (when
-   temporal review is on) currentness auditable.
+2. `DRIFTING` — a declared counter-signal occurs in the admitted entry. Within
+   that entry it takes precedence over every marker and date condition; a
+   rejected contrary duplicate does not change the admitted entry's reading.
+3. `INQUIRY` — an admitted entry has empty or partial declared markers, or its
+   positive evidence fails an enabled temporal review.
+4. `TOWARD` — every declared marker observed in the admitted entry, no declared
+   counter-signal there, and (when temporal review is on) currentness auditable.
 
 ## Staged intake semantics
 
@@ -75,6 +78,10 @@ that promise; see [claim boundaries](../../../docs/claim_boundaries.md).
 1. **Intake screening** — one entry per known id (first valid wins); unknown ids,
    duplicates, and malformed records are set aside and named in `intake_notes`.
    JSON-style token lists are normalized to sets.
+   A malformed entry does not reserve an ID. A duplicate requires an earlier
+   valid admitted entry for that ID, so it cannot by itself cause that
+   aspiration to read `NOT_OBSERVED`. No admitted entry means `NOT_OBSERVED`;
+   a valid empty entry means `INQUIRY`.
 2. **Matching** — observed tokens are intersected with the *declared* markers and
    counter-signals. Undeclared tokens are ignored and noted; they can never
    determine a status.
@@ -85,8 +92,10 @@ that promise; see [claim boundaries](../../../docs/claim_boundaries.md).
 Enabled only when `stale_after_days` is set. A missing or non-ISO `observed_on`
 sets `date_issue=True` — not fatal, but it cannot certify currentness, so a
 fully-marked record reverts to `INQUIRY`. A future-dated or over-threshold
-observation is `stale` and also reverts to `INQUIRY`. A recorded counter-signal
-still yields `DRIFTING` regardless of age.
+observation is `stale` and also reverts to `INQUIRY`; age exactly at the threshold
+remains current. A counter-signal in the admitted entry still yields `DRIFTING`
+regardless of age. Without a window, `currentness_evaluated` is false and an
+undated complete-marker entry can be `TOWARD` without any freshness claim.
 
 ## Descriptive analysis layer
 
@@ -100,7 +109,7 @@ from golden_line import (
 )
 
 signal_inventory()          # declared-token vocabulary: 18 markers / 9 counter-signals,
-                            # all distinct — reachability, not fulfilment.
+                            # all distinct — reachability, not fulfillment.
 horizon_distribution()      # groups 9 aspirations into 4 declared HORIZON_BANDS
                             # (immediate 1, recurring cycle 2, at handoff 4, open-ended 2);
                             # a registry horizon outside the map raises — no silent drop.
@@ -124,11 +133,30 @@ executed evaluator output, not drawn assertions.
 ## The report envelope (cross-instrument transport)
 
 ```python
-from golden_line import report_envelope, canonical_envelope, envelope_matches_report
+from golden_line import (
+    GOLDEN_ASPIRATIONS, HorizonStatus, canonical_archive, canonical_envelope,
+    decode_archive, envelope_matches_report, report_envelope,
+)
 
-envelope = report_envelope(report, subject_id="your reference for what was reviewed")
-archived = canonical_envelope(envelope)   # store beside canonical_report(report)
-envelope_matches_report(envelope, report) # read-back check for an archived pair
+aspiration = GOLDEN_ASPIRATIONS[0]
+positive = HorizonEntry(aspiration.id, frozenset(aspiration.markers))
+contrary = HorizonEntry(
+    aspiration.id,
+    counter_signals=frozenset(aspiration.counter_signals),
+    note="Recipient disputes the earlier observation.",
+    observed_on="2026-10-19",
+)
+transport_report = progress_report([positive, contrary], as_of="2026-10-20")
+envelope = report_envelope(
+    transport_report, subject_id="your reference for what was reviewed"
+)
+archive_json = canonical_archive(transport_report)
+envelope_json = canonical_envelope(envelope)
+restored = decode_archive(archive_json, envelope_json)
+assert restored == transport_report
+assert restored.findings[0].status is HorizonStatus.TOWARD
+assert restored.intake_archive[1].entry == contrary
+assert envelope_matches_report(envelope, restored)
 ```
 
 One `line.report-envelope/1.0` record pointing at the complete canonical
@@ -139,15 +167,21 @@ across lines.
 
 `validate_instrument_envelope` checks identity and mandatory non-claims separately
 from correspondence. Agreement does not prove an unedited archive. The unchanged
-native serialization sorts findings by ID; `canonical_archive` retains rejected
-intake separately, and `decode_archive` restores order through an envelope ID
-bijection. Source references remain unverified caller metadata; tuple/list
+native serialization sorts findings by ID; the archive adds separately hashed
+normalized intake without changing native digest identity. `decode_archive`
+restores order through an envelope ID bijection. The rejected contrary duplicate
+above remains inspectable but does not determine the reading. No temporal review
+was requested, so the undated `TOWARD` does not establish freshness.
+Keep original source bytes separately, especially malformed input that cannot be
+normalized. Source references remain unverified caller metadata; tuple/list
 reference order and duplicates are preserved.
 
 Custom registries must pass `validate_registry`; empty scopes and one-shot
-signal iterators are rejected. Their version is explicitly labelled custom.
+signal iterators are rejected. Their version is explicitly labeled custom.
 Optional provenance/conflict side records preserve human disagreement without
-changing readings; see [evidence records](../../../docs/evidence-records.md).
+changing readings. Retain their `canonical_evidence_records` export separately:
+neither the archive nor envelope bundles it. See
+[evidence records](../../../docs/evidence-records.md).
 
 ## Invariant battery
 

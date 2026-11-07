@@ -1,6 +1,39 @@
 # Changelog
 
-## Unreleased
+## 0.6.0 — 2026-11-06
+
+Reject archive intake sidecars whose consistently rehashed dispositions contradict
+the native first-valid admission rule or whose rejection notes differ from the
+native report. Reuse the evaluator's intake classifier, including custom report
+identifiers; retain original malformed bytes separately. Native findings, status
+vocabulary, registry revision, serialization, and transport schemas are unchanged.
+
+Release evidence now binds every current tracked/non-ignored source file and its
+aggregate digest, including dirty working source. Source stability is measured
+independently of cleanliness; dirty source, changed source, partial commands, or
+any failed gate still cannot pass.
+
+Preserve normalized rejected contrary intake in the primary archive/envelope
+transport examples and distinguish original-source and optional evidence-record
+custody. Clarify no admission versus valid-empty evidence, admitted-record-only
+counter precedence, first-valid duplicate handling, and optional temporal review.
+The evaluator, registry vocabulary, archive schemas, and native digest formats
+are unchanged. Maintained prose and owned names use American English:
+`STATUS_COLORS` replaces `STATUS_COLOURS`, `pipeline_stages(..., colors=...)`
+replaces `colours=`, and the internal helper is `_normalize_entry`. No aliases
+remain. Historical source, release evidence, and pinned external fixtures retain
+their original identities and wording. Current family orientation distinguishes
+the eight instruments from their reader and witness companion, independently of
+source availability.
+Replace affected wording/source-text guards with native archive, admission,
+temporal-transition, and schema-identity regressions; retain executable skill
+examples and structural cross-reference checks without pinning prose.
+
+Refresh the generated dependency lock against the declared development floors.
+Keep the failed-canonical-gate release-evidence control on the complete real
+command surface in a clean temporary snapshot of the current source, with its
+own package environment and import path. A failed test gate must block success
+even when every other local gate succeeds. Use the Python 3.11+ UTC alias.
 
 Maintenance pass, no behavior change: CI action majors current
 (`actions/checkout@v7`, `astral-sh/setup-uv@v10`,

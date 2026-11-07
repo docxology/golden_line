@@ -7,7 +7,7 @@ No voting, merge, compensation, or cross-line override occurs.
 
 | Surface | Executable boundary | Limit |
 | --- | --- | --- |
-| Registry | `validate_registry` accepts nonempty tuple/list registries of `Aspiration`, copies tuple/list signals to immutable tuples, checks nonblank fields, unique IDs, populated unique disjoint signals | Structural validity is not empirical validation; custom vocabulary is labelled `custom:` and identified by digest |
+| Registry | `validate_registry` accepts nonempty tuple/list registries of `Aspiration`, copies tuple/list signals to immutable tuples, checks nonblank fields, unique IDs, populated unique disjoint signals | Structural validity is not empirical validation; custom vocabulary is labeled `custom:` and identified by digest |
 | Intake | Built-in tuple/list/set/frozenset text-token collections, bounded by `MAX_COLLECTION_SIZE`; malformed passive records are set aside | Arbitrary token iterators are rejected without executing them; exceptions from the outer batch iterator remain caller/environment failures; raw malformed bytes require separate custody |
 | Time | Calendar `date` or ISO date string; timestamps rejected; sweep ages exact integers without bool/coercion | `currentness_evaluated=False` when no window is set; stale flags then do not certify freshness |
 | Envelope | Strict schema/identity/non-claim/shape validation is separate from native correspondence | Subject/source references are unverified caller metadata; reference tuple/list order and duplicates are retained |

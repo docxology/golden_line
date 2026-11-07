@@ -8,12 +8,14 @@ compliance verdict.
 
 The executable `progress_report` returns `TOWARD`, `INQUIRY`, `DRIFTING`, or
 `NOT_OBSERVED` for a versioned aspiration registry of nine entries. Reporting
-is staged: entries are screened at intake (unknown ids, duplicates, and
+is staged: entries are screened at intake (unknown IDs, duplicates, and
 malformed records are set aside and noted), undeclared markers are ignored with
 a reason, and temporal review can optionally test whether dated observations
-are current. Missing or malformed dates cannot certify currentness.
-`NOT_OBSERVED` means no valid entry was admitted; it does not mean that nobody
-looked.
+are current. With temporal review enabled, missing or malformed dates prevent
+`TOWARD`. Without it, currentness is unevaluated, even for an undated `TOWARD`.
+No admitted entry means `NOT_OBSERVED`; an admitted empty entry means `INQUIRY`;
+all declared markers with no admitted counter-signal mean `TOWARD`, subject to
+enabled temporal review. Rejected material does not mean that nobody looked.
 Every finding carries a full reasons trail plus structured matched/ignored
 tokens, the original note, and temporal flags. Reports identify the registry
 digest and review context that produced them. These statuses describe a record,
@@ -29,7 +31,7 @@ review and drift-detection instrument only; it makes no safety claim.
 A pure descriptive-analysis layer (`golden_line.analysis`) characterizes the
 registry and replays the evaluator without changing its semantics:
 `signal_inventory` tallies the declared marker/counter-signal vocabulary (a
-reachability count, not fulfilment); `horizon_distribution` groups the nine
+reachability count, not fulfillment); `horizon_distribution` groups the nine
 aspirations into declared temporal-reach bands (a reading aid, not a rank);
 `temporal_currentness_sweep` replays one fully-marked entry through the real
 evaluator across observation ages to expose the `TOWARD` → `INQUIRY` currentness
@@ -83,11 +85,48 @@ Subject and source references remain unverified caller metadata.
 `canonical_report` keeps its original sorted-finding byte contract.
 `canonical_archive` adds a versioned intake sidecar, including discarded
 duplicates; `decode_archive` restores finding order from the envelope and
-rejects non-bijective IDs or inconsistent statuses. `intake_digest` changes
-when a normalized discarded contradiction changes, without rewriting old
-native report digests. Malformed raw payloads need separate source custody.
+rejects non-bijective IDs, inconsistent statuses, intake dispositions that
+contradict first-valid admission, or rejection notes that differ from the report.
+`intake_digest` changes when a normalized discarded contradiction changes,
+without rewriting old native report digests. Malformed raw payloads need
+separate source custody.
 
-Custom registries pass `validate_registry` before evaluation and are labelled
+Retain the archive **and** envelope for transport, not just the native report:
+
+```python
+from golden_line import (
+    GOLDEN_ASPIRATIONS, HorizonEntry, HorizonStatus, canonical_archive,
+    canonical_envelope, decode_archive, envelope_matches_report, progress_report,
+    report_envelope,
+)
+
+aspiration = GOLDEN_ASPIRATIONS[0]
+positive = HorizonEntry(aspiration.id, frozenset(aspiration.markers))
+contrary = HorizonEntry(
+    aspiration.id,
+    counter_signals=frozenset(aspiration.counter_signals),
+    note="Recipient disputes the earlier observation.",
+    observed_on="2026-10-19",
+)
+report = progress_report([positive, contrary], as_of="2026-10-20")
+envelope = report_envelope(report)
+archive_json = canonical_archive(report)
+envelope_json = canonical_envelope(envelope)
+restored = decode_archive(archive_json, envelope_json)
+assert restored == report
+assert restored.findings[0].status is HorizonStatus.TOWARD
+assert restored.intake_archive[1].entry == contrary
+assert envelope_matches_report(envelope, restored)
+```
+
+First valid entry wins: the later contrary duplicate is retained, not evaluated.
+Counter-signal precedence applies only within the admitted entry. This undated
+positive entry has no temporal review, so `TOWARD` does not establish freshness.
+The native digest remains unchanged; the intake sidecar has its own digest.
+Keep original source bytes separately, including malformed input that cannot be
+normalized. Neither archive nor envelope authenticates history or source truth.
+
+Custom registries pass `validate_registry` before evaluation and are labeled
 `custom:` with the content digest authoritative. Empty scopes are rejected.
 Dates are calendar dates, timestamps are rejected, and currentness is explicitly
 unevaluated when no staleness window is supplied. See
@@ -95,8 +134,10 @@ unevaluated when no staleness window is supplied. See
 
 Optional `ObservationProvenance` and `AspirationConflict` side records retain
 self-report, contestation, source pointers, and human-owned unresolved tension.
-They never change a directional finding; worked records and the design decision
-are in [evidence records](docs/evidence-records.md).
+They never change a directional finding and must be retained separately via
+`canonical_evidence_records`: neither `canonical_archive` nor the envelope
+bundles them. Worked records and the design decision are in
+[evidence records](docs/evidence-records.md).
 
 ## When to use this template project
 
@@ -149,7 +190,7 @@ block is a rendering of that file, so read the config when the two could have
 drifted.
 
 <!-- PUBLISHING-STATUS:START (generated by infrastructure.publishing.status_report) -->
-**Golden Line: Toward What Matters** · v0.5.0 · CC-BY-4.0 (prose); MIT (code) · Daniel Ari Friedman
+**Golden Line: Toward What Matters** · v0.6.0 · CC-BY-4.0 (prose); MIT (code) · Daniel Ari Friedman
 
 Publishing surface — 20 platforms, 0 published:
 
@@ -214,3 +255,8 @@ envelopes without aggregation:
 - [Green Line](https://github.com/docxology/green_line) — the capacity-under-development instrument
 - [The Line Set](https://github.com/docxology/line_set) — the cross-line set reader holding instruments apart
 - [The Witness Register](https://github.com/docxology/witness_register) — co-registration without aggregation
+
+The founding four describe history, not the current family boundary. The roster
+declares distinct scopes; source availability and access controls vary by
+instrument. A citation or link does not establish installation or public access,
+and Golden Line does not require sibling sources to run.

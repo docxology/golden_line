@@ -54,7 +54,7 @@ cells where every declared marker is also present. [@fig:counter_signal_dominanc
 is that run: each cell in it is a `progress_report` return value rather than a
 box drawn to illustrate one.
 
-![Counter-signal precedence replayed rather than drawn: for each of the nine aspirations, four progress_report calls at review date 2026-07-18 with stale_after_days = 90. Complete markers with no counter-signal read TOWARD; adding one declared counter-signal returns DRIFTING even though every marker is still present, and it still returns DRIFTING when the same observation is stale. Filled cells are DRIFTING and outlined cells are not, so the panel reads without colour. The panel characterizes clause order; it does not grade any work or person.](../../output/figures/counter_signal_dominance.png){#fig:counter_signal_dominance width=95%}
+![Counter-signal precedence replayed rather than drawn: for each of the nine aspirations, four progress_report calls at review date 2026-07-18 with stale_after_days = 90. Complete markers with no counter-signal read TOWARD; adding one declared counter-signal returns DRIFTING even though every marker is still present, and it still returns DRIFTING when the same observation is stale. Filled cells are DRIFTING and outlined cells are not, so the panel reads without color. The panel characterizes clause order; it does not grade any work or person.](../../output/figures/counter_signal_dominance.png){#fig:counter_signal_dominance width=95%}
 
 These distinctions keep a positive signal from laundering a counter-signal
 ([@prop:precedence]), and keep the absence of evidence from masquerading as

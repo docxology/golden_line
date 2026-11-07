@@ -111,7 +111,7 @@ The status $\sigma(a, e)$ is determined by the first matching clause, in order:
 2. else if $\mathrm{countered}(a,e) \neq \varnothing$: $\texttt{DRIFTING}$;
 3. else if $\mathrm{observed}(a,e) = \varnothing$: $\texttt{INQUIRY}$;
 4. else if $\mathrm{unmet}(a,e) \neq \varnothing$: $\texttt{INQUIRY}$;
-5. else if $\mathrm{stale}(e,d,\tau)$ or `date_issue`: $\texttt{INQUIRY}$;
+5. else if temporal review is enabled and ($\mathrm{stale}(e,d,\tau)$ or `date_issue`): $\texttt{INQUIRY}$;
 6. otherwise: $\texttt{TOWARD}$.
 :::
 
@@ -130,28 +130,29 @@ $\Sigma$.
 :::
 
 ::: {.proposition #prop:precedence title="Counter-signal precedence"}
-If a declared counter-signal is recorded, meaning
+If a declared counter-signal occurs in the admitted entry, meaning
 $\mathrm{countered}(a,e) \neq \varnothing$ ([@def:matching]), the status is $\texttt{DRIFTING}$,
-regardless of how many markers were observed and regardless of staleness.
-Clause 2 precedes clauses 3–6, so a positive signal can never launder a
-recorded drift.
+regardless of its markers or temporal quality. Clause 2 precedes clauses 3–6
+within that entry. Rejected contrary duplicates remain inspectable but cannot
+change its reading.
 :::
 
 ::: {.proposition #prop:toward_exact title="Exactness and currency of TOWARD"}
-$\sigma(a,e) = \texttt{TOWARD}$ iff $\mathrm{observed}(a,e) = M$ (every declared
-marker seen), $\mathrm{countered}(a,e) = \varnothing$ ([@def:matching]), and neither
-$\mathrm{stale}(e,d,\tau)$ nor `date_issue` holds. Any missing marker, any
-counter-signal, stale observation, or unparseable reviewed date reverts the
-reading to $\texttt{INQUIRY}$ or $\texttt{DRIFTING}$. Counter-signal precedence is as stated in [@prop:precedence]. There is no partial
-credit: an entry recording every marker but one reads exactly as an entry
-recording none.
+For an admitted entry, $\sigma(a,e) = \texttt{TOWARD}$ iff
+$\mathrm{observed}(a,e) = M$ (every declared marker seen),
+$\mathrm{countered}(a,e) = \varnothing$ ([@def:matching]), and, when temporal
+review is enabled, neither $\mathrm{stale}(e,d,\tau)$ nor `date_issue` holds.
+Without temporal review, currentness is unevaluated and an undated entry may
+be $\texttt{TOWARD}$. Counter-signal precedence is as stated in
+[@prop:precedence]. There is no partial credit: an entry recording every marker
+but one reads exactly as an entry recording none.
 :::
 
 ::: {.proposition #prop:temporal_inquiry title="Temporal uncertainty reopens, never condemns"}
-A fully-marked but stale or date-un-auditable observation with no
-counter-signal yields $\texttt{INQUIRY}$ (clause 5), not $\texttt{DRIFTING}$.
-Age or malformed temporal metadata reopens a question; it does not manufacture
-drift.
+With temporal review enabled, a fully-marked but stale or date-un-auditable
+admitted observation with no declared counter-signal yields $\texttt{INQUIRY}$
+(clause 5), not $\texttt{DRIFTING}$. Age or malformed reviewed temporal metadata
+reopens a question; it does not manufacture drift.
 :::
 
 ::: {.proposition #prop:absence title="Absence is not negation"}
@@ -165,16 +166,16 @@ matters.
 :::
 
 ::: {.proposition #prop:first_wins title="First valid entry stands; the reading is deterministic"}
-For each identifier, screening admits the first valid entry bearing it in the
-order of $E$: the first valid entry bearing an identifier stands, and every
-later entry with that identifier is set aside with a duplicate note. For an
-identifier with no valid entry, the reading is $\texttt{NOT\_OBSERVED}$
-([@prop:absence]). Exchanging
-the positions of two entries that share an identifier can therefore change the
-finding, but nothing else about the call can: replaying an identical batch with
-identical $\mathrm{as\_of}$ and $\tau$ reproduces the identical report, digest
-for digest. Determinism is a property of the code path; it does not make the
-underlying records true.
+For each known identifier, screening admits the first valid entry bearing it in
+the order of $E$. Every later valid entry with that identifier is set aside with
+a duplicate note; malformed entries are rejected before the duplicate check
+and do not reserve an identifier. With no valid admitted entry, the reading is
+$\texttt{NOT\_OBSERVED}$; a valid empty entry instead yields $\texttt{INQUIRY}$.
+Exchanging the positions of two valid entries that share a known identifier can
+therefore change the finding. Replaying an identical batch against the same
+registry with identical $\mathrm{as\_of}$ and $\tau$ instead reproduces the
+identical report, digest for digest. Determinism is a property of the code path;
+it does not make the underlying records true.
 :::
 
 ::: {.proposition #prop:intake-screening-determinism title="Intake screening determinism"}
@@ -221,7 +222,7 @@ $\texttt{TOWARD}$; a single missing marker holds the direction open at
 $\texttt{INQUIRY}$, exactly as an empty entry does. The panel characterizes the
 clause order, not any observed practice.
 
-![Every observed-marker subset for every aspiration, filed as an entry and evaluated. Each cell prints the status progress_report returned and the count of markers still unmet, so the grid reads without colour; only the complete subset reaches TOWARD, and one missing marker reads exactly as none. Marker completeness is a property of the record, never a measure of the work.](../../output/figures/marker_completeness.png){#fig:marker_completeness width=95%}
+![Every observed-marker subset for every aspiration, filed as an entry and evaluated. Each cell prints the status progress_report returned and the count of markers still unmet, so the grid reads without color; only the complete subset reaches TOWARD, and one missing marker reads exactly as none. Marker completeness is a property of the record, never a measure of the work.](../../output/figures/marker_completeness.png){#fig:marker_completeness width=95%}
 
 ### The temporal half of the rule
 
@@ -235,7 +236,7 @@ likewise reads $\texttt{INQUIRY}$. Every cell in
 illustration of one; the sweep observes the evaluator and never re-implements
 it.
 
-![A fully-marked entry replayed through the real evaluator at 14 observation ages with stale_after_days = 90. Every cell names the status progress_report actually returned, so nothing here is carried by colour alone: TOWARD through age 90, INQUIRY from age 91 and for future-dated observations. Age reopens the question; it never manufactures drift.](../../output/figures/temporal_currentness_sweep.png){#fig:temporal_currentness_sweep width=95%}
+![A fully-marked entry replayed through the real evaluator at 14 observation ages with stale_after_days = 90. Every cell names the status progress_report actually returned, so nothing here is carried by color alone: TOWARD through age 90, INQUIRY from age 91 and for future-dated observations. Age reopens the question; it never manufactures drift.](../../output/figures/temporal_currentness_sweep.png){#fig:temporal_currentness_sweep width=95%}
 
 ::: {.proposition #prop:sweep_codomain title="Sweep delegation and codomain"}
 The sweep computes no status of its own: its only status-producing call is
@@ -260,7 +261,7 @@ Replaying the sweep ([@prop:sweep_codomain]) for every $a \in R$ at the same rev
 yields the same $\texttt{TOWARD} \to \texttt{INQUIRY}$ transition age for every
 aspiration, because [@def:temporal_review] reads only $\mathrm{d_{obs}}$, $d$,
 and $\tau$ — no field of $a$ enters the staleness comparison. The sweep
-confirms that the temporal-inquiry behaviour stated in
+confirms that the temporal-inquiry behavior stated in
 [@prop:temporal_inquiry] and the exclusive boundary stated in
 [@prop:boundary_exclusive] are properties of the evaluator's code path, not
 of any particular aspiration. The lattice in
@@ -270,7 +271,7 @@ and a count of rows that differ. Uniformity here is a fact about the code path;
 it says nothing about how any aspiration is actually served.
 :::
 
-![The same currentness replay run across the whole registry: 9 aspiration rows by 14 observation ages, 126 executed progress_report calls at stale_after_days = 90. Filled cells are TOWARD and outlined cells are INQUIRY, so the grid reads without colour; the FLIPS AT column gives each row's own transition age and the footer counts rows that differ. Uniform ageing is a fact about the evaluator's code path, not evidence that any aspiration is being served.](../../output/figures/currentness_lattice.png){#fig:currentness_lattice width=95%}
+![The same currentness replay run across the whole registry: 9 aspiration rows by 14 observation ages, 126 executed progress_report calls at stale_after_days = 90. Filled cells are TOWARD and outlined cells are INQUIRY, so the grid reads without color; the FLIPS AT column gives each row's own transition age and the footer counts rows that differ. Uniform aging is a fact about the evaluator's code path, not evidence that any aspiration is being served.](../../output/figures/currentness_lattice.png){#fig:currentness_lattice width=95%}
 
 ## Structural invariants
 
@@ -386,7 +387,7 @@ within the admitted record, never a claim about all submitted observations.
 Before intake, `validate_registry` rejects empty scopes, duplicate or blank IDs,
 malformed entries, empty/overlapping/repeated signals, and scalar/mapping/iterator
 signal fields. Accepted tuple/list registries become immutable tuples. Custom
-registries are labelled `custom:` with content digest authoritative. Calendar
+registries are labeled `custom:` with content digest authoritative. Calendar
 dates exclude timestamps; sweep ages exclude bool and lossy numeric coercion.
 `currentness_evaluated` is false when temporal review is disabled.
 
@@ -410,30 +411,30 @@ what each result does *not* claim.
 
 | Definition | Statement essence | Verifying test | Boundary |
 | --- | --- | --- | --- |
-| [@def:aspiration] | six fields, two of them token sequences | `tests/test_formalism_bindings.py::test_aspiration_tuple_matches_the_dataclass` | names the fields, not what a marker is worth |
-| [@def:registry] | nine entries, four founding then five further | `tests/test_formalism_bindings.py::test_registry_definition_matches_the_source_tuple` | a versioned design choice, not a canon |
-| [@def:horizon_entry] | five fields, the observation date optional | `tests/test_formalism_bindings.py::test_horizon_entry_tuple_matches_the_dataclass` | records an observation, not a person |
-| [@def:status_codomain] | exactly the four `HorizonStatus` values, in enum order | `tests/test_formalism_bindings.py::test_status_codomain_matches_the_enumeration` | four readings, not a scale from bad to good |
-| [@def:finding] | twelve fields, ignored markers kept apart from ignored counter-signals | `tests/test_formalism_bindings.py::test_finding_tuple_matches_the_dataclass` | exposes a derivation, not a justification |
-| [@def:report_function] | four parameters, two keyword-only; three named stages | `tests/test_formalism_bindings.py::test_report_function_signature_matches_manuscript` | a call shape, not a guarantee about inputs |
-| [@def:intake] | shape, then membership, then prior admission; notes indexed from 1; supported passive data only | `tests/test_formalism_bindings.py::test_intake_screening_tests_records_in_the_stated_order`, `tests/test_formalism_bindings.py::test_intake_screening_never_raises_on_hostile_input`, `tests/test_formalism_bindings.py::test_intake_first_wins_and_replay_determinism_match_manuscript` | screening judges records, never their authors |
-| [@def:matching] | the three set operations, and undeclared tokens discarded | `tests/test_formalism_bindings.py::test_matching_set_operations_match_manuscript` | set membership, not sufficiency of evidence |
-| [@def:temporal_review] | enabled iff $\tau$ is set; missing or unparseable dates flag rather than fail | `tests/test_formalism_bindings.py::test_temporal_review_rule_matches_manuscript` | a data-quality window, not a decay law |
+| [@def:aspiration] | six fields, two of them token sequences | `tests/test_api.py::test_native_record_schema_fields` | names the fields, not what a marker is worth |
+| [@def:registry] | nine entries, four founding then five further | `tests/test_registry.py::test_registry_shape` | a versioned design choice, not a canon |
+| [@def:horizon_entry] | five fields, the observation date optional | `tests/test_api.py::test_native_record_schema_fields` | records an observation, not a person |
+| [@def:status_codomain] | exactly the four `HorizonStatus` values, in enum order | `tests/test_api.py::test_native_status_vocabulary` | four readings, not a scale from bad to good |
+| [@def:finding] | twelve fields, ignored markers kept apart from ignored counter-signals | `tests/test_api.py::test_native_record_schema_fields` | exposes a derivation, not a justification |
+| [@def:report_function] | four parameters, two keyword-only; three named stages | `tests/test_review_archive.py::test_archive_retains_admission_and_optional_temporal_transitions` | a call shape, not a guarantee about inputs |
+| [@def:intake] | shape, then membership, then prior admission; notes indexed from 1; supported passive data only | `tests/test_formalism_bindings.py::test_intake_classification_orders_validation_membership_and_admission`, `tests/test_formalism_bindings.py::test_intake_screening_never_raises_on_hostile_input`, `tests/test_formalism_bindings.py::test_first_valid_admission_and_replay_determinism` | screening judges records, never their authors |
+| [@def:matching] | the three set operations, and undeclared tokens discarded | `tests/test_formalism_bindings.py::test_matching_retains_declared_and_ignored_signal_sets` | set membership, not sufficiency of evidence |
+| [@def:temporal_review] | enabled iff $\tau$ is set; missing or unparseable dates flag rather than fail | `tests/test_formalism_bindings.py::test_temporal_review_enablement_and_exclusive_boundary` | a data-quality window, not a decay law |
 | [@def:decision_rule] | six clauses, first match wins | `tests/test_formalism_bindings.py::test_decision_clauses_fire_in_the_stated_order` | clause order, not moral order |
 
 | Proposition | Statement essence | Verifying test | Boundary |
 | --- | --- | --- | --- |
-| [@prop:totality] | one finding per registry aspiration; counts partition $n = 9$ | `tests/test_progress.py::test_counts_summary`, `tests/test_formalism_bindings.py::test_totality_count_matches_manuscript` | report shape, not coverage of a life |
-| [@prop:precedence] | a declared counter-signal forces `DRIFTING` over every later clause | `tests/test_progress.py::test_drifting_survives_staleness` | flags a recorded signal, not a failing person |
-| [@prop:toward_exact] | `TOWARD` iff all markers observed, none countered, currentness auditable | `tests/test_progress.py::test_observed_and_unmet_fields_are_populated`, `tests/test_progress.py::test_fresh_observation_stays_toward`, `tests/test_figures.py::test_completeness_panel_gives_no_partial_credit` | a reading of one record, not an accreditation |
-| [@prop:temporal_inquiry] | temporal uncertainty yields `INQUIRY`, never `DRIFTING` | `tests/test_progress.py::test_stale_observation_reverts_toward_to_inquiry`, `tests/test_progress.py::test_undated_entry_cannot_certify_currentness` | age reopens a question, never condemns |
+| [@prop:totality] | one finding per registry aspiration; counts partition $n = 9$ | `tests/test_progress.py::test_counts_summary`, `tests/test_formalism_bindings.py::test_totality_partitions_the_native_registry` | report shape, not coverage of a life |
+| [@prop:precedence] | a declared counter-signal in the admitted entry forces `DRIFTING` over every later clause | `tests/test_progress.py::test_drifting_survives_staleness` | flags a recorded signal, not a failing person |
+| [@prop:toward_exact] | `TOWARD` iff all markers observed, none countered, and currentness auditable when review is enabled | `tests/test_progress.py::test_observed_and_unmet_fields_are_populated`, `tests/test_progress.py::test_fresh_observation_stays_toward`, `tests/test_figures.py::test_completeness_panel_gives_no_partial_credit` | a reading of one record, not an accreditation |
+| [@prop:temporal_inquiry] | enabled temporal review can yield `INQUIRY`, never manufacture `DRIFTING` | `tests/test_progress.py::test_stale_observation_reverts_toward_to_inquiry`, `tests/test_progress.py::test_undated_entry_cannot_certify_currentness`, `tests/test_review_archive.py::test_archive_retains_admission_and_optional_temporal_transitions` | age reopens a question, never condemns |
 | [@prop:absence] | `NOT_OBSERVED` arises solely from no admitted entry | `tests/test_progress.py::test_unknown_aspiration_id_is_noted_not_fatal`, `tests/test_progress.py::test_empty_entries_yield_all_not_observed` | absence of signal is not evidence of drift |
-| [@prop:first_wins] | first valid entry per id stands; identical calls reproduce identical reports | `tests/test_progress.py::test_duplicate_entries_first_wins_and_is_noted`, `tests/test_formalism_bindings.py::test_intake_first_wins_and_replay_determinism_match_manuscript` | determinism of the reading, not truth of the records |
+| [@prop:first_wins] | first valid entry per id stands; identical calls reproduce identical reports | `tests/test_progress.py::test_duplicate_entries_first_wins_and_is_noted`, `tests/test_formalism_bindings.py::test_first_valid_admission_and_replay_determinism` | determinism of the reading, not truth of the records |
 | [@prop:intake-screening-determinism] | screening is a pure function of (E, ids(R)); malformed input is set aside deterministically; supported passive data only | `tests/test_formalism_bindings.py::test_intake_screening_never_raises_on_hostile_input`, `tests/test_formalism_bindings.py::test_intake_screening_is_deterministic_on_all_input` | determinism of the screening function, not truth of records |
-| [@prop:boundary_exclusive] | staleness is strict: `TOWARD` at age $\tau$, stale from $\tau + 1$ | `tests/test_progress.py::test_observation_exactly_at_staleness_boundary_stays_fresh`, `tests/test_progress.py::test_observation_one_day_past_staleness_boundary_is_stale`, `tests/test_formalism_bindings.py::test_currentness_boundary_constants_match_manuscript` | the threshold is a review-cadence choice, not a decay law |
-| [@prop:sweep_codomain] | sweep delegates to `progress_report` and computes no status; codomain is `TOWARD`/`INQUIRY` only | `tests/test_analysis.py::test_sweep_module_constructs_no_status_of_its_own`, `tests/test_analysis.py::test_sweep_never_produces_drifting_or_not_observed`, `tests/test_formalism_bindings.py::test_sweep_codomain_matches_manuscript` | characterizes the instrument, not any observed practice |
+| [@prop:boundary_exclusive] | staleness is strict: `TOWARD` at age $\tau$, stale from $\tau + 1$ | `tests/test_progress.py::test_observation_exactly_at_staleness_boundary_stays_fresh`, `tests/test_progress.py::test_observation_one_day_past_staleness_boundary_is_stale`, `tests/test_formalism_bindings.py::test_currentness_boundary_is_exclusive` | the threshold is a review-cadence choice, not a decay law |
+| [@prop:sweep_codomain] | sweep delegates to `progress_report` and computes no status; codomain is `TOWARD`/`INQUIRY` only | `tests/test_analysis.py::test_sweep_flips_toward_to_inquiry_at_exclusive_boundary`, `tests/test_analysis.py::test_sweep_never_produces_drifting_or_not_observed`, `tests/test_formalism_bindings.py::test_sweep_reaches_only_toward_and_inquiry` | characterizes the instrument, not any observed practice |
 | [@prop:boundary_uniform] | every aspiration's reading flips at the same observation age | `tests/test_figures.py::test_lattice_cells_are_executed_evaluator_readings`, `tests/test_figures.py::test_lattice_reports_a_uniform_flip_age`, `tests/test_figures.py::test_lattice_deviation_count_detects_a_planted_outlier` | uniformity of the code path, not of any practice |
-| [@prop:digest_order] | registry digest is permutation-invariant, 64 lowercase hex characters | `tests/test_serialization.py::test_canonical_registry_is_deterministic_json`, `tests/test_golden_line.py::test_registry_is_unique_and_order_independent`, `tests/test_formalism_bindings.py::test_digest_order_independence_matches_manuscript` | a drift-review handle, no attestation semantics |
+| [@prop:digest_order] | registry digest is permutation-invariant, 64 lowercase hex characters | `tests/test_serialization.py::test_canonical_registry_is_deterministic_json`, `tests/test_golden_line.py::test_registry_is_unique_and_order_independent`, `tests/test_formalism_bindings.py::test_native_registry_digest_is_order_independent_hex` | a drift-review handle, no attestation semantics |
 | [@prop:detection] | every invariant passes on the real registry and rejects a planted-bad one | `tests/test_invariants.py::test_battery_passes_on_real_registry`, `tests/test_invariants.py::test_registry_sound_false_on_any_planted_bad` | detection proof concerns the checks, not registry merit |
 
 The envelope section declares its blocks after the propositions above, so its
@@ -441,8 +442,8 @@ rows sit in their own table, in the same document order:
 
 | Envelope block | Statement essence | Verifying test | Boundary |
 | --- | --- | --- | --- |
-| [@def:report_envelope] | ten fields, `native_status` the complete ordered per-aspiration pairs | `tests/test_formalism_bindings.py::test_report_envelope_tuple_matches_the_dataclass` | a data contract, not a summary and not a score |
-| [@prop:envelope_pointer] | the envelope agrees with its report-bound fields; inconsistent edits to those fields are visible | `tests/test_formalism_bindings.py::test_envelope_pointer_matches_manuscript`, `tests/test_report_envelope.py::test_envelope_matches_report_verifies_an_archived_pair` | archival agreement; caller metadata remains unverified, as does truth of the report |
+| [@def:report_envelope] | ten fields, `native_status` the complete ordered per-aspiration pairs | `tests/test_report_envelope.py::test_canonical_envelope_round_trips_and_is_deterministic`, `tests/test_report_envelope.py::test_native_status_is_the_complete_ordered_per_aspiration_readings` | a data contract, not a summary and not a score |
+| [@prop:envelope_pointer] | the envelope agrees with its report-bound fields; inconsistent edits to those fields are visible | `tests/test_formalism_bindings.py::test_envelope_pointer_binds_native_report`, `tests/test_report_envelope.py::test_envelope_matches_report_verifies_an_archived_pair` | archival agreement; caller metadata remains unverified, as does truth of the report |
 
 The bindings are themselves code behavior: they show which claims the suite
 would catch, not that the registry's aspirations are wise or well served.

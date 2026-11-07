@@ -4,7 +4,7 @@ import json
 import platform
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from .paths import PROJECT_ROOT
@@ -49,6 +49,49 @@ def _untracked(root: Path) -> list[str]:
     ]
 
 
+def _source_snapshot(root: Path) -> dict[str, str]:
+    """Bind current tracked and non-ignored source bytes, not only HEAD."""
+    names = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(root),
+            "ls-files",
+            "--cached",
+            "--others",
+            "--exclude-standard",
+            "-z",
+        ],
+        check=True,
+        capture_output=True,
+    ).stdout.split(b"\0")
+    snapshot = {}
+    for raw_name in sorted(set(names)):
+        if not raw_name:
+            continue
+        name = raw_name.decode(sys.getfilesystemencoding(), "surrogateescape")
+        if name.startswith("graft/"):
+            continue
+        path = root / name
+        if path.is_symlink():
+            snapshot[name] = hashlib.sha256(
+                ("symlink:" + str(path.readlink())).encode("utf-8")
+            ).hexdigest()
+        elif path.is_file():
+            snapshot[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+        else:
+            snapshot[name] = "missing"
+    return snapshot
+
+
+def _snapshot_digest(snapshot: dict[str, str]) -> str:
+    return hashlib.sha256(
+        json.dumps(
+            snapshot, sort_keys=True, ensure_ascii=True, separators=(",", ":")
+        ).encode("ascii")
+    ).hexdigest()
+
+
 def collect_evidence(
     root: Path,
     destination: Path,
@@ -63,9 +106,9 @@ def collect_evidence(
     destination.mkdir(parents=True, exist_ok=True)
     commit = _git(root, "rev-parse", "HEAD")
     untracked = _untracked(root)
-    dirty = bool(_git(root, "status", "--porcelain", "--untracked-files=no")) or bool(
-        untracked
-    )
+    tracked_status = _git(root, "status", "--porcelain", "--untracked-files=no")
+    dirty = bool(tracked_status) or bool(untracked)
+    source_snapshot = _source_snapshot(root)
     outputs = []
     for index, command in enumerate(commands, start=1):
         try:
@@ -93,8 +136,10 @@ def collect_evidence(
         renderer_issue = str(exc)
     unchanged = (
         _git(root, "rev-parse", "HEAD") == commit
-        and not _untracked(root)
-        and not _git(root, "status", "--porcelain", "--untracked-files=no")
+        and _git(root, "status", "--porcelain", "--untracked-files=no")
+        == tracked_status
+        and _untracked(root) == untracked
+        and _source_snapshot(root) == source_snapshot
     )
     artifacts = {
         str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
@@ -107,9 +152,11 @@ def collect_evidence(
         "source_commit": commit,
         "tracked_source_dirty": dirty,
         "untracked_source_paths": untracked,
+        "working_source_sha256": _snapshot_digest(source_snapshot),
+        "working_source_files": source_snapshot,
         "complete_gate_surface": commands == LOCAL_GATES,
         "source_unchanged": unchanged,
-        "recorded_at": datetime.now(timezone.utc).isoformat(),
+        "recorded_at": datetime.now(UTC).isoformat(),
         "python": platform.python_version(),
         "python_prefix": str(Path(sys.prefix).resolve()),
         "python_base_prefix": str(Path(sys.base_prefix).resolve()),

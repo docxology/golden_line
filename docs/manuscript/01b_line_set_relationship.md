@@ -18,6 +18,10 @@ commitment: Blue Line records that question. A flourishing marker does not
 show affected-party consent: Violet Line records that question. None of these
 separate records is imported, scored, or overridden by Golden Line.
 
+This is a declaration of independent scopes, not an installation report.
+Sibling sources may be optional or access-controlled; links and citations do
+not establish public availability. Golden Line runs without those sources.
+
 ## Note on the name
 
 The name is not incidental. *Golden Line* openly echoes the yellowing stage of
@@ -26,7 +30,7 @@ place between the whitening and the reddening. The echo is meant in Carl Jung's
 symbolic-psychological register, where the stages of the opus are read as a map
 of individuation, and in that register only: it is a metaphor for a practice
 turning toward what it is for, never an empirical, mystical, or causal claim
-about matter, minds, or this instrument. The working order of the four-line set
+about matter, minds, or this instrument. The historical founding-four order
 refuse, then method, then aspire, then absence, is functional and chosen for how
 the instruments are actually used, and deliberately does not reenact the opus's
 canonical sequence (nigredo → albedo → citrinitas → rubedo). Citrinitas here

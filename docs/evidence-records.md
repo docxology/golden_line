@@ -12,6 +12,14 @@ observer role, collection method, review scope, token-to-source pointers,
 contestation and supersession references. A reference identifies a source; it
 does not verify its contents. Competing observations coexist without voting.
 
+Retain the `canonical_evidence_records` export separately from
+`canonical_archive(report)` and the report envelope: neither transport format
+includes these optional records. Keep the original source bytes and custody
+records separately as well. The archive retains normalized intake, including
+rejected contrary duplicates, but cannot recover malformed original payloads or
+the contents behind source references. Matching digests establish neither
+source truth nor an unedited history.
+
 `AspirationConflict` retains the aspirations in tension, affected perspectives,
 unresolved alternatives, review note, and human decision owner. A tension with
 confidentiality or locally adverse effects can name a single Golden aspiration

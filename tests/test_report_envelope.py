@@ -54,7 +54,7 @@ def _worked_report() -> HorizonReport:
 
 
 # ---------------------------------------------------------------------------
-# Canonical report completeness: the reference target holds the whole state.
+# Native report completeness; normalized intake custody needs canonical_archive.
 # ---------------------------------------------------------------------------
 
 

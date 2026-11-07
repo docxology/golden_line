@@ -17,7 +17,7 @@ contracts.
 - `test_figure_guards.py` — figure guard invariants
 - `test_figure_legibility.py` — printed text size constraints
 - `test_artifacts.py` — artifact validation and digest agreement
-- `test_formalism_bindings.py` — prose and formalism block bindings
+- `test_formalism_bindings.py` — native evaluator boundaries and structural formalism/ledger bindings
 - `test_formalism_syntax.py` — formalism syntax and error paths
 - `test_publication_metadata.py` — publication metadata across config and package
 - `test_experiment_plan.py` — experiment plan surface
@@ -26,7 +26,7 @@ contracts.
 - `test_review_boundaries.py` — input-boundary rejections and validation fail-closed cases
 - `test_review_archive.py` — archive sidecar round-trip, native-status bijection, legacy fixture decode
 - `test_review_artifacts.py` — artifact gate mutation controls
-- `test_review_records.py` — provenance/conflict records and family documentation claims
+- `test_review_records.py` — provenance/conflict record validation and custody
 - `test_archive_validation.py` — strict envelope/archive validation and malformed-input rejection
 - `test_audit_corrections.py` — audit corrections, CFF schema conformance, boundary fixes
 - `test_formalism_claim_ledger.py` — binds `data/formalism_claim_ledger.json` to manuscript labels

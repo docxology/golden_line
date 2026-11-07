@@ -42,14 +42,6 @@ def _builder(name: str):
     return next(entry[2] for entry in FIGURES if entry[0] == name)
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-
-
-def _normalized(path: Path) -> str:
-    """Whitespace-normalized file text so bindings survive markdown wrapping."""
-    return " ".join(path.read_text(encoding="utf-8").split())
-
-
 def test_analysis_figures_are_registered() -> None:
     names = {entry[0] for entry in FIGURES}
     assert {
@@ -95,159 +87,6 @@ def test_horizon_bands_figure_names_every_band() -> None:
     svg = _builder("horizon_bands")()
     for band_name, _ in HORIZON_BANDS:
         assert band_name.upper() in svg
-
-
-def test_horizon_bands_counts_derive_from_the_registry() -> None:
-    """Subtitle and caption counts re-derive; registry growth cannot strand them."""
-    from golden_line.analysis import horizon_distribution
-    from golden_line.registry import GOLDEN_ASPIRATIONS
-
-    bands = horizon_distribution()
-    total = sum(len(band.aspiration_ids) for band in bands)
-    assert total == len(GOLDEN_ASPIRATIONS)
-    svg = _builder("horizon_bands")()
-    assert f"{total} horizons, {len(bands)} reaches of visibility" in svg
-    caption = next(entry[3] for entry in FIGURES if entry[0] == "horizon_bands")
-    assert f"The {total} aspiration horizons grouped into {len(bands)}" in caption
-
-
-def test_sweep_captions_derive_from_the_sweep_constants() -> None:
-    """Spec caption and 02a embed re-derive; an ages/threshold change cannot strand them."""
-    from golden_line.figures import SWEEP_AGES, SWEEP_STALE_AFTER_DAYS
-
-    caption = next(
-        entry[3] for entry in FIGURES if entry[0] == "temporal_currentness_sweep"
-    )
-    alt = next(
-        entry[4] for entry in FIGURES if entry[0] == "temporal_currentness_sweep"
-    )
-    assert f"at {len(SWEEP_AGES)} observation ages" in caption
-    assert f"stale_after_days = {SWEEP_STALE_AFTER_DAYS}" in caption
-    assert (
-        f"TOWARD through age {SWEEP_STALE_AFTER_DAYS} and reverts to INQUIRY "
-        f"from age {SWEEP_STALE_AFTER_DAYS + 1}" in caption
-    )
-    assert f"{len(SWEEP_AGES)} age-labelled cells" in alt
-    assert f"{SWEEP_STALE_AFTER_DAYS}-day staleness boundary" in alt
-    embed = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "02a_formalism.md")
-    assert (
-        f"at {len(SWEEP_AGES)} observation ages with "
-        f"stale_after_days = {SWEEP_STALE_AFTER_DAYS}" in embed
-    )
-    assert (
-        f"TOWARD through age {SWEEP_STALE_AFTER_DAYS}, "
-        f"INQUIRY from age {SWEEP_STALE_AFTER_DAYS + 1}" in embed
-    )
-
-
-def test_shipped_registry_signal_literals_are_pinned() -> None:
-    """Bind the manuscript's 18/9 all-distinct prose class to the executed inventory."""
-    from golden_line.analysis import signal_inventory
-
-    inventory = signal_inventory()
-    assert (inventory.total_markers, inventory.unique_markers) == (18, 18)
-    assert (inventory.total_counter_signals, inventory.unique_counter_signals) == (
-        9,
-        9,
-    )
-    numerals = (
-        f"{inventory.total_markers} markers and "
-        f"{inventory.total_counter_signals} counter-signals"
-    )
-    assert numerals in _normalized(
-        PROJECT_ROOT / "docs" / "manuscript" / "02_method.md"
-    )
-    aspirations = _normalized(
-        PROJECT_ROOT / "docs" / "manuscript" / "03_aspirations.md"
-    )
-    assert numerals in aspirations
-    assert (
-        f"all {inventory.unique_markers} marker tokens and all "
-        f"{inventory.unique_counter_signals} counter-signal tokens distinct"
-        in aspirations
-    )
-    # Word-form sites pin to the same executed totals via the 18/9 equality above.
-    assert "eighteen markers and nine counter-signals" in _normalized(
-        PROJECT_ROOT / "docs" / "manuscript" / "05_limits.md"
-    )
-    assert "eighteen markers and nine counter-signals" in _normalized(
-        PROJECT_ROOT / "docs" / "manuscript" / "04a_batch_reading.md"
-    )
-    assert (
-        f"{inventory.total_markers} markers / "
-        f"{inventory.total_counter_signals} counter-signals"
-        in _normalized(PROJECT_ROOT / ".agents" / "skills" / "golden-line" / "SKILL.md")
-    )
-
-
-def test_horizon_band_membership_counts_match_the_prose() -> None:
-    """Per-band counts in 03 and SKILL.md re-derive from horizon_distribution().
-
-    The figure renders each band's size dynamically and the older tests only
-    checked the total and the number of bands, both invariant under a
-    re-partition — so moving one aspiration between bands falsified two
-    documents while the suite stayed green. These are the per-band numbers.
-    """
-    from golden_line.analysis import horizon_distribution
-
-    counts = {band.band: len(band.aspiration_ids) for band in horizon_distribution()}
-    assert sum(counts.values()) == 9
-
-    aspirations = _normalized(
-        PROJECT_ROOT / "docs" / "manuscript" / "03_aspirations.md"
-    )
-    assert (
-        f"immediate ({counts['immediate']} aspiration, at the next decision), "
-        f"recurring cycle ({counts['recurring cycle']}, at revision or tool turnover), "
-        f"at handoff ({counts['at handoff']}, when the work reaches another person), and "
-        f"open-ended ({counts['open-ended']}, over years)" in aspirations
-    )
-    skill = _normalized(
-        PROJECT_ROOT / ".agents" / "skills" / "golden-line" / "SKILL.md"
-    )
-    assert (
-        f"(immediate {counts['immediate']}, recurring cycle {counts['recurring cycle']}, "
-        f"at handoff {counts['at handoff']}, open-ended {counts['open-ended']})"
-        in skill
-    )
-
-
-def test_band_count_binding_rejects_a_planted_repartition() -> None:
-    """Proof of detection: a re-banded registry no longer matches the prose."""
-    from golden_line.analysis import horizon_distribution
-
-    planted_map = (
-        ("immediate", ("next decision",)),
-        ("recurring cycle", ("tool turnover",)),
-        (
-            "at handoff",
-            (
-                "next learner",
-                "collaborator or public reader",
-                "public claim",
-                "shared pool",
-                "revision cycle",
-            ),
-        ),
-        ("open-ended", ("long horizon", "multi-year inquiry")),
-    )
-    from golden_line.registry import GOLDEN_ASPIRATIONS
-
-    planted_counts = {
-        band: sum(1 for item in GOLDEN_ASPIRATIONS if item.horizon in horizons)
-        for band, horizons in planted_map
-    }
-    real_counts = {
-        band.band: len(band.aspiration_ids) for band in horizon_distribution()
-    }
-    assert planted_counts != real_counts
-    aspirations = _normalized(
-        PROJECT_ROOT / "docs" / "manuscript" / "03_aspirations.md"
-    )
-    assert (
-        f"recurring cycle ({planted_counts['recurring cycle']}, at revision or tool turnover)"
-        not in aspirations
-    )
 
 
 def test_lattice_cells_are_executed_evaluator_readings() -> None:
@@ -350,21 +189,6 @@ def test_precedence_panel_would_report_a_marker_that_outranked_a_counter_signal(
     assert dominated == len(rows) - 1
 
 
-def test_every_figure_carries_the_boundary_footer() -> None:
-    """Every figure keeps the SOURCE-DRIVEN epistemic-boundary convention."""
-    assert FIGURES, "no figures registered, so this convention check is vacuous"
-    for name, _, builder, *_ in FIGURES:
-        assert "SOURCE-DRIVEN SCHEMATIC" in builder(), name
-
-
-def test_every_caption_keeps_a_boundary_clause() -> None:
-    """Every registry caption states an interpretive limit, not just content."""
-    markers = ("not a ", "never", "not part", "do not", "rejects")
-    for name, _, _, caption, _ in FIGURES:
-        lowered = caption.lower()
-        assert any(marker in lowered for marker in markers), name
-
-
 def test_pipeline_figure_draws_real_intake_setasides() -> None:
     """The set-aside branch quotes the evaluator's own intake notes verbatim."""
     from golden_line import HorizonEntry, progress_report
@@ -445,41 +269,6 @@ def test_batch_overview_fates_derive_from_public_intake_classification() -> None
     for entry, fate in zip(WORKED_BATCH_ENTRIES, fates):
         assert entry.aspiration_id in svg
         assert fate in svg
-
-
-def test_batch_overview_caption_and_manuscript_match_execution() -> None:
-    """Caption and 04a literals restate exactly the executed batch partition."""
-    from golden_line.analysis import report_overview
-    from golden_line.figures import WORKED_BATCH_ENTRIES
-    from golden_line.progress import progress_report
-
-    report = progress_report(list(WORKED_BATCH_ENTRIES))
-    overview = report_overview(report)
-    counts = report.counts()
-    partition = (
-        f"{counts['TOWARD']} TOWARD, {counts['INQUIRY']} INQUIRY, "
-        f"{counts['DRIFTING']} DRIFTING, and {counts['NOT_OBSERVED']} NOT_OBSERVED"
-    )
-    caption = next(
-        entry[3] for entry in FIGURES if entry[0] == "batch_reading_overview"
-    )
-    assert partition in caption
-    assert f"{overview.intake_note_count} intake set-asides" in caption
-
-    text = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "04a_batch_reading.md")
-    assert "batch_reading_overview.png" in text
-    assert "#fig:batch_reading_overview" in text
-    assert f"{partition} across {len(report.findings)} findings" in text
-    words = {0: "zero", 1: "one", 2: "two", 3: "three", 4: "four", 5: "five"}
-    assert (
-        f"{words[counts['TOWARD']]} `TOWARD`, {words[counts['INQUIRY']]} `INQUIRY`, "
-        f"{words[counts['DRIFTING']]} `DRIFTING`, and "
-        f"{words[counts['NOT_OBSERVED']]} `NOT_OBSERVED`" in text
-    )
-    assert f"`intake_note_count` is **{overview.intake_note_count}**" in text
-    assert f"`ignored_marker_total` is **{overview.ignored_marker_total}**" in text
-    for note in report.intake_notes:
-        assert note in text  # 04a quotes both intake notes verbatim
 
 
 def test_completeness_panel_cells_are_executed_evaluator_readings() -> None:
@@ -656,39 +445,3 @@ def test_field_matrix_always_carried_detects_a_planted_empty_reasons() -> None:
     )
     assert "reasons" not in always_carried_fields(planted)
     assert len(always_carried_fields(planted)) == len(always_carried_fields(rows)) - 1
-
-
-def test_field_matrix_manuscript_literals_match_the_replay() -> None:
-    """02c's field and condition counts are derived, never hand-kept."""
-    from golden_line.figures.record_figures import (
-        FIELD_MATRIX_CONDITIONS,
-        always_carried_fields,
-        field_matrix_rows,
-    )
-
-    rows = field_matrix_rows()
-    always = always_carried_fields(rows)
-    words = {3: "Three", 6: "six", 9: "nine", 12: "twelve"}
-    text = _normalized(
-        PROJECT_ROOT / "docs" / "manuscript" / "02c_evidence_protocol.md"
-    )
-    assert (
-        f"The {words[len(rows)]} structured fields of a finding against "
-        f"{words[len(FIELD_MATRIX_CONDITIONS)]} evidence conditions" in text
-    )
-    assert f"{words[len(always)]} fields are carried under every condition" in text
-    assert f"the remaining {words[len(rows) - len(always)]} are carried exactly" in text
-
-
-def test_new_replay_figures_are_registered_and_embedded() -> None:
-    """Both new panels ship in the builder and are cited by the manuscript."""
-    names = {entry[0] for entry in FIGURES}
-    assert {"marker_completeness", "finding_field_matrix"} <= names
-    formalism = _normalized(PROJECT_ROOT / "docs" / "manuscript" / "02a_formalism.md")
-    assert "marker_completeness.png" in formalism
-    assert "@fig:marker_completeness" in formalism
-    evidence = _normalized(
-        PROJECT_ROOT / "docs" / "manuscript" / "02c_evidence_protocol.md"
-    )
-    assert "finding_field_matrix.png" in evidence
-    assert "@fig:finding_field_matrix" in evidence

@@ -28,9 +28,9 @@ CARD = "#efe7d8"
 CARD_LINE = "#d8cbb4"
 
 #: One hue per directional reading, shared by every figure that draws a
-#: status. Colour is never the only channel: each drawn status also carries its
-#: own name, or a fill-versus-outline distinction that survives greyscale.
-STATUS_COLOURS = {
+#: status. Color is never the only channel: each drawn status also carries its
+#: own name, or a fill-versus-outline distinction that survives grayscale.
+STATUS_COLORS = {
     HorizonStatus.TOWARD: TEAL,
     HorizonStatus.INQUIRY: GOLD_DARK,
     HorizonStatus.DRIFTING: RED,

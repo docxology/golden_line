@@ -23,21 +23,30 @@ of human flourishing.
 
 ## Status decision
 
-For one admitted entry, the evaluator computes declared observations, unmet
-markers, declared counter-signals, ignored tokens, and temporal quality before
-selecting a status:
+For each aspiration, intake first determines whether a valid entry was admitted.
+For an admitted entry, the evaluator computes declared observations, unmet
+markers, declared counter-signals, ignored tokens, and optional temporal quality:
 
 1. no admitted entry → `NOT_OBSERVED`;
-2. a declared counter-signal → `DRIFTING`;
+2. a declared counter-signal in the admitted entry → `DRIFTING`;
 3. no declared marker → `INQUIRY`;
 4. an unmet marker → `INQUIRY`;
-5. stale, missing, or currentness-un-auditable positive evidence → `INQUIRY`;
+5. with temporal review enabled, stale or currentness-un-auditable positive
+   evidence (including missing or malformed dates) → `INQUIRY`;
 6. otherwise → `TOWARD`.
 
-The ordering is a conservative precedence rule, not a severity ranking.
-`DRIFTING` describes a declared counter-signal in one record; it does not
-diagnose a person or project. `TOWARD` describes a complete current marker
-record; it does not certify safety, legality, virtue, quality, or permission.
+Thus no entry or only rejected malformed material means `NOT_OBSERVED`; an
+admitted empty entry means `INQUIRY`; complete admitted markers with no declared
+counter-signal mean `TOWARD`, subject to enabled temporal review. Without a
+window, currentness is unevaluated and an undated entry can be `TOWARD`. With a
+window, age exactly at the threshold is current; a future date or greater age is
+stale.
+
+The ordering is a conservative precedence rule within the admitted record, not
+a severity ranking across submitted records. A duplicate requires a prior valid
+admitted same-ID entry; it is retained but not evaluated. `DRIFTING` does not
+diagnose a person or project, and `TOWARD` does not certify safety, legality,
+virtue, quality, permission, or freshness when temporal review is disabled.
 
 ## Artifact gate
 

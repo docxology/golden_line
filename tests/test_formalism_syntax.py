@@ -10,7 +10,7 @@ silently, and a reference to a label nobody declared is emitted as literal
 ``[@def:x]`` markup with pandoc still exiting 0.
 
 This module is the local check for both failure modes, plus the structural
-obligations the filter cannot enforce — every block labelled, every label
+obligations the filter cannot enforce — every block labeled, every label
 prefixed for its kind, every label distinct. It reads the manuscript files
 themselves, so it works in a checkout that has no rendering toolchain.
 
@@ -170,7 +170,7 @@ def test_the_manuscript_carries_no_formalism_syntax_violation() -> None:
     assert formalism_violations(sources) == []
 
 
-def test_every_declared_block_is_labelled_titled_and_numbered() -> None:
+def test_every_declared_block_is_labeled_titled_and_numbered() -> None:
     """The scan is non-empty and every declared block reaches the number map."""
     blocks = declared_blocks(_manuscript_sources())
     assert blocks, "no formalism blocks parsed, so the gate would be vacuous"
@@ -210,15 +210,15 @@ def test_guard_rejects_a_reference_to_an_undeclared_label() -> None:
     assert any("undeclared formalism prop:no_such_result" in i for i in issues), issues
 
 
-def test_guard_rejects_an_unlabelled_block() -> None:
-    """Proof of detection: an unlabelled block can never be referenced."""
+def test_guard_rejects_an_unlabeled_block() -> None:
+    """Proof of detection: an unlabeled block can never be referenced."""
     planted = {"x.md": '::: {.definition title="Nameless"}\nBody.\n:::\n'}
     issues = formalism_violations(planted)
     assert any("carries no label" in issue for issue in issues), issues
 
 
 def test_guard_rejects_a_mismatched_label_prefix() -> None:
-    """Proof of detection: a proposition labelled ``def:`` is reported."""
+    """Proof of detection: a proposition labeled ``def:`` is reported."""
     planted = {"x.md": '::: {.proposition #def:wrong title="Wrong"}\nBody.\n:::\n'}
     issues = formalism_violations(planted)
     assert any("does not use the 'prop:' prefix" in issue for issue in issues), issues

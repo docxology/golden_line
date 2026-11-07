@@ -107,3 +107,36 @@ def test_string_archive_input_and_malformed_dispositions_round_trip():
         )
         == report
     )
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    ["duplicate-admitted", "known-set-aside", "unknown-admitted", "blank-id", "notes"],
+)
+def test_rehashed_intake_cannot_contradict_native_admission(mutation):
+    identifier = gl.GOLDEN_ASPIRATIONS[0].id
+    report = gl.progress_report(
+        [gl.HorizonEntry(identifier), gl.HorizonEntry(identifier)],
+        as_of="2026-11-06",
+    )
+    data = json.loads(gl.canonical_archive(report))
+    records = data["intake"]["records"]
+    if mutation == "duplicate-admitted":
+        records[1].update(admitted=True, set_aside_reason=None, note=None)
+    elif mutation == "known-set-aside":
+        records[0].update(
+            admitted=False, set_aside_reason="unknown_id", note="set aside"
+        )
+    elif mutation == "unknown-admitted":
+        records[0]["entry"]["aspiration_id"] = "outside-the-report"
+    elif mutation == "blank-id":
+        records[0]["entry"]["aspiration_id"] = ""
+    else:
+        records[1]["note"] = "different rejection note"
+    data["intake_ref"] = hashlib.sha256(
+        json.dumps(
+            data["intake"], ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        ).encode()
+    ).hexdigest()
+    with pytest.raises(ValueError, match="invalid Golden Line archive"):
+        gl.decode_archive(data, gl.canonical_envelope(gl.report_envelope(report)))

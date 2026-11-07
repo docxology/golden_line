@@ -5,8 +5,8 @@
 Cite this work via its minted DOI or repository:
 
 > Friedman, D. A. (2026). *Golden Line: Toward What Matters* (version
-> 0.5.0) [Software and manuscript]. GitHub.
-> <https://github.com/docxology/golden_line/tree/v0.5.0>
+> 0.6.0) [Software and manuscript]. GitHub.
+> <https://github.com/docxology/golden_line/tree/v0.6.0>
 
 BibTeX:
 
@@ -14,16 +14,16 @@ BibTeX:
 @software{friedman_golden_line_2026,
   author  = {Friedman, Daniel Ari},
   title   = {Golden Line: Toward What Matters},
-  version = {0.5.0},
+  version = {0.6.0},
   year    = {2026},
-  url     = {https://github.com/docxology/golden_line/tree/v0.5.0}
+  url     = {https://github.com/docxology/golden_line/tree/v0.6.0}
 }
 ```
 
 The last verified Zenodo edition is 0.4.1, DOI
 `10.5281/zenodo.22833506`, verified against the Zenodo API on 2026-10-21.
 That DOI is retained in publication metadata pending Daniel's reserve-first
-new-version deposition. It does not identify a newly minted 0.5.0 deposit.
+new-version deposition. It does not identify a newly minted 0.6.0 deposit.
 
 `CITATION.cff` carries the release metadata in machine-readable form, and
 `.zenodo.json` carries the deposit metadata. The version authority is

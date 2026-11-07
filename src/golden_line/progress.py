@@ -88,7 +88,7 @@ def _validate_staleness_threshold(stale_after_days: int | None) -> None:
         raise ValueError("stale_after_days must be a non-negative integer or None")
 
 
-def _normalise_entry(entry: Any, index: int) -> tuple[HorizonEntry | None, str | None]:
+def _normalize_entry(entry: Any, index: int) -> tuple[HorizonEntry | None, str | None]:
     """Validate and normalize one incoming record without trusting its fields.
 
     The public type is intentionally small, but callers often construct records
@@ -190,7 +190,7 @@ def _classify_intake_entries(
     seen: set[str] = set()
     classifications: list[IntakeClassification] = []
     for index, raw_entry in enumerate(entries, start=1):
-        entry, malformed_note = _normalise_entry(raw_entry, index)
+        entry, malformed_note = _normalize_entry(raw_entry, index)
         if malformed_note is not None:
             classifications.append(
                 IntakeClassification(

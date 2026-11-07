@@ -32,8 +32,8 @@ repair, commons governance, technical power, and the hazards of turning an
 aspiration into a metric. Thirteen code-derived **figures** render the registry,
 its signal vocabulary, the decision path, the staged pipeline, the evidence-state
 matrix, the horizon bands, and a loop for the founding four. Six of the thirteen
-replay the evaluator rather than diagram it: one entry ageing past the
-currentness boundary, the whole registry ageing at once across 126 dated
+replay the evaluator rather than diagram it: one entry aging past the
+currentness boundary, the whole registry aging at once across 126 dated
 readings, every marker subset of every aspiration, the twelve fields of the
 returned record under six evidence conditions, a worked batch of six entries,
 and a precedence panel in which complete markers plus one counter-signal still

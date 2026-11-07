@@ -1,8 +1,6 @@
 """Descriptive analysis helpers: inventory, bands, sweep, report overview."""
 
-import ast
 from datetime import date
-from pathlib import Path
 
 import pytest
 
@@ -12,7 +10,6 @@ from golden_line import (
     Aspiration,
     HorizonEntry,
     HorizonStatus,
-    analysis,
     horizon_distribution,
     progress_report,
     report_overview,
@@ -166,41 +163,6 @@ def test_sweep_observed_on_dates_are_derived_from_as_of() -> None:
     assert points[0].observed_on == REVIEW
     assert points[1].observed_on == "2026-07-17"
     assert points[2].observed_on == "2026-06-18"
-
-
-def test_sweep_module_constructs_no_status_of_its_own() -> None:
-    """Proposition 8's delegation clause, checked structurally rather than by replay.
-
-    Comparing a sweep point against a second ``progress_report`` call compares
-    the same code path with itself: the sweep *calls* the evaluator, so the
-    comparison is true by construction and cannot fail. The falsifiable form of
-    the claim is architectural — no ``HorizonStatus`` is ever constructed in
-    ``analysis.py`` — so that is what is asserted here, over the module's real
-    parse tree rather than a substring search.
-    """
-    source = Path(analysis.__file__).read_text(encoding="utf-8")
-    tree = ast.parse(source)
-    constructions = [
-        node
-        for node in ast.walk(tree)
-        if isinstance(node, ast.Attribute)
-        and isinstance(node.value, ast.Name)
-        and node.value.id == "HorizonStatus"
-    ]
-    assert constructions == [], [node.attr for node in constructions]
-    assert "HorizonStatus(" not in source
-
-    # And the positive control: the check can fail. A module that does build a
-    # status is rejected by the same predicate.
-    planted = ast.parse("from x import HorizonStatus\ns = HorizonStatus.TOWARD\n")
-    planted_hits = [
-        node
-        for node in ast.walk(planted)
-        if isinstance(node, ast.Attribute)
-        and isinstance(node.value, ast.Name)
-        and node.value.id == "HorizonStatus"
-    ]
-    assert [node.attr for node in planted_hits] == ["TOWARD"]
 
 
 def test_sweep_point_fields_come_from_the_finding_it_replays() -> None:

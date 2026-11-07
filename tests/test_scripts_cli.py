@@ -1,8 +1,8 @@
-"""Every script in ``scripts/`` must fail closed on a command line it cannot honour.
+"""Every script in ``scripts/`` must fail closed on a command line it cannot honor.
 
 A gate that accepts an argument it does not understand and then exits ``0``
 reports success for a run it never performed: the operator believes a flag was
-honoured, and the exit code agrees with them. These tests execute the real
+honored, and the exit code agrees with them. These tests execute the real
 scripts as subprocesses — no patching tooling and no import-time shortcut — and
 assert both directions, so the check cannot pass by rejecting everything.
 """
@@ -51,14 +51,12 @@ def test_the_script_scan_set_is_not_empty() -> None:
 
 @pytest.mark.parametrize("script", SCRIPTS)
 @pytest.mark.parametrize("argument", BAD_ARGUMENTS)
-def test_script_rejects_an_argument_it_cannot_honour(
-    script: str, argument: str
-) -> None:
+def test_script_rejects_an_argument_it_cannot_honor(script: str, argument: str) -> None:
     """An unknown flag or stray positional must exit non-zero, never silently."""
     result = _run(script, argument)
     assert result.returncode != 0, (
         f"{script} exited 0 on {argument!r}; an ignored argument is "
-        "indistinguishable from an honoured one"
+        "indistinguishable from an honored one"
     )
     assert "usage:" in result.stderr
 
@@ -74,7 +72,7 @@ def test_script_still_succeeds_on_its_real_input(script: str) -> None:
 
 @pytest.mark.parametrize("script", SCRIPTS)
 def test_script_documents_itself_without_doing_any_work(script: str) -> None:
-    """``--help`` is honoured, so the parser is real rather than a bare reject."""
+    """``--help`` is honored, so the parser is real rather than a bare reject."""
     result = _run(script, "--help")
     assert result.returncode == 0, result.stdout + result.stderr
     assert "usage:" in result.stdout

@@ -67,13 +67,13 @@ def test_thread_nodes_reject_a_founding_set_the_layout_cannot_hold() -> None:
 def test_pipeline_stages_bind_to_the_evaluator_stage_names() -> None:
     """The positive control, and then a figure that describes one stage fewer."""
     bodies = tuple("body" for _ in EVALUATOR_STAGES)
-    colours = tuple("#000000" for _ in EVALUATOR_STAGES)
-    stages = core_schematics.pipeline_stages(EVALUATOR_STAGES, bodies, colours)
+    colors = tuple("#000000" for _ in EVALUATOR_STAGES)
+    stages = core_schematics.pipeline_stages(EVALUATOR_STAGES, bodies, colors)
     assert [title for title, *_ in stages] == [
         f"{index + 1} · {name.upper()}" for index, name in enumerate(EVALUATOR_STAGES)
     ]
     with pytest.raises(ValueError, match="different number of stages"):
-        core_schematics.pipeline_stages(EVALUATOR_STAGES, bodies[:-1], colours[:-1])
+        core_schematics.pipeline_stages(EVALUATOR_STAGES, bodies[:-1], colors[:-1])
 
 
 def test_precedence_heading_lines_reject_a_heading_that_would_be_truncated() -> None:

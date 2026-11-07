@@ -33,12 +33,12 @@ Agents that need to:
 
 ## Validation
 
-The skill claims no behaviour of its own. Its fenced Python examples are
+The skill claims no behavior of its own. Its fenced Python examples are
 executed by `tests/test_skill.py`, which runs the blocks in order against the
-installed package, asserts that every name they import is in
-`golden_line.__all__`, and re-derives the sweep example's documented outcome
-from a real replay. That test runs as part of the first gate below; the other
-three do not read `.agents/`.
+installed package, including assertions on archive/envelope read-back and
+rejected contrary intake. Wording and comments are not pinned as behavior.
+That test runs as part of the first gate below; the other three do not read
+`.agents/`.
 
 - `uv run pytest tests/ --cov=src --cov-branch --cov-report=term-missing`
 - `uv run python scripts/check_registry.py`

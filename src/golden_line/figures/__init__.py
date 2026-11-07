@@ -126,8 +126,8 @@ FIGURES = (
         "temporal_currentness_sweep",
         "fig:temporal_currentness_sweep",
         _svg_currentness_sweep,
-        f"A fully-marked, counter-signal-free entry for the first registry aspiration replayed through the real evaluator at {len(SWEEP_AGES)} observation ages with stale_after_days = {SWEEP_STALE_AFTER_DAYS}. Every cell names the status progress_report actually returned, so the reading does not depend on colour; the reading stays TOWARD through age {SWEEP_STALE_AFTER_DAYS} and reverts to INQUIRY from age {SWEEP_STALE_AFTER_DAYS + 1} and for future-dated observations. Age reopens the question; it never manufactures drift.",
-        f"A grid of {len(SWEEP_AGES)} age-labelled cells read left to right, each printing the evaluator's actual status for that observation age, with a dashed line at the exclusive {SWEEP_STALE_AFTER_DAYS}-day staleness boundary where TOWARD becomes INQUIRY.",
+        f"A fully-marked, counter-signal-free entry for the first registry aspiration replayed through the real evaluator at {len(SWEEP_AGES)} observation ages with stale_after_days = {SWEEP_STALE_AFTER_DAYS}. Every cell names the status progress_report actually returned, so the reading does not depend on color; the reading stays TOWARD through age {SWEEP_STALE_AFTER_DAYS} and reverts to INQUIRY from age {SWEEP_STALE_AFTER_DAYS + 1} and for future-dated observations. Age reopens the question; it never manufactures drift.",
+        f"A grid of {len(SWEEP_AGES)} age-labeled cells read left to right, each printing the evaluator's actual status for that observation age, with a dashed line at the exclusive {SWEEP_STALE_AFTER_DAYS}-day staleness boundary where TOWARD becomes INQUIRY.",
     ),
     (
         "marker_completeness",
@@ -137,13 +137,13 @@ FIGURES = (
             f"Every observed-marker subset for each of the {len(GOLDEN_ASPIRATIONS)} aspirations, filed as an entry and "
             f"evaluated: {len(GOLDEN_ASPIRATIONS) * _COMPLETENESS_SUBSETS} executed progress_report calls at review date "
             f"{RECORD_AS_OF}, every observation current. Each cell prints the status the evaluator returned and how many "
-            "declared markers remain unmet, so the grid reads without colour; only the complete subset reaches TOWARD, and an "
+            "declared markers remain unmet, so the grid reads without color; only the complete subset reaches TOWARD, and an "
             f"entry missing one marker reads exactly as one missing all of them. The {_COMPLETENESS_TOWARD} filled cells "
             "describe records, never the quality of the work or its author."
         ),
         (
             f"A {len(GOLDEN_ASPIRATIONS)}-row by {_COMPLETENESS_SUBSETS}-column grid of executed readings, one column per "
-            "observed-marker subset ordered from none to all, each cell filled for TOWARD and outlined otherwise and labelled "
+            "observed-marker subset ordered from none to all, each cell filled for TOWARD and outlined otherwise and labeled "
             "with its status and its count of unmet markers; only the final column is filled."
         ),
     ),
@@ -155,12 +155,12 @@ FIGURES = (
             f"The {len(_FIELD_MATRIX_ROWS)} structured fields of a finding against {len(FIELD_MATRIX_CONDITIONS)} evidence "
             f"conditions, one executed progress_report call per column at review date {RECORD_AS_OF}. Filled cells are fields "
             "the returned record carries and outlined cells are empty, and every cell prints which it is, so the matrix reads "
-            f"without colour. The fields carried under every condition are {', '.join(_FIELD_MATRIX_ALWAYS)}, so no reading "
+            f"without color. The fields carried under every condition are {', '.join(_FIELD_MATRIX_ALWAYS)}, so no reading "
             "arrives unexplained. An empty field records an absent observation; it never asserts that what it names is false."
         ),
         (
             f"A {len(_FIELD_MATRIX_ROWS)}-row by {len(FIELD_MATRIX_CONDITIONS)}-column matrix of finding fields against "
-            "evidence conditions, each cell either filled and labelled carried or outlined and labelled empty, with the "
+            "evidence conditions, each cell either filled and labeled carried or outlined and labeled empty, with the "
             "status each condition returned printed above its column."
         ),
     ),
@@ -168,7 +168,7 @@ FIGURES = (
         "signal_inventory",
         "fig:signal_inventory",
         _svg_signal_inventory,
-        "The aggregate declared-signal vocabulary of the registry, one unit block per token: filled blocks for markers, outlined blocks for counter-signals, with per-registry totals and token-uniqueness counts. The blocks describe what the evaluator can match, never fulfilment or performance.",
+        "The aggregate declared-signal vocabulary of the registry, one unit block per token: filled blocks for markers, outlined blocks for counter-signals, with per-registry totals and token-uniqueness counts. The blocks describe what the evaluator can match, never fulfillment or performance.",
         (
             f"{len(GOLDEN_ASPIRATIONS)} registry rows, each showing filled marker blocks and outlined counter-signal blocks per "
             "aspiration, with aggregate totals in the header; the blocks are vocabulary, not points."
@@ -191,9 +191,9 @@ FIGURES = (
         (
             f"The same currentness replay run across the whole registry: {len(GOLDEN_ASPIRATIONS)} aspiration rows by "
             f"{len(SWEEP_AGES)} observation ages, {len(GOLDEN_ASPIRATIONS) * len(SWEEP_AGES)} executed progress_report calls, at "
-            f"stale_after_days = {SWEEP_STALE_AFTER_DAYS}. Filled cells are TOWARD and outlined cells are INQUIRY, so the grid reads without colour; "
+            f"stale_after_days = {SWEEP_STALE_AFTER_DAYS}. Filled cells are TOWARD and outlined cells are INQUIRY, so the grid reads without color; "
             f"the FLIPS AT column gives each row's own TOWARD-to-INQUIRY age and the footer counts rows that differ. "
-            "Uniform ageing is a fact about the evaluator's code path — it is never evidence that any aspiration is being served."
+            "Uniform aging is a fact about the evaluator's code path — it is never evidence that any aspiration is being served."
         ),
         (
             f"A {len(GOLDEN_ASPIRATIONS)}-row by {len(SWEEP_AGES)}-column lattice of executed evaluator readings, each cell filled for TOWARD and outlined "
@@ -209,7 +209,7 @@ FIGURES = (
             f"progress_report calls at review date {PRECEDENCE_AS_OF} with stale_after_days = {PRECEDENCE_STALE_AFTER_DAYS}. "
             "Complete markers with no counter-signal read TOWARD; adding one declared counter-signal returns DRIFTING even though every "
             "marker is still present, and it still returns DRIFTING when the same observation is stale. Filled cells are DRIFTING and "
-            "outlined cells are not, so the panel reads without colour. The panel characterizes clause order; it is never a grade of any work or person."
+            "outlined cells are not, so the panel reads without color. The panel characterizes clause order; it is never a grade of any work or person."
         ),
         (
             f"A {len(GOLDEN_ASPIRATIONS)}-row panel with four executed-status columns per aspiration — complete markers, complete markers plus a "

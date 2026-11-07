@@ -28,7 +28,7 @@ from .svg import (
     MUTED,
     PAPER,
     RED,
-    STATUS_COLOURS,
+    STATUS_COLORS,
     TEAL,
     _canvas,
     _plural,
@@ -53,7 +53,7 @@ def _svg_currentness_sweep() -> str:
 
     A fully-marked, counter-signal-free entry for the first registry
     aspiration is replayed through ``progress_report`` at each sampled
-    observation age; every cell colour below is the status the real evaluator
+    observation age; every cell color below is the status the real evaluator
     returned for that age.
     """
     aspiration = GOLDEN_ASPIRATIONS[0]
@@ -107,12 +107,12 @@ def _svg_currentness_sweep() -> str:
         row, column = divmod(index, SWEEP_COLUMNS)
         x = left + column * (cell_w + gap)
         y = top + row * (cell_h + row_gap)
-        colour = STATUS_COLOURS[point.status]
+        color = STATUS_COLORS[point.status]
         parts.append(
-            f'<rect x="{x}" y="{y}" width="{cell_w}" height="{cell_h}" rx="10" fill="{CARD}" stroke="{colour}" stroke-width="2.5"/>'
+            f'<rect x="{x}" y="{y}" width="{cell_w}" height="{cell_h}" rx="10" fill="{CARD}" stroke="{color}" stroke-width="2.5"/>'
         )
         parts.append(
-            f'<rect x="{x}" y="{y}" width="{cell_w}" height="42" rx="10" fill="{colour}"/>'
+            f'<rect x="{x}" y="{y}" width="{cell_w}" height="42" rx="10" fill="{color}"/>'
         )
         parts.append(_text(x + 16, y + 30, point.status.value, 20, PAPER, "700"))
         age_label = (
@@ -125,7 +125,7 @@ def _svg_currentness_sweep() -> str:
         flag = (
             "stale" if point.stale else ("no audit" if point.date_issue else "current")
         )
-        parts.append(_text(x + 16, y + 148, flag, 20, colour, "700"))
+        parts.append(_text(x + 16, y + 148, flag, 20, color, "700"))
         if (
             boundary is None
             and index > 0
@@ -153,9 +153,9 @@ def _svg_currentness_sweep() -> str:
     legend_y = top + rows_drawn * (cell_h + row_gap) + 44
     legend_x = 70
     for status in (HorizonStatus.TOWARD, HorizonStatus.INQUIRY):
-        colour = STATUS_COLOURS[status]
+        color = STATUS_COLORS[status]
         parts.append(
-            f'<rect x="{legend_x}" y="{legend_y - 20}" width="26" height="26" rx="6" fill="{colour}"/>'
+            f'<rect x="{legend_x}" y="{legend_y - 20}" width="26" height="26" rx="6" fill="{color}"/>'
         )
         parts.append(_text(legend_x + 38, legend_y, status.value, 20, INK, "700"))
         legend_x += 220
@@ -316,15 +316,15 @@ def _svg_currentness_lattice() -> str:
         for line_index, line in enumerate(title_lines):
             parts.append(_text(label_x, y + 28 + line_index * 26, line, 20, INK, "700"))
         for column, status in enumerate(row.statuses):
-            colour = STATUS_COLOURS[status]
+            color = STATUS_COLORS[status]
             cx = grid_x + column * cell_pitch
             if status is HorizonStatus.TOWARD:
                 parts.append(
-                    f'<rect x="{cx}" y="{y + 16}" width="{cell_w - 16}" height="30" rx="6" fill="{colour}"/>'
+                    f'<rect x="{cx}" y="{y + 16}" width="{cell_w - 16}" height="30" rx="6" fill="{color}"/>'
                 )
             else:
                 parts.append(
-                    f'<rect x="{cx}" y="{y + 16}" width="{cell_w - 16}" height="30" rx="6" fill="none" stroke="{colour}" stroke-width="3"/>'
+                    f'<rect x="{cx}" y="{y + 16}" width="{cell_w - 16}" height="30" rx="6" fill="none" stroke="{color}" stroke-width="3"/>'
                 )
         flip_label = "—" if row.flip_age is None else f"{row.flip_age} d"
         parts.append(
@@ -340,11 +340,11 @@ def _svg_currentness_lattice() -> str:
 
     legend_y = top + len(rows) * row_pitch + 40
     parts.append(
-        f'<rect x="70" y="{legend_y - 22}" width="44" height="30" rx="6" fill="{STATUS_COLOURS[HorizonStatus.TOWARD]}"/>'
+        f'<rect x="70" y="{legend_y - 22}" width="44" height="30" rx="6" fill="{STATUS_COLORS[HorizonStatus.TOWARD]}"/>'
     )
     parts.append(_text(128, legend_y, "TOWARD (filled)", 20, INK, "700"))
     parts.append(
-        f'<rect x="440" y="{legend_y - 22}" width="44" height="30" rx="6" fill="none" stroke="{STATUS_COLOURS[HorizonStatus.INQUIRY]}" stroke-width="3"/>'
+        f'<rect x="440" y="{legend_y - 22}" width="44" height="30" rx="6" fill="none" stroke="{STATUS_COLORS[HorizonStatus.INQUIRY]}" stroke-width="3"/>'
     )
     parts.append(_text(498, legend_y, "INQUIRY (outlined)", 20, INK, "700"))
     parts.append(
@@ -362,7 +362,7 @@ def _svg_currentness_lattice() -> str:
         _text(
             70,
             height - 34,
-            "SOURCE-DRIVEN SCHEMATIC · uniform ageing is a fact about the code path, never evidence that any aspiration is served",
+            "SOURCE-DRIVEN SCHEMATIC · uniform aging is a fact about the code path, never evidence that any aspiration is served",
             20,
             GOLD_DARK,
             "700",
@@ -454,7 +454,7 @@ def _svg_signal_inventory() -> str:
             _text(
                 70,
                 height - 34,
-                "SOURCE-DRIVEN SCHEMATIC · counts describe the declared vocabulary, never fulfilment or performance",
+                "SOURCE-DRIVEN SCHEMATIC · counts describe the declared vocabulary, never fulfillment or performance",
                 20,
                 GOLD_DARK,
                 "700",
@@ -511,19 +511,19 @@ def _svg_horizon_bands() -> str:
             ),
         ]
     )
-    band_colours = (GOLD, TEAL, GOLD_DARK, RED)
+    band_colors = (GOLD, TEAL, GOLD_DARK, RED)
     top = 292
     band_h = 232
     for index, band in enumerate(bands):
-        colour = band_colours[index % len(band_colours)]
+        color = band_colors[index % len(band_colors)]
         y = top + index * (band_h + 24)
         parts.append(
-            f'<rect x="70" y="{y}" width="1460" height="{band_h}" rx="12" fill="{CARD}" stroke="{colour}" stroke-width="2.5"/>'
+            f'<rect x="70" y="{y}" width="1460" height="{band_h}" rx="12" fill="{CARD}" stroke="{color}" stroke-width="2.5"/>'
         )
         parts.append(
-            f'<rect x="70" y="{y}" width="12" height="{band_h}" rx="6" fill="{colour}"/>'
+            f'<rect x="70" y="{y}" width="12" height="{band_h}" rx="6" fill="{color}"/>'
         )
-        parts.append(_text(112, y + 48, band.band.upper(), 22, colour, "700"))
+        parts.append(_text(112, y + 48, band.band.upper(), 22, color, "700"))
         parts.append(
             _text(
                 112,
@@ -732,14 +732,14 @@ def _svg_batch_overview() -> str:
     y = col_top
     for status in HorizonStatus:
         ids = overview.by_status[status.value]
-        colour = STATUS_COLOURS[status]
+        color = STATUS_COLORS[status]
         id_lines = _wrap(", ".join(ids) if ids else "—", 52)[:3]
         box_h = 60 + len(id_lines) * 28 + 14
         parts.append(
-            f'<rect x="{group_x}" y="{y}" width="{group_w}" height="{box_h}" rx="12" fill="{CARD}" stroke="{colour}" stroke-width="2.5"/>'
+            f'<rect x="{group_x}" y="{y}" width="{group_w}" height="{box_h}" rx="12" fill="{CARD}" stroke="{color}" stroke-width="2.5"/>'
         )
         parts.append(
-            f'<rect x="{group_x}" y="{y}" width="12" height="{box_h}" rx="6" fill="{colour}"/>'
+            f'<rect x="{group_x}" y="{y}" width="12" height="{box_h}" rx="6" fill="{color}"/>'
         )
         parts.append(
             _text(
@@ -747,7 +747,7 @@ def _svg_batch_overview() -> str:
                 y + 42,
                 f"{status.value} · {counts[status.value]}",
                 22,
-                colour,
+                color,
                 "700",
             )
         )

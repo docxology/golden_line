@@ -42,7 +42,7 @@ from .svg import (
     MUTED,
     PAPER,
     RED,
-    STATUS_COLOURS,
+    STATUS_COLORS,
     TEAL,
     _canvas,
     _plural,
@@ -227,11 +227,11 @@ def _svg_marker_completeness() -> str:
         parts.append(_text(label_x, y + 40, row.aspiration_id, 20, INK, "700"))
         for column, cell in enumerate(row.cells):
             x = grid_x + column * col_pitch
-            colour = STATUS_COLOURS[cell.status]
+            color = STATUS_COLORS[cell.status]
             filled = cell.status is HorizonStatus.TOWARD
             parts.append(
                 f'<rect x="{x - 16}" y="{y + 10}" width="{col_w}" height="44" rx="8" '
-                f'fill="{colour if filled else PAPER}" stroke="{colour}" stroke-width="2.5"/>'
+                f'fill="{color if filled else PAPER}" stroke="{color}" stroke-width="2.5"/>'
             )
             parts.append(
                 _text(
@@ -239,7 +239,7 @@ def _svg_marker_completeness() -> str:
                     y + 30,
                     cell.status.value,
                     20,
-                    PAPER if filled else colour,
+                    PAPER if filled else color,
                     "700",
                 )
             )
@@ -467,10 +467,10 @@ def _svg_finding_field_matrix() -> str:
         parts.append(_text(label_x, y + 36, name, 20, INK, "700"))
         for column, is_carried in enumerate(carried):
             x = grid_x + column * col_pitch
-            colour = TEAL if is_carried else MUTED
+            color = TEAL if is_carried else MUTED
             parts.append(
                 f'<rect x="{x - 12}" y="{y + 10}" width="{col_w}" height="36" rx="8" '
-                f'fill="{colour if is_carried else PAPER}" stroke="{colour}" stroke-width="2.5"/>'
+                f'fill="{color if is_carried else PAPER}" stroke="{color}" stroke-width="2.5"/>'
             )
             parts.append(
                 _text(
@@ -478,7 +478,7 @@ def _svg_finding_field_matrix() -> str:
                     y + 34,
                     "carried" if is_carried else "empty",
                     20,
-                    PAPER if is_carried else colour,
+                    PAPER if is_carried else color,
                     "700",
                 )
             )

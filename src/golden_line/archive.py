@@ -14,6 +14,7 @@ from .models import (
     HorizonStatus,
     IntakeDisposition,
 )
+from .progress import _classify_intake_entries
 from .serialization import canonical_report
 
 ARCHIVE_SCHEMA = "golden-line.archive/1.0"
@@ -222,6 +223,20 @@ def decode_archive(archive: object, envelope_data: object) -> HorizonReport:
             from dataclasses import replace
 
             report = replace(report, intake_archive=tuple(dispositions))
+            classifications = _classify_intake_entries(
+                (item.entry for item in dispositions), frozenset(findings)
+            )
+            if any(
+                item.entry != classification.entry
+                or item.admitted != classification.admitted
+                or item.set_aside_reason != classification.set_aside_reason
+                for item, classification in zip(dispositions, classifications)
+            ):
+                raise ValueError("intake dispositions contradict the admission rule")
+            if report.intake_notes != tuple(
+                item.note for item in dispositions if item.note is not None
+            ):
+                raise ValueError("intake notes do not correspond to dispositions")
             if _intake_payload(report) != intake_data:
                 raise ValueError("noncanonical intake payload")
         return report

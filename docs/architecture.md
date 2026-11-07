@@ -6,6 +6,8 @@ none of them import any other line project.
 The founding four describe origin; the current family has eight instruments,
 one reader, and one witness register. Direction does not establish developed
 capacity (Green), maintained commitment (Blue), or affected-party consent (Violet).
+The roster declares independent scopes, not source availability: sibling
+sources may be optional or access-controlled, and Golden Line runs without them.
 
 | Module | Question it answers |
 | --- | --- |
@@ -22,7 +24,7 @@ capacity (Green), maintained commitment (Blue), or affected-party consent (Viole
 | `src/golden_line/raster.py` | Which converter identity and raster bytes correspond to source SVG? |
 | `src/golden_line/release_evidence.py` | Which commands passed on an exact clean source revision? |
 | `src/golden_line/invariants.py` | Is the registry structurally sound? |
-| `src/golden_line/analysis.py` | What does the registry vocabulary and the evaluator's behaviour look like? |
+| `src/golden_line/analysis.py` | What does the registry vocabulary and the evaluator's behavior look like? |
 | `src/golden_line/formalism_ledger.py` | How are the manuscript's formalism labels derived into the generated claim ledger? |
 | `src/golden_line/figures/` | How is each figure drawn deterministically from source? |
 | `src/golden_line/artifacts.py` | Do the generated artifacts still agree with the source? |
@@ -85,7 +87,10 @@ provenance is recorded in [correspondence.md](correspondence.md).
 The native serialization remains unchanged and sorts findings by ID. The
 versioned archive sidecar records intake dispositions and its own digest;
 `decode_archive` restores native presentation order using the envelope's
-identifier bijection. A consistent rewrite and rehash can still pass.
+identifier bijection and reuses the native intake classifier to check admission
+and rejection custody against the supplied report identifiers. Sidecar rejection
+notes must match the native report. These consistency checks cannot establish
+authenticity: a consistent rewrite and rehash can still pass.
 See [claim boundaries](claim_boundaries.md) and [evidence records](evidence-records.md).
 
 ## Structural soundness
@@ -102,7 +107,7 @@ registry or replay `progress_report`. None changes evaluator semantics or emits
 a score:
 
 - `signal_inventory` tallies the declared marker and counter-signal vocabulary
-  per aspiration and in aggregate — a reachability count, not fulfilment.
+  per aspiration and in aggregate — a reachability count, not fulfillment.
 - `horizon_distribution` groups aspirations into the declared `HORIZON_BANDS`
   (an interpretive reading aid, not part of the registry contract); an
   unclassified horizon raises rather than being silently dropped.

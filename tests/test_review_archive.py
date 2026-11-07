@@ -100,6 +100,50 @@ def test_discarded_contradiction_retained_separately_from_native_digest():
     assert report.intake_archive[1].entry == countered
     assert gl.report_digest(report) == gl.report_digest(changed)
     assert gl.intake_digest(report) != gl.intake_digest(changed)
+    envelope = gl.report_envelope(report)
+    envelope_json = gl.canonical_envelope(envelope)
+    native_only = gl.decode_archive(gl.canonical_report(report), envelope_json)
+    assert native_only.intake_archive == ()
+    assert native_only.findings == report.findings
+    restored = gl.decode_archive(gl.canonical_archive(report), envelope_json)
+    assert restored == report
+    assert restored.intake_archive[1].admitted is False
+    assert restored.intake_archive[1].set_aside_reason == "duplicate"
+    assert restored.intake_archive[1].entry == countered
+    assert gl.envelope_matches_report(envelope, restored)
+
+
+@pytest.mark.parametrize("aspiration", gl.GOLDEN_ASPIRATIONS, ids=lambda a: a.id)
+def test_archive_retains_admission_and_optional_temporal_transitions(aspiration):
+    complete = gl.HorizonEntry(aspiration.id, frozenset(aspiration.markers))
+    malformed = replace(complete, observed_markers=None)
+    cases = (
+        ([], None, gl.HorizonStatus.NOT_OBSERVED),
+        ([malformed], None, gl.HorizonStatus.NOT_OBSERVED),
+        ([gl.HorizonEntry(aspiration.id)], None, gl.HorizonStatus.INQUIRY),
+        ([malformed, complete], None, gl.HorizonStatus.TOWARD),
+        ([complete], None, gl.HorizonStatus.TOWARD),
+        ([complete], 1, gl.HorizonStatus.INQUIRY),
+        ([replace(complete, observed_on="2026-10-19")], 1, gl.HorizonStatus.TOWARD),
+        ([replace(complete, observed_on="2026-10-18")], 1, gl.HorizonStatus.INQUIRY),
+        ([replace(complete, observed_on="2026-10-21")], 1, gl.HorizonStatus.INQUIRY),
+        (
+            [replace(complete, counter_signals=frozenset(aspiration.counter_signals))],
+            1,
+            gl.HorizonStatus.DRIFTING,
+        ),
+    )
+    for entries, window, status in cases:
+        report = gl.progress_report(
+            entries, (aspiration,), as_of="2026-10-20", stale_after_days=window
+        )
+        restored = gl.decode_archive(
+            gl.canonical_archive(report),
+            gl.canonical_envelope(gl.report_envelope(report)),
+        )
+        assert restored == report
+        assert restored.findings[0].status is status
+        assert restored.currentness_evaluated is (window is not None)
 
 
 def test_original_native_fixture_decodes_without_digest_migration():

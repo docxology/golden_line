@@ -18,8 +18,9 @@ keeping them.
   not a check.
 - *Enforced ([@prop:absence]).* A `NOT_OBSERVED` result arises solely from the
   absence of an admitted entry. It is not evidence that the aspiration is
-  absent; submitted records may have been malformed, unknown, or duplicate, and
-  the intake notes say which.
+  absent; submitted malformed records may have been rejected, and intake notes
+  say why. Unknown IDs supply no entry for requested aspirations. A duplicate
+  presupposes an earlier admitted same-ID entry, not its absence.
 - *Commitment.* Counter-signals are local warnings about a record, not
   psychological diagnoses or public labels for a person or project. Nothing in
   the evaluator can stop a reader from using one that way.
@@ -36,8 +37,10 @@ aspiration hardens into a target and is gamed rather than served
 [@strathern1997audit], or that stating the direction as a scorecard evokes the
 very behavior it was meant to describe [@merton1948prophecy]. The design pushes
 against this at every stage: no numeric score, no aggregate grade,
-counter-signals surfaced first, absence read as inquiry, and no positive
-currentness claim from malformed temporal data. What it does not touch is the
+counter-signals surfaced first within the admitted record, no admission read as
+`NOT_OBSERVED`, valid empty evidence read as `INQUIRY`, and no positive
+currentness claim from malformed temporal data during enabled review. Without
+temporal review, even `TOWARD` leaves currentness unevaluated. What it does not touch is the
 adversarial case [@manheim2018goodhart]: the evaluator matches the tokens an
 observer filed against the registry, so an observer who wants a `TOWARD` can
 file the tokens that produce one, and no clause ordering prevents it. The honest
@@ -52,7 +55,7 @@ The descriptive helpers — `signal_inventory`, `horizon_distribution`,
 smaller risks of over-reading, and each is deliberately constrained so it cannot
 outrun the evaluator it sits beside.
 
-- The inventory counts declared *vocabulary*, never fulfilment. That the registry
+- The inventory counts declared *vocabulary*, never fulfillment. That the registry
   declares eighteen markers and nine counter-signals says nothing about how many
   have ever been observed; a larger marker count is not a higher standard, only a
   longer list of things one could look for. Reading the inventory as a scoreboard
@@ -80,7 +83,7 @@ outrun the evaluator it sits beside.
 Because all four helpers are pure, deterministic, and read-only, they cannot
 change what a reading means — but a reader can still misuse a number. The
 safeguard is the same one the whole instrument relies on: keep the summaries
-descriptive and the judgement human.
+descriptive and the judgment human.
 
 For security boundaries, use Red Line. For how the work was performed, use Black
 Line. For what is missing, withheld, unobserved, or ethically left unclaimed, use

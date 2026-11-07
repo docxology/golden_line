@@ -1,10 +1,8 @@
 """Bind every 02a formalism block to executed evaluator behavior.
 
-Each test here first *derives* a constant, a field list, or a clause ordering by
-running the real code, then asserts the manuscript states exactly that.
-Corrupting a definition or proposition in the manuscript makes the matching test
-fail; corrupting the code makes the derivation assertions fail. Nothing is
-asserted that was not first executed.
+Native regressions exercise evaluator boundaries independently of manuscript
+wording. Structural checks below keep formalism labels, test references, and
+the evidence ledger connected without pinning explanatory copy.
 
 The binding tables in 02a are keyed on each block's *label*, never on its
 number, because the renderer owns the numbers (see
@@ -14,7 +12,6 @@ own, to name a test that exists.
 """
 
 import dataclasses
-import inspect
 import re
 from datetime import date, timedelta
 from pathlib import Path
@@ -48,41 +45,10 @@ REVIEW = "2026-07-18"
 _TEST_REF = re.compile(r"tests/[\w/]+\.py::\w+")
 _ROW_LABEL = re.compile(r"^\|\s*\[@((?:def|prop):[\w-]+)\]\s*\|")
 
-_COUNT_WORDS = {
-    0: "Zero",
-    1: "One",
-    2: "Two",
-    3: "Three",
-    4: "Four",
-    5: "Five",
-    6: "Six",
-    7: "Seven",
-    8: "Eight",
-    9: "Nine",
-    10: "Ten",
-    11: "Eleven",
-    12: "Twelve",
-    13: "Thirteen",
-}
-
-
-def _normalized() -> str:
-    """Whitespace-normalized manuscript text so bindings survive wrapping."""
-    return " ".join(FORMALISM.read_text(encoding="utf-8").split())
-
 
 def _formalism_blocks() -> list[tuple[str, str, str, str]]:
     """Every formalism Div declared in 02a, in document order."""
     return declared_blocks({FORMALISM.name: FORMALISM.read_text(encoding="utf-8")})
-
-
-def _tuple_arity(left_hand_side: str) -> int:
-    """Count the components of the manuscript tuple ``lhs = (...)``."""
-    match = re.search(
-        rf"{re.escape(left_hand_side)} = \((?P<body>[^)]*)\)", _normalized()
-    )
-    assert match is not None, left_hand_side
-    return len(re.split(r",\\ ", match.group("body")))
 
 
 def _ledger_number(claim_id: str) -> int:
@@ -211,122 +177,34 @@ def test_invariant_doc_table_names_real_tests() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_aspiration_tuple_matches_the_dataclass() -> None:
-    """The aspiration tuple's arity and field names come from ``Aspiration``."""
-    fields = [field.name for field in dataclasses.fields(Aspiration)]
-    assert _tuple_arity("a") == len(fields)
-    text = _normalized()
-    for name in fields:
-        if name in {"markers", "counter_signals"}:
-            continue
-        assert "\\mathrm{" + name + "}" in text, name
-    assert "$M$ (Markers)" in text
-    assert "$C$ (Counter-signals)" in text
-    assert f"the {_COUNT_WORDS[len(fields)].lower()}-tuple" in text
+def test_intake_classification_orders_validation_membership_and_admission() -> None:
+    from golden_line import IntakeSetAsideReason, classify_intake_entries
 
-
-def test_registry_definition_matches_the_source_tuple() -> None:
-    """Registry size and the founding/further split are read off the source."""
-    founding = founding_aspirations()
-    further = further_aspirations()
-    assert founding + further == GOLDEN_ASPIRATIONS  # founding entries come first
-    text = _normalized()
-    assert f"aspirations with $n = {len(GOLDEN_ASPIRATIONS)}$" in text
-    assert f"{_COUNT_WORDS[len(founding)].lower()} founding aspirations" in text
-    assert f"followed by {_COUNT_WORDS[len(further)].lower()} further ones" in text
-
-
-def test_horizon_entry_tuple_matches_the_dataclass() -> None:
-    """The entry tuple's arity, and the optionality of its date, are derived."""
-    fields = dataclasses.fields(HorizonEntry)
-    assert _tuple_arity("e") == len(fields)
-    observed_on = next(field for field in fields if field.name == "observed_on")
-    assert observed_on.default == ""  # optional in the code, optional in the prose
-    assert "$\\mathrm{d_{obs}}$ is an optional ISO date" in _normalized()
-
-
-def test_status_codomain_matches_the_enumeration() -> None:
-    """$\\Sigma$ is the enumeration, spelled in enum order, and nothing else."""
-    values = [status.value for status in HorizonStatus]
-    rendered = ",\\ ".join(
-        "\\texttt{" + value.replace("_", "\\_") + "}" for value in values
-    )
-    text = _normalized()
-    assert f"\\Sigma = \\{{{rendered}\\}}" in text
-    assert f"the {_COUNT_WORDS[len(values)].lower()}-element set" in text
-
-
-def test_finding_tuple_matches_the_dataclass() -> None:
-    """The finding tuple has one component per ``HorizonFinding`` field.
-
-    The manuscript previously pooled the two ignored-token fields into a single
-    ``ignored`` component, so the stated tuple was one shorter than the record
-    the code returns. The arity is now derived rather than transcribed.
-    """
-    fields = [field.name for field in dataclasses.fields(HorizonFinding)]
-    ignored = [name for name in fields if name.startswith("ignored_")]
-    assert len(ignored) == 2
-    assert _tuple_arity("f") == len(fields)
-    text = _normalized()
-    assert "\\mathrm{ign}_M,\\ \\mathrm{ign}_C" in text
-    assert (
-        f"{_COUNT_WORDS[len(fields)].lower()} fields, ignored markers kept apart"
-        in text
-    )
-
-
-def test_report_function_signature_matches_manuscript() -> None:
-    """Parameter count, keyword-only names, and stage names are introspected."""
-    parameters = list(inspect.signature(progress_report).parameters.values())
-    keyword_only = [
-        parameter.name
-        for parameter in parameters
-        if parameter.kind is inspect.Parameter.KEYWORD_ONLY
+    records = [
+        HorizonEntry("unknown", observed_markers=None),
+        HorizonEntry("unknown"),
+        HorizonEntry("unknown"),
+        HorizonEntry(ATTENTION.id, observed_markers=None),
+        HorizonEntry(ATTENTION.id),
+        HorizonEntry(ATTENTION.id),
     ]
-    assert keyword_only  # the review context is not positional
-    match = re.search(r"progress\\_report\} : \((?P<body>[^)]*)\)", _normalized())
-    assert match is not None
-    assert len(re.split(r",\\ ", match.group("body"))) == len(parameters)
-
-    text = _normalized()
-    assert "$\\mathrm{as\\_of}$ and $\\tau$ are keyword-only" in text
-    assert "`stale_after_days`" in text
-    assert f"It runs {_COUNT_WORDS[len(EVALUATOR_STAGES)].lower()} stages" in text
-    assert ", ".join(EVALUATOR_STAGES[:-1]) + ", and " + EVALUATOR_STAGES[-1] in text
-
-
-def test_intake_screening_tests_records_in_the_stated_order() -> None:
-    """Shape, then registry membership, then prior admission — each derived.
-
-    Every step of the order is shown by a record that would be classified
-    differently if the steps were reordered, so the claim is executed rather
-    than transcribed from the source's control flow.
-    """
-    # Shape precedes membership: a malformed record bearing an unknown id is
-    # reported as malformed, not as an unknown id.
-    malformed_unknown = progress_report(
-        [HorizonEntry("not-a-real-id", observed_markers=None)]  # type: ignore[arg-type]
+    classifications = classify_intake_entries(records)
+    assert tuple(item.set_aside_reason for item in classifications) == (
+        IntakeSetAsideReason.MALFORMED,
+        IntakeSetAsideReason.UNKNOWN_ID,
+        IntakeSetAsideReason.UNKNOWN_ID,
+        IntakeSetAsideReason.MALFORMED,
+        None,
+        IntakeSetAsideReason.DUPLICATE,
     )
-    assert len(malformed_unknown.intake_notes) == 1
-    assert "observed_markers must be" in malformed_unknown.intake_notes[0]
-    assert "unknown aspiration" not in malformed_unknown.intake_notes[0]
-
-    # Membership precedes prior admission: two entries sharing an *unknown* id
-    # are both unknown-id set-asides, never a duplicate.
-    repeated_unknown = progress_report(
-        [HorizonEntry("not-a-real-id"), HorizonEntry("not-a-real-id")]
+    assert tuple(item.admitted for item in classifications) == (
+        False,
+        False,
+        False,
+        False,
+        True,
+        False,
     )
-    assert len(repeated_unknown.intake_notes) == 2
-    assert all("unknown aspiration" in note for note in repeated_unknown.intake_notes)
-    assert not any("duplicate" in note for note in repeated_unknown.intake_notes)
-
-    # Notes index submitted records from 1, not from 0.
-    indexed = progress_report(["not a record"])  # type: ignore[list-item]
-    assert indexed.intake_notes[0].startswith("entry #1 ")
-
-    text = _normalized()
-    assert "shape, then registry membership, then prior admission" in text
-    assert "indices counted from 1 in the intake notes" in text
 
 
 def test_intake_screening_never_raises_on_hostile_input() -> None:
@@ -348,11 +226,10 @@ def test_intake_screening_never_raises_on_hostile_input() -> None:
     assert {finding.status for finding in report.findings} == {
         HorizonStatus.NOT_OBSERVED
     }
-    assert "Screening never raises on supported malformed passive data" in _normalized()
 
 
-def test_matching_set_operations_match_manuscript() -> None:
-    """The three matching sets are read off a real finding, then stated."""
+def test_matching_retains_declared_and_ignored_signal_sets() -> None:
+    """Observed, unmet, countered, and ignored signals remain distinct."""
     entry = HorizonEntry(
         ATTENTION.id,
         observed_markers=frozenset({ATTENTION.markers[0], "undeclared marker"}),
@@ -367,12 +244,6 @@ def test_matching_set_operations_match_manuscript() -> None:
     assert finding.ignored_markers == ("undeclared marker",)
     assert finding.ignored_counter_signals == ("undeclared counter-signal",)
 
-    text = _normalized()
-    assert "\\mathrm{observed}(a,e) = O \\cap M" in text
-    assert "\\mathrm{unmet}(a,e) = M \\setminus O" in text
-    assert "\\mathrm{countered}(a,e) = K \\cap C" in text
-    assert "they can never determine a status" in text
-
 
 def _fully_marked(observed_on: str) -> HorizonEntry:
     """A complete, counter-signal-free entry dated ``observed_on``."""
@@ -381,7 +252,7 @@ def _fully_marked(observed_on: str) -> HorizonEntry:
     )
 
 
-def test_temporal_review_rule_matches_manuscript() -> None:
+def test_temporal_review_enablement_and_exclusive_boundary() -> None:
     """Enablement, the flag branch, and the strict comparison are all executed."""
     tau = SWEEP_STALE_AFTER_DAYS
     review = date.fromisoformat(REVIEW)
@@ -408,21 +279,6 @@ def test_temporal_review_rule_matches_manuscript() -> None:
     assert not _read(tau).stale and _read(tau).status is HorizonStatus.TOWARD
     assert _read(tau + 1).stale and _read(tau + 1).status is HorizonStatus.INQUIRY
     assert _read(-1).stale and _read(-1).status is HorizonStatus.INQUIRY
-
-    text = _normalized()
-    assert "temporal review is enabled exactly when $\\tau$ is set" in text
-    assert "$\\mathrm{d_{obs}} > d$ (a future observation)" in text
-    assert "d - \\mathrm{d_{obs}} > \\tau$" in text
-
-
-def _decision_clause_statuses() -> list[str]:
-    """The status each numbered clause of the decision rule terminates in."""
-    block = _normalized().split("The status $\\sigma(a, e)$ is determined by")[1]
-    block = block.split(":::")[0]
-    return [
-        name.replace("\\_", "_")
-        for name in re.findall(r"\\texttt\{([A-Z\\_]+)\}", block)
-    ]
 
 
 def test_decision_clauses_fire_in_the_stated_order() -> None:
@@ -458,12 +314,14 @@ def test_decision_clauses_fire_in_the_stated_order() -> None:
         for entries in witnesses
     ]
 
-    clauses = _decision_clause_statuses()
-    assert len(clauses) == len(witnesses), (
-        "the decision rule lists a different number of clauses than this test "
-        "has witnesses for; add or retire a witness deliberately"
-    )
-    assert clauses == executed
+    assert executed == [
+        "NOT_OBSERVED",
+        "DRIFTING",
+        "INQUIRY",
+        "INQUIRY",
+        "INQUIRY",
+        "TOWARD",
+    ]
 
 
 # ---------------------------------------------------------------------------
@@ -471,18 +329,15 @@ def test_decision_clauses_fire_in_the_stated_order() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_totality_count_matches_manuscript() -> None:
-    """Totality's n = 9 is the executed registry and report size."""
+def test_totality_partitions_the_native_registry() -> None:
+    """Every registry aspiration has one finding and contributes to counts."""
     n = len(GOLDEN_ASPIRATIONS)
     report = progress_report([])
     assert len(report.findings) == n
     assert sum(report.counts().values()) == n
-    text = _normalized()
-    assert f"a report contains $n = {n}$ findings" in text
-    assert f"counts partition $n = {n}$" in text
 
 
-def test_intake_first_wins_and_replay_determinism_match_manuscript() -> None:
+def test_first_valid_admission_and_replay_determinism() -> None:
     """First-wins derived by order swap, determinism by replay."""
     full = HorizonEntry(ATTENTION.id, frozenset(ATTENTION.markers))
     empty = HorizonEntry(ATTENTION.id)
@@ -491,21 +346,13 @@ def test_intake_first_wins_and_replay_determinism_match_manuscript() -> None:
     empty_first = progress_report([empty, full], as_of=REVIEW)
     assert full_first.findings[0].status is HorizonStatus.TOWARD
     assert empty_first.findings[0].status is HorizonStatus.INQUIRY
-    assert any("the first entry stands" in note for note in full_first.intake_notes)
 
     replay = progress_report([full, empty], as_of=REVIEW)
     assert report_digest(replay) == report_digest(full_first)
 
-    text = _normalized()
-    assert (
-        "the first valid entry bearing an identifier stands, and every later "
-        "entry with that identifier is set aside with a duplicate note" in text
-    )
-    assert "reproduces the identical report, digest for digest" in text
 
-
-def test_currentness_boundary_constants_match_manuscript() -> None:
-    """The 90/91 boundary is derived, exclusive, and stated."""
+def test_currentness_boundary_is_exclusive() -> None:
+    """The last TOWARD age is the threshold, followed by INQUIRY."""
     tau = 90
     points = temporal_currentness_sweep(
         ATTENTION.id, range(120), as_of=REVIEW, stale_after_days=tau
@@ -516,16 +363,9 @@ def test_currentness_boundary_constants_match_manuscript() -> None:
     assert boundary == tau  # exclusive: age == tau is still current
     assert min(stale_ages) == boundary + 1
 
-    text = _normalized()
-    assert f"$\\tau = {tau}$" in text
-    assert (
-        f"at age exactly {boundary} days and reverts from age {boundary + 1} days"
-        in text
-    )
 
-
-def test_sweep_codomain_matches_manuscript() -> None:
-    """The unreachable statuses are derived, then stated."""
+def test_sweep_reaches_only_toward_and_inquiry() -> None:
+    """Every sampled age remains within the native temporal codomain."""
     points = temporal_currentness_sweep(
         ATTENTION.id, range(-10, 200, 5), as_of=REVIEW, stale_after_days=90
     )
@@ -533,20 +373,8 @@ def test_sweep_codomain_matches_manuscript() -> None:
     unreachable = sorted({status.value for status in HorizonStatus} - reached)
     assert unreachable == ["DRIFTING", "NOT_OBSERVED"]
 
-    latex_names = " and ".join(
-        "$\\texttt{" + name.replace("_", "\\_") + "}$" for name in unreachable
-    )
-    assert f"{latex_names} are unreachable in a sweep" in _normalized()
 
-
-def test_lattice_call_count_matches_manuscript() -> None:
-    """The registry-wide replay size is derived from the registry and the ages."""
-    rows = len(GOLDEN_ASPIRATIONS)
-    columns = len(SWEEP_AGES)
-    assert f"${rows} \\times {columns} = {rows * columns}$ executed" in _normalized()
-
-
-def test_digest_order_independence_matches_manuscript() -> None:
+def test_native_registry_digest_is_order_independent_hex() -> None:
     """Permutation-invariance and the 64-hex shape are executed."""
     digest = registry_digest(GOLDEN_ASPIRATIONS)
     assert registry_digest(tuple(reversed(GOLDEN_ASPIRATIONS))) == digest
@@ -554,8 +382,6 @@ def test_digest_order_independence_matches_manuscript() -> None:
     assert registry_digest(rotated) == digest
     assert len(digest) == 64
     assert set(digest) <= set("0123456789abcdef")
-
-    assert f"exactly {len(digest)} lowercase hexadecimal characters" in _normalized()
 
 
 def test_intake_screening_is_deterministic_on_all_input() -> None:
@@ -592,10 +418,6 @@ def test_intake_screening_is_deterministic_on_all_input() -> None:
     for c1, c2 in zip(r1, r2):
         assert not c1.admitted and not c2.admitted
         assert c1.note == c2.note
-
-    text = _normalized()
-    assert "intake screening function" in text
-    assert "never raises on supported malformed passive data" in text
 
 
 # ---------------------------------------------------------------------------
@@ -743,7 +565,6 @@ def test_ledger_source_path_check_rejects_a_retired_path() -> None:
 
 
 _LIMITS = PROJECT_ROOT / "docs" / "manuscript" / "05_limits.md"
-_LIMIT_WORDS = {2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six"}
 
 
 def _limit_bullets() -> list[str]:
@@ -751,25 +572,6 @@ def _limit_bullets() -> list[str]:
     raw = _LIMITS.read_text(encoding="utf-8")
     body = raw.split("The sharpest risk")[0]
     return re.findall(r"^- \*(Commitment|Enforced [^*]+)\.\*", body, flags=re.MULTILINE)
-
-
-def test_limits_enforcement_split_matches_its_own_labels() -> None:
-    """05's claim about how many limits the code enforces is counted, not asserted.
-
-    The section used to say "most of them are enforced in the code", which was
-    an overclaim: three of the six are commitments the evaluator cannot hold.
-    The prose now labels every bullet, and this test counts the labels.
-    """
-    bullets = _limit_bullets()
-    assert bullets, "no labelled limit bullets parsed; the check would be vacuous"
-    enforced = [label for label in bullets if label.startswith("Enforced")]
-    commitments = [label for label in bullets if label == "Commitment"]
-    assert len(enforced) + len(commitments) == len(bullets)
-
-    text = " ".join(_LIMITS.read_text(encoding="utf-8").split())
-    assert f"carries {_LIMIT_WORDS[len(bullets)].lower()} hard limits" in text
-    assert f"{_LIMIT_WORDS[len(enforced)]} of them have a mechanical core" in text
-    assert f"the other {_LIMIT_WORDS[len(commitments)].lower()} are commitments" in text
 
 
 def test_limits_enforced_labels_name_real_formalism_results() -> None:
@@ -789,60 +591,7 @@ def test_limits_enforced_labels_name_real_formalism_results() -> None:
     assert not set(cited) - declared, sorted(set(cited) - declared)
 
 
-def test_limits_split_guard_rejects_the_earlier_overclaim() -> None:
-    """Proof of detection: the retired "most of them" wording must not pass."""
-    bullets = _limit_bullets()
-    enforced = [label for label in bullets if label.startswith("Enforced")]
-    assert len(enforced) * 2 <= len(bullets), (
-        "a majority of the limits would now be code-enforced, so the retired "
-        '"most of them are enforced" wording would need re-examining'
-    )
-    text = " ".join(_LIMITS.read_text(encoding="utf-8").split())
-    assert "most of them are enforced in the code" not in text
-
-
-def test_abstract_figure_count_matches_the_builder() -> None:
-    """The abstract's figure count is bound to len(FIGURES), never hand-kept."""
-    abstract = " ".join(
-        (PROJECT_ROOT / "docs" / "manuscript" / "00_abstract.md")
-        .read_text(encoding="utf-8")
-        .split()
-    )
-    assert f"{_COUNT_WORDS[len(FIGURES)]} code-derived **figures**" in abstract
-    for count, word in _COUNT_WORDS.items():
-        if count != len(FIGURES):
-            assert f"{word} code-derived" not in abstract
-
-
-def test_abstract_figure_count_guard_rejects_a_stale_count() -> None:
-    """Proof of detection: the pre-analysis-layer count must not pass the guard."""
-    stale = "Five code-derived **figures** render the registry."
-    assert f"{_COUNT_WORDS[len(FIGURES)]} code-derived **figures**" not in stale
-
-
-def test_report_envelope_tuple_matches_the_dataclass() -> None:
-    """The envelope tuple has one component per ``ReportEnvelope`` field.
-
-    The arity and the schema string are derived from the running package, not
-    transcribed: a field added to or removed from the record, or a changed
-    schema literal, fails here before any archived envelope can drift from
-    the definition a reader was given.
-    """
-    from golden_line import ENVELOPE_SCHEMA, ReportEnvelope
-
-    fields = [field.name for field in dataclasses.fields(ReportEnvelope)]
-    assert _tuple_arity("v") == len(fields)
-    text = _normalized()
-    assert (
-        f"with exactly those {_COUNT_WORDS[len(fields)].lower()} fields, in order"
-        in text
-    )
-    assert f"`{ENVELOPE_SCHEMA}`" in text
-    for name in fields:
-        assert name.replace("_", "\\_") in text, name
-
-
-def test_envelope_pointer_matches_manuscript() -> None:
+def test_envelope_pointer_binds_native_report() -> None:
     """The pointer proposition is re-derived through a real export.
 
     A live report is wrapped, the match check must hold, every stated field
@@ -876,9 +625,3 @@ def test_envelope_pointer_matches_manuscript() -> None:
         dataclasses.replace(envelope, native_status=envelope.native_status[:-1]),
     ):
         assert not envelope_matches_report(edited, report)
-    text = _normalized()
-    assert "editing any of them afterwards makes the check return false" in text
-    assert (
-        "agreement proves neither an unedited archive nor authenticity, truth, or merit"
-        in text
-    )

@@ -91,22 +91,3 @@ def test_evidence_record_validation_rejects_structural_errors(case):
         conflicts = (replace(conflicts[0], aspiration_ids=("unknown",)),)
     with pytest.raises(ValueError):
         gl.canonical_evidence_records(observations, conflicts)
-
-
-def test_documentation_uses_current_family_and_founding_history():
-    from pathlib import Path
-
-    root = Path(__file__).resolve().parents[1]
-    for name in (
-        "README.md",
-        "docs/architecture.md",
-        "docs/manuscript/01b_line_set_relationship.md",
-        ".agents/skills/golden-line/SKILL.md",
-    ):
-        text = (root / name).read_text()
-        assert "founding four" in text, name
-        assert "eight instruments" in text, name
-    assert (
-        "developed capacity"
-        in (root / "docs/manuscript/01b_line_set_relationship.md").read_text()
-    )

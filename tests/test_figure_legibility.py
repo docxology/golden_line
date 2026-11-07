@@ -8,7 +8,7 @@ page geometry. This module re-derives that number for every shipped figure and
 fails below :data:`golden_line.figures.svg.MIN_POINT_SIZE`.
 
 The accessibility convention the figures rely on — shape and text repeating
-what colour shows — only works if the text can be read at print scale, so this
+what color shows — only works if the text can be read at print scale, so this
 is a correctness gate rather than a style preference. Every check here is
 proof-of-detection tested: a planted small label and a planted over-tall canvas
 must both be reported.

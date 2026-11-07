@@ -17,7 +17,7 @@ def main() -> None:
 
     The gate takes no options. It still parses its command line, because a gate
     that silently ignores an argument it was given cannot be told apart from
-    one that honoured it: a mistyped flag would otherwise read as a clean run
+    one that honored it: a mistyped flag would otherwise read as a clean run
     over something the gate never looked at.
     """
     argparse.ArgumentParser(description=__doc__).parse_args()

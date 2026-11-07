@@ -63,7 +63,7 @@ observed marker can never accidentally support two directions at once. The
 blocks are vocabulary the evaluator can match, never observations and never
 points.
 
-![The aggregate declared-signal vocabulary of the registry, one unit block per token: filled blocks for markers, outlined blocks for counter-signals. The counts describe what the evaluator can match, never fulfilment or performance.](../../output/figures/signal_inventory.png){#fig:signal_inventory width=95%}
+![The aggregate declared-signal vocabulary of the registry, one unit block per token: filled blocks for markers, outlined blocks for counter-signals. The counts describe what the evaluator can match, never fulfillment or performance.](../../output/figures/signal_inventory.png){#fig:signal_inventory width=95%}
 
 ## The reach of the nine horizons
 

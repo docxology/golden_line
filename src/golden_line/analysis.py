@@ -5,12 +5,12 @@ registry, or replays the public :func:`golden_line.progress.progress_report`
 evaluator, and returns typed summaries. Nothing in this module changes the
 evaluator's semantics, and none of its outputs is a score, a certification,
 or a permission mechanism — they characterize the declared vocabulary and
-the evaluator's behaviour so both can be inspected and drawn.
+the evaluator's behavior so both can be inspected and drawn.
 
-Three families of helpers are provided:
+Four families of helpers are provided:
 
 * :func:`signal_inventory` — aggregate declared marker and counter-signal
-  counts across a registry (the signal vocabulary, not its fulfilment);
+  counts across a registry (the signal vocabulary, not its fulfillment);
 * :func:`horizon_distribution` — an interpretive grouping of aspirations by
   the temporal reach of their horizons, declared in :data:`HORIZON_BANDS`;
 * :func:`temporal_currentness_sweep` — a replay of one fully-marked entry

@@ -1,6 +1,7 @@
 """Public API surface stays importable and versioned."""
 
 import re
+from dataclasses import fields
 from pathlib import Path
 
 import golden_line
@@ -120,3 +121,49 @@ def test_shared_project_root_matches_the_repo_root() -> None:
     assert PROJECT_ROOT == expected
     assert FIGURES_ROOT == PROJECT_ROOT
     assert ARTIFACTS_ROOT == PROJECT_ROOT
+
+
+def test_native_record_schema_fields() -> None:
+    schemas = {
+        golden_line.Aspiration: (
+            "id",
+            "title",
+            "thread",
+            "horizon",
+            "markers",
+            "counter_signals",
+        ),
+        golden_line.HorizonEntry: (
+            "aspiration_id",
+            "observed_markers",
+            "counter_signals",
+            "note",
+            "observed_on",
+        ),
+        golden_line.HorizonFinding: (
+            "aspiration_id",
+            "status",
+            "reasons",
+            "observed",
+            "unmet",
+            "countered",
+            "ignored_markers",
+            "ignored_counter_signals",
+            "note",
+            "observed_on",
+            "stale",
+            "date_issue",
+        ),
+    }
+    for record_type, names in schemas.items():
+        assert tuple(field.name for field in fields(record_type)) == names
+    assert golden_line.HorizonEntry("example").observed_on == ""
+
+
+def test_native_status_vocabulary() -> None:
+    assert tuple(status.value for status in golden_line.HorizonStatus) == (
+        "TOWARD",
+        "INQUIRY",
+        "DRIFTING",
+        "NOT_OBSERVED",
+    )

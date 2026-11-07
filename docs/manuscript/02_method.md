@@ -28,8 +28,9 @@ trail plus structured derivation fields so no reading arrives unexplained.
 
 1. **Intake screening.** Each incoming entry is checked for the expected record
    shape and against the known aspiration identifiers. An entry for an unknown
-   aspiration is set aside with a note; a second valid entry for an aspiration
-   already seen is set aside, and the first entry stands. JSON-like token lists
+   aspiration is set aside with a note; a later valid entry for an aspiration
+   already admitted is set aside, and the first valid entry stands. A malformed
+   entry does not reserve an identifier. JSON-like token lists
    are normalized to sets. Malformed passive records in the supported input
    domain are recorded as intake notes. Unsupported token iterators are rejected
    without consumption. Exceptions raised by an outer batch iterator or by
@@ -47,13 +48,20 @@ The four readings are:
 - `TOWARD` means every declared marker is observed, no counter-signal is
   recorded, and (if temporal review is enabled) currentness is auditable: the
   observation date is present, parseable, and within the declared window.
-- `INQUIRY` means the aspiration is named but the evidence is partial, empty, or
-  stale, so the direction remains honestly open.
-- `DRIFTING` means a declared counter-signal is present. It describes the record,
-  not the person or project as a whole.
+- `INQUIRY` means an entry was admitted but its declared markers are partial or
+  empty, or positive evidence fails an enabled temporal review.
+- `DRIFTING` means a declared counter-signal is present in the admitted entry.
+  It describes the record, not the person or project as a whole.
 - `NOT_OBSERVED` means no valid horizon entry was admitted for that aspiration.
-  An entry can be present in the input but fail intake because it is malformed,
-  unknown, or a duplicate set aside by the first-valid-entry rule.
+  Submitted malformed material can therefore coexist with `NOT_OBSERVED`.
+  Unknown IDs do not supply entries for requested aspirations. A duplicate
+  requires an earlier admitted entry for that same ID, so a duplicate alone
+  cannot explain `NOT_OBSERVED` for it.
+
+No admitted entry means `NOT_OBSERVED`; a valid empty entry means `INQUIRY`;
+complete valid markers with no declared counter-signal mean `TOWARD`, subject
+to enabled temporal review. Without a window, `currentness_evaluated` is false:
+an undated complete-marker entry may be `TOWARD` without establishing freshness.
 
 The finding also preserves the note, observed date, declared counter-signals,
 and undeclared tokens that were ignored. This makes the status machine-readable
@@ -62,13 +70,16 @@ reason strings.
 
 ## Conservative precedence
 
-The precedence is intentionally conservative. A counter-signal is surfaced
-before any markers are counted, and staleness never erases a recorded drift: a
-declared counter-signal yields `DRIFTING` even when the same observation is old.
-Partial, stale, or currentness-un-auditable positive evidence reverts to
-`INQUIRY` rather than being rounded up to `TOWARD`. This mirrors a satisficing
-stance: the evaluator looks for *good enough and current* evidence of direction
-and refuses to over-read thin signals [@simon1956rational].
+The precedence is intentionally conservative within the admitted record. Its
+declared counter-signals are surfaced before markers, and staleness never
+erases that drift. Rejected contrary duplicates remain in the intake archive
+but do not change the reading. Partial positive evidence yields `INQUIRY`;
+stale or currentness-un-auditable positive evidence also yields `INQUIRY` when
+temporal review is enabled. Evidence at exactly the age threshold remains
+current; future dates and greater ages are stale. This mirrors a satisficing
+stance: the evaluator looks for *good enough* evidence of direction, and for
+currentness only when requested, rather than over-reading thin signals
+[@simon1956rational].
 
 The result is a directional report. It is not an evaluator of worth, a
 certification, or a substitute for the Red Line, Black Line, or White Line
@@ -94,7 +105,7 @@ change what a reading means. Four helpers are provided.
 - `signal_inventory` tallies the declared markers and counter-signals across a
   registry — for the shipped registry, 18 markers and 9 counter-signals, with
   every token distinct — describing the vocabulary the evaluator can match,
-  never its fulfilment.
+  never its fulfillment.
 - `horizon_distribution` groups aspirations into four declared temporal-reach
   bands (immediate, recurring cycle, at handoff, open-ended). The band map
   lives in the analysis layer, not the registry contract, and an unclassified

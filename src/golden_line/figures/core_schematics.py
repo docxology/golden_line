@@ -23,7 +23,7 @@ from .svg import (
     MUTED,
     PAPER,
     RED,
-    STATUS_COLOURS,
+    STATUS_COLORS,
     TEAL,
     _canvas,
     _entries,
@@ -32,7 +32,7 @@ from .svg import (
     _wrap,
 )
 
-#: Interpretive icon and colour for each founding aspiration, keyed by
+#: Interpretive icon and color for each founding aspiration, keyed by
 #: identifier. Keying by id rather than by registry position means a registry
 #: reorder can never hand one aspiration another's symbol; a founding entry
 #: with no entry here raises instead of drawing a silently wrong icon.
@@ -52,7 +52,7 @@ def thread_nodes(
     symbols: dict[str, tuple[str, str]] = FOUNDING_SYMBOLS,
     slots: tuple[tuple[int, int], ...] = _THREAD_SLOTS,
 ) -> tuple[tuple[Aspiration, int, int, str, str], ...]:
-    """Pair each founding aspiration with its slot, colour, and icon.
+    """Pair each founding aspiration with its slot, color, and icon.
 
     Both failure modes are refused rather than drawn around: an aspiration with
     no declared symbol, and a founding set the layout has no room for.
@@ -125,41 +125,41 @@ def _svg_thread() -> str:
             ),
         ]
     )
-    for item, x, y, colour, icon in nodes:
+    for item, x, y, color, icon in nodes:
         card_x = x - 268
         card_y = y - 90
         parts.extend(
             [
-                f'<rect x="{card_x}" y="{card_y}" width="536" height="180" rx="18" fill="{CARD}" stroke="{colour}" stroke-width="2.5"/>',
-                f'<circle cx="{card_x + 44}" cy="{card_y + 46}" r="26" fill="{PAPER}" stroke="{colour}" stroke-width="3"/>',
+                f'<rect x="{card_x}" y="{card_y}" width="536" height="180" rx="18" fill="{CARD}" stroke="{color}" stroke-width="2.5"/>',
+                f'<circle cx="{card_x + 44}" cy="{card_y + 46}" r="26" fill="{PAPER}" stroke="{color}" stroke-width="3"/>',
             ]
         )
         if icon == "attention":
             parts.extend(
                 [
-                    f'<ellipse cx="{card_x + 44}" cy="{card_y + 46}" rx="14" ry="9" fill="none" stroke="{colour}" stroke-width="3"/>',
-                    f'<circle cx="{card_x + 44}" cy="{card_y + 46}" r="4" fill="{colour}"/>',
+                    f'<ellipse cx="{card_x + 44}" cy="{card_y + 46}" rx="14" ry="9" fill="none" stroke="{color}" stroke-width="3"/>',
+                    f'<circle cx="{card_x + 44}" cy="{card_y + 46}" r="4" fill="{color}"/>',
                 ]
             )
         elif icon == "usefulness":
             parts.extend(
                 [
-                    f'<path d="M{card_x + 30} {card_y + 56} L{card_x + 44} {card_y + 33} L{card_x + 58} {card_y + 56}" fill="none" stroke="{colour}" stroke-width="3" stroke-linecap="round"/>',
-                    f'<path d="M{card_x + 31} {card_y + 46} L{card_x + 57} {card_y + 46}" stroke="{colour}" stroke-width="3"/>',
+                    f'<path d="M{card_x + 30} {card_y + 56} L{card_x + 44} {card_y + 33} L{card_x + 58} {card_y + 56}" fill="none" stroke="{color}" stroke-width="3" stroke-linecap="round"/>',
+                    f'<path d="M{card_x + 31} {card_y + 46} L{card_x + 57} {card_y + 46}" stroke="{color}" stroke-width="3"/>',
                 ]
             )
         elif icon == "repair":
             parts.extend(
                 [
-                    f'<path d="M{card_x + 32} {card_y + 34} L{card_x + 57} {card_y + 59}" stroke="{colour}" stroke-width="5" stroke-linecap="round"/>',
-                    f'<path d="M{card_x + 34} {card_y + 36} L{card_x + 40} {card_y + 30} M{card_x + 51} {card_y + 53} L{card_x + 59} {card_y + 61}" stroke="{colour}" stroke-width="3" stroke-linecap="round"/>',
+                    f'<path d="M{card_x + 32} {card_y + 34} L{card_x + 57} {card_y + 59}" stroke="{color}" stroke-width="5" stroke-linecap="round"/>',
+                    f'<path d="M{card_x + 34} {card_y + 36} L{card_x + 40} {card_y + 30} M{card_x + 51} {card_y + 53} L{card_x + 59} {card_y + 61}" stroke="{color}" stroke-width="3" stroke-linecap="round"/>',
                 ]
             )
         else:
             parts.extend(
                 [
-                    f'<path d="M{card_x + 44} {card_y + 60} L{card_x + 44} {card_y + 41} M{card_x + 44} {card_y + 47} L{card_x + 32} {card_y + 37} M{card_x + 44} {card_y + 49} L{card_x + 56} {card_y + 38}" stroke="{colour}" stroke-width="3" stroke-linecap="round"/>',
-                    f'<circle cx="{card_x + 44}" cy="{card_y + 30}" r="10" fill="none" stroke="{colour}" stroke-width="3"/>',
+                    f'<path d="M{card_x + 44} {card_y + 60} L{card_x + 44} {card_y + 41} M{card_x + 44} {card_y + 47} L{card_x + 32} {card_y + 37} M{card_x + 44} {card_y + 49} L{card_x + 56} {card_y + 38}" stroke="{color}" stroke-width="3" stroke-linecap="round"/>',
+                    f'<circle cx="{card_x + 44}" cy="{card_y + 30}" r="10" fill="none" stroke="{color}" stroke-width="3"/>',
                 ]
             )
         title_lines = _wrap(item.title, 29)[:3]
@@ -183,7 +183,7 @@ def _svg_thread() -> str:
                     f"{_plural(len(item.markers), 'marker')}  ·  "
                     f"{_plural(len(item.counter_signals), 'counter-signal')}",
                     20,
-                    colour,
+                    color,
                     "700",
                 ),
             ]
@@ -340,11 +340,11 @@ def _svg_decision_path() -> str:
         )
         parts.append(_text(x + 26, y + 48, text, 22, INK, "700"))
 
-    def terminal(x: int, y: int, status_value: str, colour: str) -> None:
+    def terminal(x: int, y: int, status_value: str, color: str) -> None:
         parts.append(
-            f'<rect x="{x}" y="{y}" width="350" height="66" rx="33" fill="{PAPER}" stroke="{colour}" stroke-width="3"/>'
+            f'<rect x="{x}" y="{y}" width="350" height="66" rx="33" fill="{PAPER}" stroke="{color}" stroke-width="3"/>'
         )
-        parts.append(_text(x + 30, y + 44, status_value, 24, colour, "700"))
+        parts.append(_text(x + 30, y + 44, status_value, 24, color, "700"))
 
     steps = [
         (
@@ -365,14 +365,14 @@ def _svg_decision_path() -> str:
     ]
     top = 248
     gap = 128
-    for index, (question, status_value, colour, branch) in enumerate(steps):
+    for index, (question, status_value, color, branch) in enumerate(steps):
         y = top + index * gap
         decision(70, y, question)
         parts.append(
-            f'<line x1="870" y1="{y + 39}" x2="1190" y2="{y + 39}" stroke="{colour}" stroke-width="2.5"/>'
+            f'<line x1="870" y1="{y + 39}" x2="1190" y2="{y + 39}" stroke="{color}" stroke-width="2.5"/>'
         )
-        parts.append(_text(896, y + 28, branch, 20, colour, "700"))
-        terminal(1190, y + 6, status_value, colour)
+        parts.append(_text(896, y + 28, branch, 20, color, "700"))
+        terminal(1190, y + 6, status_value, color)
         if index < len(steps) - 1:
             parts.append(
                 f'<line x1="470" y1="{y + 78}" x2="470" y2="{y + gap}" stroke="{TEAL}" stroke-width="2.5"/>'
@@ -515,7 +515,7 @@ def _svg_counter_signal_dominance() -> str:
             _text(
                 70,
                 244,
-                "SOURCE-DRIVEN SCHEMATIC · a replayed clause ordering, never a judgement of the work or its author",
+                "SOURCE-DRIVEN SCHEMATIC · a replayed clause ordering, never a judgment of the work or its author",
                 20,
                 TEAL,
                 "700",
@@ -540,14 +540,14 @@ def _svg_counter_signal_dominance() -> str:
         parts.append(_text(label_x, y + 42, aspiration_id, 20, INK, "700"))
         for column, status in enumerate(statuses):
             x = grid_x + column * col_pitch
-            colour = STATUS_COLOURS[status]
+            color = STATUS_COLORS[status]
             filled = status is HorizonStatus.DRIFTING
             parts.append(
                 f'<rect x="{x - 16}" y="{y + 12}" width="{col_w}" height="42" rx="8" '
-                f'fill="{colour if filled else PAPER}" stroke="{colour}" stroke-width="2.5"/>'
+                f'fill="{color if filled else PAPER}" stroke="{color}" stroke-width="2.5"/>'
             )
             parts.append(
-                _text(x, y + 40, status.value, 20, PAPER if filled else colour, "700")
+                _text(x, y + 40, status.value, 20, PAPER if filled else color, "700")
             )
 
     summary_y = top + len(rows) * row_pitch + 34
@@ -609,21 +609,21 @@ def _pipeline_setaside_demo() -> tuple[tuple[str, str], ...]:
 def pipeline_stages(
     names: tuple[str, ...],
     bodies: tuple[str, ...],
-    colours: tuple[str, ...],
+    colors: tuple[str, ...],
 ) -> list[tuple[str, str, str]]:
-    """Zip the evaluator's declared stage names with the figure's copy and colour.
+    """Zip the evaluator's declared stage names with the figure's copy and color.
 
     The figure may not describe more or fewer stages than
     :data:`golden_line.progress.EVALUATOR_STAGES` declares.
     """
-    if not len(names) == len(bodies) == len(colours):
+    if not len(names) == len(bodies) == len(colors):
         raise ValueError(
             "the pipeline figure describes a different number of stages than "
             f"progress.EVALUATOR_STAGES declares ({len(names)})"
         )
     return [
-        (f"{index + 1} · {name.upper()}", body, colour)
-        for index, (name, body, colour) in enumerate(zip(names, bodies, colours))
+        (f"{index + 1} · {name.upper()}", body, color)
+        for index, (name, body, color) in enumerate(zip(names, bodies, colors))
     ]
 
 
@@ -662,20 +662,20 @@ def _svg_pipeline() -> str:
         "Observed markers and counter-signals are intersected with the declared sets. Undeclared tokens are ignored and noted.",
         "The matched sets, with optional temporal review, select one of the four directional readings.",
     )
-    stage_colours = (TEAL, GOLD_DARK, RED)
-    stages = pipeline_stages(EVALUATOR_STAGES, stage_bodies, stage_colours)
+    stage_colors = (TEAL, GOLD_DARK, RED)
+    stages = pipeline_stages(EVALUATOR_STAGES, stage_bodies, stage_colors)
     top = 248
     box_h = 168
     box_w = 900
-    for index, (title, body, colour) in enumerate(stages):
+    for index, (title, body, color) in enumerate(stages):
         y = top + index * (box_h + 36)
         parts.append(
-            f'<rect x="70" y="{y}" width="{box_w}" height="{box_h}" rx="12" fill="{CARD}" stroke="{colour}" stroke-width="2.5"/>'
+            f'<rect x="70" y="{y}" width="{box_w}" height="{box_h}" rx="12" fill="{CARD}" stroke="{color}" stroke-width="2.5"/>'
         )
         parts.append(
-            f'<rect x="70" y="{y}" width="12" height="{box_h}" rx="6" fill="{colour}"/>'
+            f'<rect x="70" y="{y}" width="12" height="{box_h}" rx="6" fill="{color}"/>'
         )
-        parts.append(_text(112, y + 48, title, 24, colour, "700"))
+        parts.append(_text(112, y + 48, title, 24, color, "700"))
         for line_index, line in enumerate(_wrap(body, 60)[:3]):
             parts.append(_text(112, y + 88 + line_index * 30, line, 20, INK))
         if index < len(stages) - 1:
@@ -829,13 +829,13 @@ def _svg_evidence_state_matrix() -> str:
         ]
     )
     top = 244
-    for index, (status, condition, limit, colour) in enumerate(rows):
+    for index, (status, condition, limit, color) in enumerate(rows):
         y = top + index * 128
         parts.append(
-            f'<rect x="70" y="{y}" width="1460" height="104" rx="12" fill="{CARD}" stroke="{colour}" stroke-width="2.5"/>'
+            f'<rect x="70" y="{y}" width="1460" height="104" rx="12" fill="{CARD}" stroke="{color}" stroke-width="2.5"/>'
         )
         parts.append(
-            f'<rect x="70" y="{y}" width="316" height="104" rx="12" fill="{colour}"/>'
+            f'<rect x="70" y="{y}" width="316" height="104" rx="12" fill="{color}"/>'
         )
         parts.append(_text(102, y + 62, status, 26, PAPER, "700"))
         parts.append(_text(422, y + 44, condition, 22, INK, "700"))
