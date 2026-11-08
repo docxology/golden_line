@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.6.1 — 2026-11-08
+
+Restore the existing Python 3.10–3.15 runtime contract. Use `timezone.utc`
+instead of the Python 3.11-only `UTC` alias in release evidence and datetime
+boundary tests, and resolve the locked development environment for Python 3.10.
+UTC timestamps retain the same ISO format. The evaluator, registry, archive,
+envelope, and vocabulary contracts are unchanged.
+
+Remove source-wiring and prose-wording tests while retaining real repository-local
+link and bibliography closure checks. Keep the existing CI matrix, native gate
+commands, coverage floor, and immutable `v0.6.0` release unchanged.
+
 ## 0.6.0 — 2026-11-06
 
 Reject archive intake sidecars whose consistently rehashed dispositions contradict

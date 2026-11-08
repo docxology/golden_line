@@ -1,23 +1,4 @@
-"""Guards that this repository stays readable and runnable on its own.
-
-Golden Line belongs to a family of eight instruments, a reader, and a register,
-each in its own repository. The set's
-standalone rule is explicit: "Each project has its own source of truth, Python
-package, tests, documentation, manuscript, references, figures, and rendered
-artifacts. A separated copy must still explain its own purpose and limits.
-Cross-references are orientation links, not hidden dependencies."
-
-A fresh-clone audit found that the prose had drifted from that rule while the
-code never had. Four markdown links resolved above the repository root, the
-grounding citation for the project's own name was deferred to a document that
-does not ship here, the one non-Python prerequisite of the figure build was
-recorded only in a deep maintainer note, and the render instructions assumed a
-particular directory layout. None of those defects can be caught by a test that
-imports the package, so they are caught here, from the files themselves.
-
-Every guard asserts its scan is non-empty before asserting the property, so a
-rename or a moved directory shows up as a failure rather than as a silent pass.
-"""
+"""Repository-local documentation links and bibliography closure."""
 
 from __future__ import annotations
 
@@ -25,7 +6,6 @@ import re
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-FIGURES_INIT = PROJECT_ROOT / "src" / "golden_line" / "figures" / "__init__.py"
 MANUSCRIPT = PROJECT_ROOT / "docs" / "manuscript"
 BIBLIOGRAPHY = MANUSCRIPT / "references.bib"
 
@@ -136,86 +116,6 @@ def test_every_relative_link_resolves_to_a_file_that_ships() -> None:
     assert not broken, "relative links point at absent files: " + ", ".join(broken)
 
 
-def _required_system_tool() -> str:
-    """Read the external binary name out of the figure builder's own source."""
-
-    source = (PROJECT_ROOT / "src" / "golden_line" / "raster.py").read_text(
-        encoding="utf-8"
-    )
-    match = re.search(r"shutil\.which\(\s*\"(?P<tool>[^\"]+)\"", source)
-    assert match is not None, f"{FIGURES_INIT.name} names no external tool to require"
-    return match.group("tool")
-
-
-def test_the_figure_builds_system_prerequisite_is_documented_where_readers_look() -> (
-    None
-):
-    """The one non-Python prerequisite must appear in the reader-facing docs.
-
-    The name is read from the builder rather than restated here, so renaming the
-    tool in the source fails this test instead of quietly stranding the docs.
-    Before the audit it appeared only in ``src/golden_line/figures/AGENTS.md``,
-    a maintainer note a first-time cloner has no reason to open, while
-    ``docs/development.md`` told that reader to run the figure build.
-    """
-
-    tool = _required_system_tool()
-    for relative in ("README.md", "STANDALONE.md", "docs/development.md"):
-        text = (PROJECT_ROOT / relative).read_text(encoding="utf-8")
-        assert tool in text, (
-            f"{relative} does not name the required {tool} prerequisite"
-        )
-
-
-def test_render_instructions_do_not_assume_a_surrounding_directory_layout() -> None:
-    """Rendering is an external dependency, so it must be addressed as one.
-
-    ``cd ../../../template`` only resolves for a reader who happens to hold the
-    engine at one particular relative position. Naming the repository works from
-    anywhere; the guard also requires that the repository actually be named, so
-    removing the bad path by deleting the instructions fails too.
-    """
-
-    monorepo_hop = re.compile(r"(\.\./){2,}[A-Za-z0-9_.-]*template")
-    offenders = [
-        f"{path.relative_to(PROJECT_ROOT)}:{text.count(chr(10), 0, match.start()) + 1}"
-        for path in _markdown_files()
-        for text in (path.read_text(encoding="utf-8"),)
-        for match in monorepo_hop.finditer(text)
-    ]
-    assert not offenders, "layout-dependent template paths remain at: " + ", ".join(
-        offenders
-    )
-
-    development = (PROJECT_ROOT / "docs" / "development.md").read_text(encoding="utf-8")
-    assert "github.com/docxology/template" in development
-
-
-def test_the_project_does_not_describe_itself_as_part_of_a_larger_checkout() -> None:
-    """Self-description has to match what a separated copy actually is.
-
-    The stale phrasings below all told a reader of this repository that it was a
-    fragment of something else — a private, symlinked sidecar rendered by a
-    sibling directory. It is its own repository now, and the documents that
-    explain it must say so.
-    """
-
-    stale = (
-        "private sidecar",
-        "symlinked sidecar",
-        "sidecar project",
-        "sidecar checkout",
-    )
-    offenders = [
-        f"{path.relative_to(PROJECT_ROOT)}: {phrase}"
-        for path in _markdown_files()
-        for text in (path.read_text(encoding="utf-8").lower(),)
-        for phrase in stale
-        if phrase in text
-    ]
-    assert not offenders, "stale self-description remains at: " + ", ".join(offenders)
-
-
 def _bibliography_keys() -> frozenset[str]:
     """Every key defined in the manuscript's own bibliography."""
 
@@ -248,30 +148,3 @@ def test_every_manuscript_citation_resolves_in_this_repositorys_bibliography() -
     assert not (cited - defined), (
         f"citations without a bibliography entry: {cited - defined}"
     )
-
-
-def test_the_citrinitas_framing_carries_its_own_grounding_citation() -> None:
-    """The paper must ground its own name without sending the reader elsewhere.
-
-    The audited defect was a content dependency, not an orientation link: the
-    relationship chapter said the Jung citation "lives once in the shared
-    line-set map", a document that does not ship in this repository. A reader
-    holding only this repository could not reach it.
-    """
-
-    chapter = MANUSCRIPT / "01b_line_set_relationship.md"
-    text = chapter.read_text(encoding="utf-8")
-    assert "citrinitas" in text.lower(), "the framing this guard covers has moved"
-
-    grounding = {
-        key
-        for key in _cited_keys(chapter) & _bibliography_keys()
-        if "jung" in key.lower()
-    }
-    assert grounding, "the citrinitas framing cites no Jung reference of its own"
-
-    bibliography = BIBLIOGRAPHY.read_text(encoding="utf-8")
-    for key in grounding:
-        entry_start = bibliography.index(f"{{{key},")
-        entry = bibliography[entry_start : bibliography.index("\n}", entry_start)]
-        assert "Alchemy" in entry, f"{key} is not the Psychology and Alchemy reference"

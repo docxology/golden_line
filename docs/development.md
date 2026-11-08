@@ -65,6 +65,13 @@ reported separately from cleanliness. Run it on the committed release tree.
 Rendering is recorded as `not_run` by this local runner and requires a separate
 external-toolchain receipt.
 
+Python 3.10–3.15 are supported without runtime dependencies beyond the standard
+library. Release timestamps use `timezone.utc`, available throughout that range,
+with the same timezone-aware ISO representation on every supported interpreter.
+The Python 3.10 requirement applies to test imports and the release-evidence CLI
+as well as the evaluator. Do not remove an interpreter from CI to hide a runtime
+compatibility defect.
+
 The no-sibling-checkout CI matrix runs the declared supported Python releases
 with a locked dependency resolution and archives evidence keyed by source SHA,
 including failed runs. A fresh checkout needs only this repository, uv, and
@@ -86,8 +93,9 @@ artifacts. Refresh them with `uv run python scripts/build_figures.py` and
 `uv run python scripts/gen_formalism_ledger.py`; do not edit their bytes by hand.
 The figure build requires librsvg as described above.
 
-`docs/releases/v0.4.0.md`, `docs/releases/v0.5.0.md`, and
-`docs/reviews/2026-10-20.md` are historical receipts, not current verification.
+`docs/releases/v0.4.0.md`, `docs/releases/v0.5.0.md`,
+`docs/releases/v0.6.0.md`, and `docs/reviews/2026-10-20.md` are historical
+receipts, not current verification.
 Keep their original wording and identities, including original British spelling.
 Likewise, `tests/fixtures/native_report_v040.json` is a historical digest-bound
 native report and the CFF schema fixture retains its external enum identities.

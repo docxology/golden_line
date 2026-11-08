@@ -4,7 +4,7 @@ import json
 import platform
 import subprocess
 import sys
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from .paths import PROJECT_ROOT
@@ -156,7 +156,7 @@ def collect_evidence(
         "working_source_files": source_snapshot,
         "complete_gate_surface": commands == LOCAL_GATES,
         "source_unchanged": unchanged,
-        "recorded_at": datetime.now(UTC).isoformat(),
+        "recorded_at": datetime.now(timezone.utc).isoformat(),
         "python": platform.python_version(),
         "python_prefix": str(Path(sys.prefix).resolve()),
         "python_base_prefix": str(Path(sys.base_prefix).resolve()),

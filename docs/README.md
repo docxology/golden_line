@@ -21,7 +21,8 @@ Golden Line is a small, inspectable directional instrument. The registry is in
   pre-publication checklist.
 - [releases/v0.4.0.md](releases/v0.4.0.md) — release packet for version 0.4.0.
 - [releases/v0.5.0.md](releases/v0.5.0.md) — October review dispositions and release evidence.
-- [releases/v0.6.0.md](releases/v0.6.0.md) — current intake-custody and working-source evidence release.
+- [releases/v0.6.0.md](releases/v0.6.0.md) — retained intake-custody and working-source minor-release packet.
+- [releases/v0.6.1.md](releases/v0.6.1.md) — current Python 3.10 compatibility correction.
 
 The founding four describe the origin of the current family of eight
 instruments, a reader, and a register. Their relationships are declared in

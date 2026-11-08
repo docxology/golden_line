@@ -1,5 +1,5 @@
 from dataclasses import replace
-from datetime import UTC, date, datetime
+from datetime import date, datetime, timezone
 
 import pytest
 
@@ -56,7 +56,7 @@ def test_date_only_rejects_timestamp_in_both_modes(window):
     with pytest.raises(TypeError, match="as_of must be an ISO date string"):
         progress_report(
             [HorizonEntry(A.id, observed_on="2026-10-20")],
-            as_of=datetime(2026, 10, 20, 12, tzinfo=UTC),
+            as_of=datetime(2026, 10, 20, 12, tzinfo=timezone.utc),
             stale_after_days=window,
         )
 
@@ -72,7 +72,7 @@ def test_sweep_rejects_datetime():
         temporal_currentness_sweep(
             A.id,
             [0],
-            as_of=datetime(2026, 10, 20, tzinfo=UTC),
+            as_of=datetime(2026, 10, 20, tzinfo=timezone.utc),
             stale_after_days=30,
         )
 
