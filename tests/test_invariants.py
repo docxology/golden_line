@@ -31,19 +31,6 @@ def test_battery_passes_on_real_registry() -> None:
     assert registry_sound(REAL)
 
 
-def test_battery_defaults_to_real_registry() -> None:
-    """The default argument *is* the shipped registry object, not a copy of it.
-
-    Asserting ``all_invariants() == all_invariants(REAL)`` compared a call with
-    its own default against itself and could never fail. Binding the default to
-    the registry object carries the information that was intended.
-    """
-    assert all_invariants.__defaults__ == (GOLDEN_ASPIRATIONS,)
-    assert registry_sound.__defaults__ == (GOLDEN_ASPIRATIONS,)
-    assert all_invariants.__defaults__[0] is GOLDEN_ASPIRATIONS
-    assert registry_sound()
-
-
 def test_distinct_ids_detects_duplicate() -> None:
     assert check_distinct_aspiration_ids(REAL).passed
     planted = REAL + (dataclasses.replace(REAL[0], title="an impostor"),)

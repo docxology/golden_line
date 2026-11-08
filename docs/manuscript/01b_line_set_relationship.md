@@ -7,8 +7,9 @@ Line is positive operating discipline. White Line records absence, restraint,
 and negative space. Golden Line does not copy their registries or evaluators,
 and a directional finding is never a compliance verdict.
 
-The current family comprises eight instruments, the `line_set` reader, and the
-`witness_register` companion. Historically the fifth work, `line_set` is a thin reader that declares the set and checks that
+Current membership belongs to the [Line Set declaration](https://github.com/docxology/line_set);
+the reader and Witness Register are companions, not instruments. Historically
+the fifth work, `line_set` is a thin reader that declares the set and checks that
 no two lines gave the same spelling to different things; it adds no substantive
 instrument, and Golden Line does not import, depend on, or defer to it.
 
@@ -17,6 +18,12 @@ separate question. A wish to sustain inquiry does not show a maintained
 commitment: Blue Line records that question. A flourishing marker does not
 show affected-party consent: Violet Line records that question. None of these
 separate records is imported, scored, or overridden by Golden Line.
+
+Copper records dimensioned finite resource use, outstanding commitments, and
+attributed burdens, not aspiration priorities or evidence of fair allocation.
+Iron compares recorded recovery exercises with scenario-specific targets, not
+aspirational progress or a promise of future recovery. Neither supplies permission
+or a compensating score. Violet, Copper, and Iron sources are access-controlled.
 
 This is a declaration of independent scopes, not an installation report.
 Sibling sources may be optional or access-controlled; links and citations do

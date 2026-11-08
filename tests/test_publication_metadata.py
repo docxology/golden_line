@@ -4,7 +4,7 @@ Publication metadata is the surface where a wrong value does the most damage,
 because it is copied verbatim into other people's bibliographies and cannot be
 recalled. These tests bind the four places this work states its own identity —
 the package, the manuscript config, ``CITATION.cff``, and ``.zenodo.json`` — to
-each other, require every sibling reference to be the exact public URL, and
+each other, require retained citation-cohort references to use exact URLs, and
 refuse any DOI-shaped string that a person has not explicitly asserted to be
 real.
 """
@@ -24,6 +24,7 @@ CONFIG = ROOT / "docs" / "manuscript" / "config.yaml"
 LICENSE = ROOT / "LICENSE"
 
 SELF = "golden_line"
+# Retained citation cohort, not an exhaustive membership declaration.
 SIBLINGS = (
     "red_line",
     "black_line",
@@ -96,7 +97,7 @@ def test_the_citation_names_this_repository_exactly() -> None:
     assert supplements == [expected]
 
 
-def test_every_sibling_is_referenced_by_its_exact_public_url() -> None:
+def test_retained_citation_cohort_uses_exact_repository_urls() -> None:
     citation = CITATION.read_text(encoding="utf-8")
     zenodo = json.loads(ZENODO.read_text(encoding="utf-8"))
     identifiers = {item["identifier"] for item in zenodo["related_identifiers"]}
@@ -104,9 +105,6 @@ def test_every_sibling_is_referenced_by_its_exact_public_url() -> None:
         url = f"https://github.com/docxology/{sibling}"
         assert f'repository-code: "{url}"' in citation, sibling
         assert url in identifiers, sibling
-    assert len(SIBLINGS) == 9, (
-        "the current family has ten works; each names the other nine"
-    )
 
 
 def test_no_unverified_doi_appears_in_metadata() -> None:

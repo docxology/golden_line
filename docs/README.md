@@ -22,11 +22,13 @@ Golden Line is a small, inspectable directional instrument. The registry is in
 - [releases/v0.4.0.md](releases/v0.4.0.md) — release packet for version 0.4.0.
 - [releases/v0.5.0.md](releases/v0.5.0.md) — October review dispositions and release evidence.
 - [releases/v0.6.0.md](releases/v0.6.0.md) — retained intake-custody and working-source minor-release packet.
-- [releases/v0.6.1.md](releases/v0.6.1.md) — current Python 3.10 compatibility correction.
+- [releases/v0.6.1.md](releases/v0.6.1.md) — retained Python 3.10 compatibility correction.
 
-The founding four describe the origin of the current family of eight
-instruments, a reader, and a register. Their relationships are declared in
-[`line_set`](https://github.com/docxology/line_set). The original companions
+The founding four describe the origin; current membership belongs to the
+[Line Set declaration](https://github.com/docxology/line_set). Copper's dimensioned
+resource accounting and Iron's scenario-bound recorded recovery comparisons are
+not aspiration priorities or promises of recovery. Violet, Copper, and Iron
+sources are access-controlled. The original companions
 are [`docxology/red_line`](https://github.com/docxology/red_line),
 [`docxology/black_line`](https://github.com/docxology/black_line), and
 [`docxology/white_line`](https://github.com/docxology/white_line). Each is a
