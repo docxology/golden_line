@@ -140,3 +140,157 @@ def test_rehashed_intake_cannot_contradict_native_admission(mutation):
     ).hexdigest()
     with pytest.raises(ValueError, match="invalid Golden Line archive"):
         gl.decode_archive(data, gl.canonical_envelope(gl.report_envelope(report)))
+
+
+def _rehash_intake(data):
+    data["intake_ref"] = hashlib.sha256(
+        json.dumps(
+            data["intake"], ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")
+    ).hexdigest()
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "removed",
+        "markers",
+        "counters",
+        "ignored-marker",
+        "ignored-counter",
+        "note",
+        "date",
+    ],
+)
+def test_rehashed_admitted_intake_must_correspond_to_retained_finding(mutation):
+    aspiration = gl.GOLDEN_ASPIRATIONS[0]
+    entry = gl.HorizonEntry(
+        aspiration.id,
+        frozenset((*aspiration.markers, "extra marker")),
+        frozenset(("extra counter",)),
+        note="original note",
+        observed_on="2026-10-20",
+    )
+    report = gl.progress_report([entry], as_of="2026-10-20")
+    data = json.loads(gl.canonical_archive(report))
+    raw = data["intake"]["records"][0]["entry"]
+    if mutation == "removed":
+        data["intake"]["records"].clear()
+    elif mutation == "markers":
+        raw["observed_markers"].remove(aspiration.markers[0])
+    elif mutation == "counters":
+        raw["counter_signals"].append(aspiration.counter_signals[0])
+    elif mutation == "ignored-marker":
+        raw["observed_markers"].remove("extra marker")
+    elif mutation == "ignored-counter":
+        raw["counter_signals"].remove("extra counter")
+    elif mutation == "note":
+        raw["note"] = "different note"
+    else:
+        raw["observed_on"] = "2026-10-19"
+    _rehash_intake(data)
+    with pytest.raises(ValueError, match="do not correspond"):
+        gl.decode_archive(data, gl.canonical_envelope(gl.report_envelope(report)))
+
+
+def test_rehashed_intake_cannot_admit_an_unobserved_finding():
+    report = gl.progress_report([], as_of="2026-10-20")
+    data = json.loads(gl.canonical_archive(report))
+    data["intake"]["records"].append(
+        {
+            "ordinal": 1,
+            "entry": {
+                "aspiration_id": gl.GOLDEN_ASPIRATIONS[0].id,
+                "observed_markers": [],
+                "counter_signals": [],
+                "note": "",
+                "observed_on": "",
+            },
+            "admitted": True,
+            "set_aside_reason": None,
+            "note": None,
+        }
+    )
+    _rehash_intake(data)
+    with pytest.raises(ValueError, match="do not correspond"):
+        gl.decode_archive(data, gl.canonical_envelope(gl.report_envelope(report)))
+
+
+def test_rehashed_rejected_duplicate_may_change_without_changing_native_finding():
+    aspiration = gl.GOLDEN_ASPIRATIONS[0]
+    positive = gl.HorizonEntry(aspiration.id, frozenset(aspiration.markers))
+    report = gl.progress_report([positive, positive], as_of="2026-10-20")
+    data = json.loads(gl.canonical_archive(report))
+    raw = data["intake"]["records"][1]["entry"]
+    raw["note"] = "later contrary observation"
+    raw["counter_signals"] = sorted(aspiration.counter_signals)
+    _rehash_intake(data)
+    restored = gl.decode_archive(
+        data, gl.canonical_envelope(gl.report_envelope(report))
+    )
+    assert restored.findings == report.findings
+    assert restored.intake_archive[1].entry.note == raw["note"]
+    assert restored.intake_archive[1].entry.counter_signals == frozenset(
+        aspiration.counter_signals
+    )
+
+
+def test_archive_null_intake_is_not_a_native_only_read():
+    report = gl.progress_report([], as_of="2026-10-20")
+    data = json.loads(gl.canonical_archive(report))
+    data["intake"] = None
+    _rehash_intake(data)
+    with pytest.raises(ValueError, match="archive schema"):
+        gl.decode_archive(data, gl.canonical_envelope(gl.report_envelope(report)))
+
+
+@pytest.mark.parametrize("field", ["observed", "countered"])
+def test_admitted_token_partition_cannot_overlap_its_ignored_tokens(field):
+    aspiration = gl.GOLDEN_ASPIRATIONS[0]
+    entry = gl.HorizonEntry(
+        aspiration.id,
+        frozenset(aspiration.markers),
+        frozenset(aspiration.counter_signals),
+    )
+    report = gl.progress_report([entry], as_of="2026-10-20")
+    finding = report.findings[0]
+    ignored = "ignored_markers" if field == "observed" else "ignored_counter_signals"
+    contradictory = replace(finding, **{ignored: getattr(finding, field)})
+    report = replace(report, findings=(contradictory, *report.findings[1:]))
+    with pytest.raises(ValueError, match="do not correspond"):
+        gl.decode_archive(
+            gl.canonical_archive(report),
+            gl.canonical_envelope(gl.report_envelope(report)),
+        )
+
+
+@pytest.mark.parametrize(
+    "location",
+    [
+        "native-note",
+        "native-tokens",
+        "native-metadata",
+        "intake-note",
+        "intake-tokens",
+        "disposition",
+    ],
+)
+def test_decoder_rejects_surrogates_at_text_boundary_before_utf8_hashing(location):
+    aspiration = gl.GOLDEN_ASPIRATIONS[0]
+    report = gl.progress_report([gl.HorizonEntry(aspiration.id)], as_of="2026-10-20")
+    data = json.loads(gl.canonical_archive(report))
+    if location == "native-note":
+        data["report"]["findings"][0]["note"] = "\ud800"
+    elif location == "native-tokens":
+        data["report"]["findings"][0]["reasons"] = ["\ud800"]
+    elif location == "native-metadata":
+        data["report"]["registry_version"] = "\ud800"
+    elif location == "intake-note":
+        data["intake"]["records"][0]["entry"]["note"] = "\ud800"
+    elif location == "intake-tokens":
+        data["intake"]["records"][0]["entry"]["observed_markers"] = ["\ud800"]
+    else:
+        data["intake"]["records"][0]["note"] = "\ud800"
+    with pytest.raises(ValueError) as caught:
+        gl.decode_archive(data, gl.canonical_envelope(gl.report_envelope(report)))
+    assert not isinstance(caught.value.__cause__, UnicodeError)

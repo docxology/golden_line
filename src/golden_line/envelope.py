@@ -24,10 +24,10 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass
-from datetime import date
 
 from .models import HorizonReport, HorizonStatus
 from .serialization import report_digest
+from .validation import _calendar_date, _is_scalar_text
 
 #: The cross-instrument envelope shape this module exports.
 ENVELOPE_SCHEMA = "line.report-envelope/1.0"
@@ -104,6 +104,8 @@ def report_envelope(
     scheme; the evaluator does not verify it. The envelope's ``report_ref``
     is computed from the exact report supplied, so an envelope can only ever
     point at the derivation that produced its readings.
+    Caller subject/reference text must contain only Unicode scalar values;
+    surrogate code points raise ValueError before serialization.
     """
 
     if (
@@ -112,10 +114,12 @@ def report_envelope(
     ):
         raise TypeError("source_snapshot_refs must be a finite tuple or list")
     refs = tuple(source_snapshot_refs)
-    if not all(isinstance(ref, str) and ref.strip() for ref in refs):
+    if not all(_is_scalar_text(ref) and ref.strip() for ref in refs):
         raise ValueError("source_snapshot_refs must be non-blank strings")
     if not isinstance(subject_id, str):
         raise TypeError("subject_id must be a string")
+    if not _is_scalar_text(subject_id):
+        raise ValueError("subject_id must be Unicode scalar text")
     return ReportEnvelope(
         ENVELOPE_SCHEMA,
         GOLDEN_LINE_ID,
@@ -193,7 +197,7 @@ def validate_instrument_envelope(envelope: object) -> tuple[str, ...]:
         issues.append("incorrect line_id")
     if envelope.scope_and_nonclaims != SCOPE_AND_NONCLAIMS:
         issues.append("mandatory scope_and_nonclaims differ")
-    if type(envelope.subject_id) is not str:
+    if type(envelope.subject_id) is not str or not _is_scalar_text(envelope.subject_id):
         issues.append("subject_id must be text (unverified caller metadata)")
     for name in ("registry_digest", "report_ref"):
         value = getattr(envelope, name)
@@ -202,22 +206,23 @@ def validate_instrument_envelope(envelope: object) -> tuple[str, ...]:
     if (
         type(envelope.registry_version) is not str
         or not envelope.registry_version.strip()
+        or not _is_scalar_text(envelope.registry_version)
     ):
         issues.append("registry_version must be nonblank text")
     try:
-        if (
-            type(envelope.review_date) is not str
-            or date.fromisoformat(envelope.review_date).isoformat()
-            != envelope.review_date
-        ):
+        if type(envelope.review_date) is not str:
             raise ValueError
+        _calendar_date(envelope.review_date)
     except ValueError:
-        issues.append("review_date must be an ISO calendar date")
+        issues.append("review_date must be an ASCII YYYY-MM-DD calendar date")
     refs = envelope.source_snapshot_refs
     if (
         type(refs) is not tuple
         or len(refs) > 4096
-        or any(type(ref) is not str or not ref.strip() for ref in refs)
+        or any(
+            type(ref) is not str or not _is_scalar_text(ref) or not ref.strip()
+            for ref in refs
+        )
     ):
         issues.append(
             "source_snapshot_refs must be a finite tuple of nonblank text (unverified)"
@@ -230,6 +235,7 @@ def validate_instrument_envelope(envelope: object) -> tuple[str, ...]:
             type(row) is not tuple
             or len(row) != 2
             or type(row[0]) is not str
+            or not _is_scalar_text(row[0])
             or not row[0].strip()
             or type(row[1]) is not str
             or row[1] not in {status.value for status in HorizonStatus}

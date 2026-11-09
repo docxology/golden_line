@@ -96,6 +96,20 @@ def _working_copy(tmp_path):
     return clone
 
 
+def test_source_observation_preserves_git_index(tmp_path):
+    clone = _working_copy(tmp_path)
+    source = clone / "src" / "golden_line" / "version.py"
+    stat = source.stat()
+    os.utime(source, ns=(stat.st_atime_ns, stat.st_mtime_ns + 2_000_000_000))
+    index = clone / ".git" / "index"
+    index_before = index.read_bytes()
+    manifest = evidence.collect_evidence(clone, tmp_path / "receipt", commands=())
+    assert manifest["tracked_source_dirty"] is False
+    assert manifest["source_unchanged"] is True
+    assert manifest["passed"] is False
+    assert index.read_bytes() == index_before
+
+
 def test_failed_canonical_gate_alone_blocks_success(tmp_path, monkeypatch):
     clone = _working_copy(tmp_path)
     monkeypatch.setenv("VIRTUAL_ENV", str(clone / ".venv"))

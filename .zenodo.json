@@ -12,7 +12,7 @@
   ],
   "license": "cc-by-4.0",
   "access_right": "open",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "keywords": [
     "aspiration",
     "long-horizon work",
@@ -23,6 +23,8 @@
     "non-compensatory reading"
   ],
   "related_identifiers": [
+    {"identifier": "10.5281/zenodo.24069424", "relation": "references", "scheme": "doi"},
+    {"identifier": "10.5281/zenodo.22833506", "relation": "references", "scheme": "doi"},
     {"identifier": "https://github.com/docxology/green_line", "relation": "references", "scheme": "url"},
     {"identifier": "https://github.com/docxology/blue_line", "relation": "references", "scheme": "url"},
     {"identifier": "https://github.com/docxology/violet_line", "relation": "references", "scheme": "url"},
@@ -98,5 +100,5 @@
       "scheme": "doi"
     }
   ],
-  "notes": "Current membership belongs to https://github.com/docxology/line_set; the founding four are historical origin. Copper resource quantities are not aspiration priorities or proof of fair allocation; Iron recorded recovery target comparisons are not aspirational progress or promises of future recovery. Violet, Copper, and Iron sources are access-controlled; membership is not access. Known sibling DOIs and this work's last verified DOI are retained historical identities, not a DOI assigned to 0.6.2. No deposit or new DOI is asserted."
+  "notes": "Current membership belongs to https://github.com/docxology/line_set; the founding four are historical origin. Copper resource quantities are not aspiration priorities or proof of fair allocation; Iron recorded recovery target comparisons are not aspirational progress or promises of future recovery. Violet, Copper, and Iron sources are access-controlled; membership is not access. Known sibling DOIs are retained historical identities. Previously verified source archive: 0.6.2, DOI 10.5281/zenodo.24069424; identifies that source ZIP only, not a standalone manuscript. DOI 10.5281/zenodo.22833506 identifies historical edition 0.4.1. This metadata cites later source through its repository until that exact edition/object is independently verified."
 }

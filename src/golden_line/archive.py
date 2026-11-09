@@ -16,6 +16,7 @@ from .models import (
 )
 from .progress import _classify_intake_entries
 from .serialization import canonical_report
+from .validation import _is_scalar_text
 
 ARCHIVE_SCHEMA = "golden-line.archive/1.0"
 INTAKE_SCHEMA = "golden-line.intake/1.0"
@@ -26,6 +27,11 @@ def _json(value: object) -> str:
 
 
 def _intake_payload(report: HorizonReport) -> dict:
+    if report.intake_archive is None:
+        raise ValueError(
+            "normalized intake custody is unavailable; retain native report and "
+            "envelope instead of emitting a complete archive"
+        )
     records = []
     for disposition in report.intake_archive:
         record = asdict(disposition)
@@ -41,6 +47,7 @@ def _intake_payload(report: HorizonReport) -> dict:
 
 
 def intake_digest(report: HorizonReport) -> str:
+    """Hash complete normalized intake; raise ValueError if custody is unavailable."""
     return hashlib.sha256(_json(_intake_payload(report)).encode("utf-8")).hexdigest()
 
 
@@ -51,6 +58,8 @@ def canonical_archive(report: HorizonReport) -> str:
     contract. The envelope restores presentation order; intake_ref binds only
     supplied normalized intake data, never authenticity of a source batch.
     Malformed payload bytes must be retained separately by the caller.
+    Native-only decoded reports have unavailable intake custody and are refused;
+    a freshly evaluated empty intake remains a complete, exportable empty log.
     """
     return _json(
         {
@@ -63,8 +72,10 @@ def canonical_archive(report: HorizonReport) -> str:
 
 
 def _strings(value: object) -> tuple[str, ...]:
-    if type(value) is not list or any(type(item) is not str for item in value):
-        raise ValueError("expected an array of strings")
+    if type(value) is not list or any(
+        type(item) is not str or not _is_scalar_text(item) for item in value
+    ):
+        raise ValueError("expected an array of Unicode scalar strings")
     return tuple(value)
 
 
@@ -82,8 +93,10 @@ def decode_archive(archive: object, envelope_data: object) -> HorizonReport:
     """Decode original native JSON or archive/1.0 using envelope ID order.
 
     Reject non-bijective IDs, inconsistent statuses, counts, digest pointers,
-    malformed structures, and unsupported schemas. This checks supplied
-    consistency, not unedited history or the truth of any observation.
+    malformed structures, and unsupported schemas. With a sidecar, check
+    first-valid custody and intrinsic admitted-entry/finding correspondence,
+    not custom-registry evaluation. Native-only reads leave intake unavailable.
+    This checks supplied consistency, not unedited history or observation truth.
     """
     try:
         envelope_dict = _object(
@@ -102,18 +115,15 @@ def decode_archive(archive: object, envelope_data: object) -> HorizonReport:
             raise ValueError("; ".join(issues))
         payload = _parse(archive)
         intake_data = None
-        if type(payload) is dict and "schema_version" in payload:
+        has_intake = type(payload) is dict and "schema_version" in payload
+        if has_intake:
             payload = _object(
                 payload, {"schema_version", "report", "intake", "intake_ref"}
             )
             if payload["schema_version"] != ARCHIVE_SCHEMA:
                 raise ValueError("unsupported archive schema")
             intake_data = payload["intake"]
-            if (
-                hashlib.sha256(_json(intake_data).encode("utf-8")).hexdigest()
-                != payload["intake_ref"]
-            ):
-                raise ValueError("intake digest mismatch")
+            intake_ref = payload["intake_ref"]
             payload = payload["report"]
         payload = _object(
             payload,
@@ -143,8 +153,8 @@ def decode_archive(archive: object, envelope_data: object) -> HorizonReport:
             ):
                 item[name] = _strings(item[name])
             for name in ("aspiration_id", "note", "observed_on"):
-                if type(item[name]) is not str:
-                    raise ValueError(f"{name} must be text")
+                if type(item[name]) is not str or not _is_scalar_text(item[name]):
+                    raise ValueError(f"{name} must be Unicode scalar text")
             if any(type(item[name]) is not bool for name in ("stale", "date_issue")):
                 raise ValueError("temporal flags must be boolean")
             item["status"] = HorizonStatus(item["status"])
@@ -157,6 +167,9 @@ def decode_archive(archive: object, envelope_data: object) -> HorizonReport:
         window = payload["stale_after_days"]
         if window is not None and (type(window) is not int or window < 0):
             raise ValueError("invalid staleness threshold")
+        for name in ("registry_version", "registry_digest", "as_of"):
+            if type(payload[name]) is not str or not _is_scalar_text(payload[name]):
+                raise ValueError(f"{name} must be Unicode scalar text")
         report = HorizonReport(
             tuple(findings[identifier] for identifier, _ in envelope.native_status),
             _strings(payload["intake_notes"]),
@@ -169,7 +182,7 @@ def decode_archive(archive: object, envelope_data: object) -> HorizonReport:
             payload
         ) or not envelope_matches_report(envelope, report):
             raise ValueError("native report and envelope do not correspond")
-        if intake_data is not None:
+        if has_intake:
             intake_data = _object(intake_data, {"schema_version", "records"})
             if (
                 intake_data["schema_version"] != INTAKE_SCHEMA
@@ -192,7 +205,12 @@ def decode_archive(archive: object, envelope_data: object) -> HorizonReport:
                     "duplicate",
                     "unknown_id",
                     "malformed",
-                ) or (raw["note"] is not None and type(raw["note"]) is not str):
+                ) or (
+                    raw["note"] is not None
+                    and (
+                        type(raw["note"]) is not str or not _is_scalar_text(raw["note"])
+                    )
+                ):
                     raise ValueError("invalid intake disposition")
                 if raw["entry"] is not None:
                     entry = dict(
@@ -203,7 +221,7 @@ def decode_archive(archive: object, envelope_data: object) -> HorizonReport:
                     for name in ("observed_markers", "counter_signals"):
                         entry[name] = frozenset(_strings(entry[name]))
                     if any(
-                        type(entry[name]) is not str
+                        type(entry[name]) is not str or not _is_scalar_text(entry[name])
                         for name in ("aspiration_id", "note", "observed_on")
                     ):
                         raise ValueError("invalid intake entry text")
@@ -237,8 +255,56 @@ def decode_archive(archive: object, envelope_data: object) -> HorizonReport:
                 item.note for item in dispositions if item.note is not None
             ):
                 raise ValueError("intake notes do not correspond to dispositions")
+            admitted = {
+                item.entry.aspiration_id: item.entry
+                for item in dispositions
+                if item.admitted and item.entry is not None
+            }
+            if set(admitted) != {
+                item.aspiration_id
+                for item in report.findings
+                if item.status is not HorizonStatus.NOT_OBSERVED
+            }:
+                raise ValueError(
+                    "admitted intake and observed findings do not correspond"
+                )
+            for identifier, admitted_entry in admitted.items():
+                finding = findings[identifier]
+                if (
+                    finding.note != admitted_entry.note
+                    or finding.observed_on != admitted_entry.observed_on
+                ):
+                    raise ValueError(
+                        "admitted intake text and finding do not correspond"
+                    )
+                for matched, ignored, tokens in (
+                    (
+                        finding.observed,
+                        finding.ignored_markers,
+                        admitted_entry.observed_markers,
+                    ),
+                    (
+                        finding.countered,
+                        finding.ignored_counter_signals,
+                        admitted_entry.counter_signals,
+                    ),
+                ):
+                    matched_tokens = set(matched)
+                    ignored_tokens = set(ignored)
+                    if (
+                        matched_tokens & ignored_tokens
+                        or matched_tokens | ignored_tokens != tokens
+                    ):
+                        raise ValueError(
+                            "admitted intake tokens and finding do not correspond"
+                        )
             if _intake_payload(report) != intake_data:
                 raise ValueError("noncanonical intake payload")
+            if (
+                hashlib.sha256(_json(intake_data).encode("utf-8")).hexdigest()
+                != intake_ref
+            ):
+                raise ValueError("intake digest mismatch")
         return report
     except (KeyError, TypeError, ValueError) as exc:
         raise ValueError(f"invalid Golden Line archive: {exc}") from exc

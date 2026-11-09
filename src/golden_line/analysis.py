@@ -30,6 +30,7 @@ from datetime import date, timedelta
 from .models import Aspiration, HorizonEntry, HorizonReport, HorizonStatus
 from .progress import progress_report
 from .registry import GOLDEN_ASPIRATIONS, find_aspiration
+from .validation import _calendar_date
 
 
 @dataclass(frozen=True)
@@ -159,7 +160,7 @@ class SweepPoint:
 def _sweep_review_date(as_of: str | date) -> date:
     """Resolve the sweep's review date; sweeps never default to today."""
     if isinstance(as_of, str):
-        return date.fromisoformat(as_of)
+        return _calendar_date(as_of)
     if type(as_of) is date:
         return as_of
     raise TypeError("as_of must be an ISO date string or a date")
@@ -183,8 +184,10 @@ def temporal_currentness_sweep(
     ``TOWARD`` to ``INQUIRY`` as currentness is lost — the sweep observes the
     evaluator, it never re-implements or overrides it.
 
-    ``as_of`` is required so the sweep is reproducible; ``aspiration_id``
-    must exist in ``aspirations`` or ``ValueError`` is raised.
+    ``as_of`` is required so the sweep is reproducible: supply a calendar
+    date object or exact ASCII YYYY-MM-DD text, not a datetime or another ISO
+    spelling. ``aspiration_id`` must exist in ``aspirations`` or ``ValueError``
+    is raised.
     """
     aspiration = find_aspiration(aspiration_id, aspirations)
     if aspiration is None:

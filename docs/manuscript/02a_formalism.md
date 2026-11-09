@@ -34,7 +34,7 @@ A horizon entry is
 $e = (\mathrm{aid},\ O,\ K,\ \mathrm{note},\ \mathrm{d_{obs}})$, where
 $\mathrm{aid}$ names an aspiration, $O$ is the set of observed markers, $K$ is
 the set of observed counter-signals, $\mathrm{note}$ is free text, and
-$\mathrm{d_{obs}}$ is an optional ISO date.
+$\mathrm{d_{obs}}$ is optional ASCII `YYYY-MM-DD` calendar-date text.
 :::
 
 ::: {.definition #def:status_codomain title="Status codomain"}
@@ -375,6 +375,10 @@ presentation order and can therefore differ for the same native digest.
 an identifier bijection, status agreement, counts, and report-bound fields.
 It accepts original native JSON and the explicit `golden-line.archive/1.0`
 sidecar format; historical native digests are not silently migrated.
+Native-only decoding leaves `intake_archive=None` (normalized custody
+unavailable), unlike the empty tuple from a genuinely empty evaluated batch.
+Complete archive emission and intake hashing refuse unavailable custody rather
+than inventing an empty log.
 
 The sidecar contains a separately hashed `golden-line.intake/1.0` log of
 normalized admitted, unknown, and duplicate payloads and malformed disposition
@@ -383,12 +387,22 @@ notes. A positive first record followed by a countered duplicate still reads
 `intake_digest` even if the native report is unchanged. Malformed raw payloads
 must be preserved separately by the caller. Counter-signal precedence is a rule
 within the admitted record, never a claim about all submitted observations.
+Sidecar decoding checks first-valid dispositions, rejection notes, admitted-ID
+presence, and each admitted entry's note, date text, and disjoint matched/ignored
+token partitions against the finding. It does not replay a custom registry's
+matching or temporal decisions from a digest alone.
 
 Before intake, `validate_registry` rejects empty scopes, duplicate or blank IDs,
 malformed entries, empty/overlapping/repeated signals, and scalar/mapping/iterator
-signal fields. Accepted tuple/list registries become immutable tuples. Custom
-registries are labeled `custom:` with content digest authoritative. Calendar
-dates exclude timestamps; sweep ages exclude bool and lossy numeric coercion.
+signal fields. Accepted tuple/list registries become immutable tuples. Registry
+and intake text must contain only Unicode scalar values; lone surrogates are
+rejected before canonical UTF-8 transport, while legitimate non-ASCII and
+supplementary characters remain unchanged. Custom registries are labeled
+`custom:` with content digest authoritative. Review-date strings use exact ASCII
+`YYYY-MM-DD` grammar; calendar `date` objects remain supported, but timestamps
+and basic/week ISO spellings are not review dates. Observation text outside
+that grammar cannot establish currentness when a window is enabled.
+Sweep ages exclude bool and lossy numeric coercion.
 `currentness_evaluated` is false when temporal review is disabled.
 
 ## Formalism-to-test bindings

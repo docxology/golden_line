@@ -44,9 +44,9 @@ class Aspiration:
 class HorizonEntry:
     """One dated observation against a single aspiration.
 
-    ``observed_on`` is an optional ISO date (``YYYY-MM-DD``). It is only
-    consulted when the caller enables temporal review; a missing or malformed
-    date is noted in the finding's reasons rather than raised.
+    ``observed_on`` is optional ASCII ``YYYY-MM-DD`` calendar-date text. It is
+    only consulted when the caller enables temporal review; a missing or
+    malformed date is noted in the finding's reasons rather than raised.
     """
 
     aspiration_id: str
@@ -96,6 +96,10 @@ class HorizonReport:
     ``registry_version`` and ``registry_digest`` identify the registry that
     supplied the vocabulary. ``as_of`` and ``stale_after_days`` identify the
     optional temporal review context. They are metadata, not a score.
+    ``intake_archive=None`` means normalized intake custody is unavailable;
+    an empty tuple means a genuinely empty evaluated intake. Native-only
+    decoding cannot reconstruct custody and cannot be exported as a complete
+    archive. All admitted text must contain only Unicode scalar values.
     """
 
     findings: tuple[HorizonFinding, ...]
@@ -104,7 +108,7 @@ class HorizonReport:
     registry_digest: str = ""
     as_of: str = ""
     stale_after_days: int | None = None
-    intake_archive: tuple[IntakeDisposition, ...] = ()
+    intake_archive: tuple[IntakeDisposition, ...] | None = None
 
     @property
     def currentness_evaluated(self) -> bool:

@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.7.0 — 2026-11-09
+
+- Distinguish unavailable normalized intake custody (`None`) on native-only
+  decode from a genuinely empty evaluated intake. Refuse complete archive export
+  and intake hashing without custody; reject explicit null archive sidecars.
+- Require admitted intake to correspond to observed findings, including retained
+  notes, dates, and complete disjoint matched/ignored token partitions. This is
+  supplied consistency, not semantic reevaluation or source authentication.
+- Require exact ASCII `YYYY-MM-DD` calendar dates at review boundaries and for
+  observation currentness. Retain malformed observation dates as text; disabled
+  currentness and counter-evidence precedence retain their existing meanings.
+- Reject non-scalar Unicode before UTF-8 identity operations; set aside malformed
+  entry text before admission and duplicate handling. Preserve valid non-ASCII
+  and supplementary text.
+- Clarify that evidence-record export validates the bundled aspiration registry,
+  not custom registries. Archive, intake, and envelope schemas are unchanged;
+  historical artifacts remain tied to their original producers.
+- Inspect Git state and source bytes without optional index refreshes; evidence
+  collection leaves a stat-only, otherwise clean checkout's index unchanged.
+
 ## 0.6.2 — 2026-11-08
 
 - Documentation-only patch: use the current Line Set declaration and access-aware

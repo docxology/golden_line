@@ -12,13 +12,23 @@ observer role, collection method, review scope, token-to-source pointers,
 contestation and supersession references. A reference identifies a source; it
 does not verify its contents. Competing observations coexist without voting.
 
+`canonical_evidence_records` validates aspiration IDs and token-source names
+only against the bundled `GOLDEN_ASPIRATIONS`. It is not a custom-registry
+exporter: reusing a default ID in a custom registry does not change the
+exporter's vocabulary or bind these records to that custom report. Retain
+custom-registry evidence separately. Text fields and source references must
+contain only Unicode scalar values; lone surrogates raise `ValueError` at
+validation, while legitimate non-ASCII and supplementary text is preserved.
+
 Retain the `canonical_evidence_records` export separately from
 `canonical_archive(report)` and the report envelope: neither transport format
 includes these optional records. Keep the original source bytes and custody
-records separately as well. The archive retains normalized intake, including
-rejected contrary duplicates, but cannot recover malformed original payloads or
-the contents behind source references. Matching digests establish neither
-source truth nor an unedited history.
+records separately as well. A complete archive retains normalized intake,
+including rejected contrary duplicates, but cannot recover malformed original
+payloads or the contents behind source references. Native-only decoded reports
+have unavailable intake (`intake_archive=None`), not a known empty log;
+`canonical_archive` and `intake_digest` refuse them with `ValueError`.
+Matching digests establish neither source truth nor an unedited history.
 
 `AspirationConflict` retains the aspirations in tension, affected perspectives,
 unresolved alternatives, review note, and human decision owner. A tension with

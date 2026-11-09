@@ -42,6 +42,12 @@ window, currentness is unevaluated and an undated entry can be `TOWARD`. With a
 window, age exactly at the threshold is current; a future date or greater age is
 stale.
 
+Review-date text must be exactly ASCII `YYYY-MM-DD` and name a valid calendar
+day; a calendar `date` object is also accepted. Basic/week ISO forms and
+timestamps are not calendar-date text here. Observation text outside that
+grammar is retained, but it is a date issue when currentness is evaluated.
+Surrogate-bearing entry text is malformed at intake, not a late UTF-8 error.
+
 The ordering is a conservative precedence rule within the admitted record, not
 a severity ranking across submitted records. A duplicate requires a prior valid
 admitted same-ID entry; it is retained but not evaluated. `DRIFTING` does not
@@ -79,3 +85,9 @@ unverified. A consistent rewrite and rehash can pass correspondence, so hashes
 do not authenticate archive history. The supported data domain is documented in
 [claim boundaries](claim_boundaries.md); optional authorship and conflict records
 are specified in [evidence records](evidence-records.md).
+
+Native-only decoding leaves normalized custody unavailable (`None`), distinct
+from a genuinely empty evaluated intake (`()`). Complete archive export and
+intake hashing refuse unavailable custody. Sidecar decoding checks intrinsic
+admitted-entry/finding correspondence without re-evaluating a custom registry;
+full semantic replay requires the original vocabulary as well as input custody.

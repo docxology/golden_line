@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use or refer to this work, please cite it as below."
 type: software
 title: "Golden Line: Toward What Matters"
-version: "0.6.2"
-date-released: "2026-11-08"
+version: "0.7.0"
+date-released: "2026-11-09"
 authors:
   - family-names: "Friedman"
     given-names: "Daniel Ari"
@@ -13,8 +13,6 @@ authors:
 repository-code: "https://github.com/docxology/golden_line"
 url: "https://github.com/docxology/golden_line"
 identifiers:
-  - type: doi
-    value: "10.5281/zenodo.22833506"
   - type: url
     value: "https://github.com/docxology/golden_line"
 license:
@@ -35,6 +33,22 @@ abstract: >-
   computes no aggregate: there is no virtue score, and NOT_OBSERVED means
   no valid entry was admitted rather than that nobody looked.
 references:
+  - type: software
+    title: "Golden Line: Toward What Matters"
+    version: "0.6.2"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+    doi: "10.5281/zenodo.24069424"
+    notes: "Previously verified source ZIP only; not a standalone manuscript identifier."
+  - type: software
+    title: "Golden Line: Toward What Matters"
+    version: "0.4.1"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+    doi: "10.5281/zenodo.22833506"
+    notes: "Historical edition only."
   - type: software
     title: "green_line"
     authors:

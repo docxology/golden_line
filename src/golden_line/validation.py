@@ -1,8 +1,32 @@
 from dataclasses import dataclass, replace
+from datetime import date
 
 from .models import Aspiration
 
 MAX_COLLECTION_SIZE = 4096
+
+
+def _is_scalar_text(value: object) -> bool:
+    """Whether text contains only Unicode scalar values, usable in UTF-8."""
+    return isinstance(value, str) and not any(
+        "\ud800" <= character <= "\udfff" for character in value
+    )
+
+
+def _calendar_date(value: str) -> date:
+    """Parse exactly ASCII YYYY-MM-DD, independent of Python's ISO grammar."""
+    if (
+        len(value) != 10
+        or value[4] != "-"
+        or value[7] != "-"
+        or any(
+            character < "0" or character > "9"
+            for index, character in enumerate(value)
+            if index not in (4, 7)
+        )
+    ):
+        raise ValueError("expected an ASCII YYYY-MM-DD calendar date")
+    return date.fromisoformat(value)
 
 
 @dataclass(frozen=True)
@@ -23,7 +47,7 @@ class RegistryValidationError(ValueError):
 def validate_registry(aspirations: object) -> tuple[Aspiration, ...]:
     """Normalize finite tuple/list registry data once; reject empty scopes.
 
-    Signal collections must be tuples or lists of unique nonblank strings.
+    Signal collections must be tuples or lists of unique nonblank scalar text.
     Iterators and arbitrary objects are never executed by validation.
     The returned registry and its signal fields are immutable tuples.
     """
@@ -48,9 +72,15 @@ def validate_registry(aspirations: object) -> tuple[Aspiration, ...]:
             continue
         for name in ("id", "title", "thread", "horizon"):
             value = getattr(item, name)
-            if type(value) is not str or not value.strip():
+            if (
+                type(value) is not str
+                or not _is_scalar_text(value)
+                or not value.strip()
+            ):
                 issues.append(
-                    ValidationIssue(f"{path}.{name}", "expected nonblank text")
+                    ValidationIssue(
+                        f"{path}.{name}", "expected nonblank Unicode scalar text"
+                    )
                 )
         if type(item.id) is str:
             if item.id in ids:
@@ -63,12 +93,17 @@ def validate_registry(aspirations: object) -> tuple[Aspiration, ...]:
                 type(value) not in (tuple, list)
                 or not value
                 or len(value) > MAX_COLLECTION_SIZE
-                or any(type(token) is not str or not token.strip() for token in value)
+                or any(
+                    type(token) is not str
+                    or not _is_scalar_text(token)
+                    or not token.strip()
+                    for token in value
+                )
             ):
                 issues.append(
                     ValidationIssue(
                         f"{path}.{name}",
-                        "expected nonempty tuple/list of nonblank text",
+                        "expected nonempty tuple/list of nonblank Unicode scalar text",
                     )
                 )
                 continue

@@ -39,14 +39,17 @@ report or vanish silently:
    aspiration ids, duplicates, and malformed records are set aside and
    recorded in the report's `intake_notes`. The first valid entry for an
    aspiration stands. JSON-like token lists are normalized to frozensets.
+   IDs, notes, date text, and tokens must contain only Unicode scalar values;
+   surrogate-bearing entries are malformed before membership or duplicate checks.
 2. **Signal reading.** Observed markers and counter-signals that the
    aspiration never declared are ignored, with a reason on the finding — an
    entry cannot invent its own evidence vocabulary.
 3. **Temporal review** (optional, additive). When the caller passes
    `stale_after_days`, a dated observation older than the window — or dated
    after the review date — reverts a would-be `TOWARD` to `INQUIRY`. A missing
-   or malformed date also prevents currentness from being certified. A
-   recorded counter-signal is never erased by age: `DRIFTING` stands.
+   or malformed date also prevents currentness from being certified. Calendar
+   text is exactly ASCII `YYYY-MM-DD` on every supported Python runtime.
+   A recorded counter-signal is never erased by age: `DRIFTING` stands.
 4. **Structured derivation.** Every finding carries non-empty `reasons`, plus
    `observed`, `unmet`, `countered`, ignored-token lists, the source note, and
    temporal flags, so a consumer need not parse prose to audit the status.
@@ -90,8 +93,21 @@ versioned archive sidecar records intake dispositions and its own digest;
 `decode_archive` restores native presentation order using the envelope's
 identifier bijection and reuses the native intake classifier to check admission
 and rejection custody against the supplied report identifiers. Sidecar rejection
-notes must match the native report. These consistency checks cannot establish
-authenticity: a consistent rewrite and rehash can still pass.
+notes must match the native report. Admitted IDs must equal the IDs of findings
+other than `NOT_OBSERVED`; each admitted entry's note, observation-date text,
+and complete token sets must match its finding's disjoint matched/ignored
+partitions. This does not replay custom-registry matching, status derivation, or
+temporal decisions; archive bytes contain a registry digest, not its vocabulary.
+These consistency checks cannot establish authenticity: a consistent rewrite
+and rehash can still pass.
+
+A native-only decoded report has `intake_archive=None`: normalized custody was
+not supplied. A freshly evaluated empty batch has `intake_archive=()`.
+`canonical_archive` and `intake_digest` refuse unavailable custody with
+`ValueError`; they never invent an empty log or recover records from prose.
+Native JSON and envelope serialization remain usable. No new wire schema is
+needed: complete archives retain `golden-line.archive/1.0` and
+`golden-line.intake/1.0`, with unchanged canonical bytes for valid inputs.
 See [claim boundaries](claim_boundaries.md) and [evidence records](evidence-records.md).
 
 ## Structural soundness

@@ -35,7 +35,10 @@ LOCAL_GATES = (
 
 def _git(root: Path, *args: str) -> str:
     return subprocess.run(
-        ["git", "-C", str(root), *args], check=True, capture_output=True, text=True
+        ["git", "--no-optional-locks", "-C", str(root), *args],
+        check=True,
+        capture_output=True,
+        text=True,
     ).stdout.strip()
 
 
@@ -54,6 +57,7 @@ def _source_snapshot(root: Path) -> dict[str, str]:
     names = subprocess.run(
         [
             "git",
+            "--no-optional-locks",
             "-C",
             str(root),
             "ls-files",
