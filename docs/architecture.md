@@ -3,11 +3,12 @@
 Golden Line is a small modular package. Each module answers one question and
 none of them import any other line project.
 
-The founding four describe origin; the current family has eight instruments,
-one reader, and one witness register. Direction does not establish developed
-capacity (Green), maintained commitment (Blue), or affected-party consent (Violet).
-The roster declares independent scopes, not source availability: sibling
-sources may be optional or access-controlled, and Golden Line runs without them.
+The founding four describe origin; current membership belongs to the
+[Line Set declaration](https://github.com/docxology/line_set). Direction does not
+establish Green capacity, Blue commitment, Violet consent, Copper's dimensioned
+resource quantities or fairness, or Iron's recorded recovery target comparisons.
+Iron does not promise future recovery. Violet, Copper, and Iron sources are
+access-controlled; membership is not source availability. Golden runs without them.
 
 | Module | Question it answers |
 | --- | --- |

@@ -12,7 +12,7 @@
   ],
   "license": "cc-by-4.0",
   "access_right": "open",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "keywords": [
     "aspiration",
     "long-horizon work",
@@ -98,5 +98,5 @@
       "scheme": "doi"
     }
   ],
-  "notes": "One of ten related works: eight instruments, their reader, and a witness register. Known sibling DOIs are retained in related_identifiers; this work's last verified DOI is recorded in CITATION.cff. A new version DOI requires Daniel's reserve-first publication step."
+  "notes": "Current membership belongs to https://github.com/docxology/line_set; the founding four are historical origin. Copper resource quantities are not aspiration priorities or proof of fair allocation; Iron recorded recovery target comparisons are not aspirational progress or promises of future recovery. Violet, Copper, and Iron sources are access-controlled; membership is not access. Known sibling DOIs and this work's last verified DOI are retained historical identities, not a DOI assigned to 0.6.2. No deposit or new DOI is asserted."
 }

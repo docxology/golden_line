@@ -2,11 +2,12 @@
 
 ## How to cite
 
-Cite this work via its minted DOI or repository:
+Version 0.6.2 is a documentation-only patch prepared for repository release.
+Use the repository and, once created, its tag; no release or deposit is asserted here:
 
 > Friedman, D. A. (2026). *Golden Line: Toward What Matters* (version
-> 0.6.1) [Software and manuscript]. GitHub.
-> <https://github.com/docxology/golden_line/tree/v0.6.1>
+> 0.6.2) [Software and manuscript]. GitHub.
+> <https://github.com/docxology/golden_line>
 
 BibTeX:
 
@@ -14,16 +15,16 @@ BibTeX:
 @software{friedman_golden_line_2026,
   author  = {Friedman, Daniel Ari},
   title   = {Golden Line: Toward What Matters},
-  version = {0.6.1},
+  version = {0.6.2},
   year    = {2026},
-  url     = {https://github.com/docxology/golden_line/tree/v0.6.1}
+  url     = {https://github.com/docxology/golden_line}
 }
 ```
 
 The last verified Zenodo edition is 0.4.1, DOI
 `10.5281/zenodo.22833506`, verified against the Zenodo API on 2026-10-21.
-That DOI is retained in publication metadata pending Daniel's reserve-first
-new-version deposition. It does not identify a newly minted 0.6.1 deposit.
+That DOI remains a prior-version archive reference. It does not identify a
+newly minted 0.6.2 deposit; a successor identifier requires actual verification.
 
 `CITATION.cff` carries the release metadata in machine-readable form, and
 `.zenodo.json` carries the deposit metadata. The version authority is
@@ -38,7 +39,17 @@ the citation metadata unless that exact DOI is listed as verified inside the tes
 itself. A placeholder DOI that renders like a real one is worse than no DOI: it
 survives copy-and-paste into someone else's bibliography and points nowhere.
 
-## Reserving and Minting DOIs (reserve-first order)
+## Authorized automatic publication for this release
+
+On November 8, 2026, the owner authorized this GitHub Release campaign with the
+existing public repositories' Zenodo hooks left active. Inspect the authenticated
+hook state immediately before publication and verify the resulting archive's
+repository, tag, version, and contents. Never prefill a DOI or amend an immutable
+tag to add one learned afterward. PyPI, private-source disclosure, and new
+private-sibling deposit automation remain unauthorized. The manual procedure
+below is an alternative, not a prerequisite for this authorized integration.
+
+## Manual reserve-first DOI publication
 
 1. Create the Zenodo deposition **without publishing it**, and reserve its DOI.
 2. Record the reserved DOI in this repository: add it under `identifiers:` in
@@ -52,10 +63,10 @@ survives copy-and-paste into someone else's bibliography and points nowhere.
 
 ## The other works
 
-This work belongs to eight instruments, their reader, and a witness register.
+Current membership belongs to the [Line Set declaration](https://github.com/docxology/line_set).
 The founding four are historical origin. Known verified DOI references below
 are retained, each naming that work's latest verified Zenodo edition; the
-remaining instrument references use repository URLs rather
+remaining retained references use repository URLs rather
 than invented identifiers. No work imports another, and the shared report-envelope schema
 string is aligned by published convention rather than by dependency.
 
@@ -68,8 +79,13 @@ string is aligned by published convention rather than by dependency.
 | `witness_register` | companion beside the set — co-registration without aggregation | <https://github.com/docxology/witness_register> | `https://doi.org/10.5281/zenodo.22833511` |
 | `green_line` | developed capacity | <https://github.com/docxology/green_line> | not asserted here |
 | `blue_line` | maintained commitment | <https://github.com/docxology/blue_line> | not asserted here |
-| `violet_line` | affected-party consent | <https://github.com/docxology/violet_line> | not asserted here |
+| `violet_line` | affected-party consent; access-controlled source | <https://github.com/docxology/line_set> (membership reference) | not asserted here |
 | `silver_line` | stewardship | <https://github.com/docxology/silver_line> | not asserted here |
+| `copper_line` | dimensioned finite resource use, outstanding commitments, and attributed burdens; access-controlled source | <https://github.com/docxology/line_set> (membership reference) | not asserted here |
+| `iron_line` | recorded recovery exercises compared with scenario-specific targets; access-controlled source | <https://github.com/docxology/line_set> (membership reference) | not asserted here |
+
+Copper's quantities are not aspiration priorities or evidence of fairness;
+Iron's comparisons do not promise future recovery. Membership is not source access.
 
 ## Publication-readiness audit
 

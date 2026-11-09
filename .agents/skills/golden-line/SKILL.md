@@ -10,11 +10,13 @@ observable movement toward it. It emits one of four directional readings per
 aspiration and never a grade. A reading describes a *record*, not a person,
 project, virtue, safety state, legality, or permission.
 
-The founding four describe the origin; the current family has eight instruments,
-one reader, and one witness register. Golden direction does not establish Green
-capacity, Blue commitment, or Violet consent.
-Sibling source availability and access controls are separate from this declared
-roster; no sibling source is required to operate Golden Line.
+The founding four describe the origin; current membership belongs to the
+[Line Set declaration](https://github.com/docxology/line_set). Golden direction
+does not establish Green capacity, Blue commitment, Violet consent, Copper's
+dimensioned resource quantities or fairness, or Iron's recorded recovery target
+comparisons. Iron does not promise future recovery. Violet, Copper, and Iron
+sources are access-controlled; membership is not installation or source access.
+No sibling source is required to operate Golden Line.
 
 ## What the instrument is (and is not)
 

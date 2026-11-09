@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use or refer to this work, please cite it as below."
 type: software
 title: "Golden Line: Toward What Matters"
-version: "0.6.1"
+version: "0.6.2"
 date-released: "2026-11-08"
 authors:
   - family-names: "Friedman"

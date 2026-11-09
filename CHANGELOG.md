@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.2 — 2026-11-08
+
+- Documentation-only patch: use the current Line Set declaration and access-aware
+  Copper/Iron roles without confusing resource quantities or recorded recovery
+  target comparisons with aspiration priorities.
+- Delete incidental sibling-count, default-object identity, module-attribution,
+  and authored prose/gate-name assertions; retain reference validity, verified
+  DOI, metadata consistency, registry behavior, and historical byte-custody checks.
+- Synchronize current descriptive version metadata. Native evaluator semantics,
+  registry identity, schemas, canonical golden archives, and original DOI and
+  citation identities are unchanged. No artifacts, deposit, or new release
+  verification are asserted here.
+
 ## 0.6.1 — 2026-11-08
 
 Restore the existing Python 3.10–3.15 runtime contract. Use `timezone.utc`

@@ -113,10 +113,10 @@ provenance contract.
 
 ## Documentation and signposting gaps
 
-The founding four and current eight-instrument family remain cross-linked by repository references; they are not
-merged into one evaluator. Keep those references current when the companion
-repositories change, and never let one become a relative path out of this
-repository.
+The founding four remain historical orientation; current membership belongs to
+the [Line Set declaration](https://github.com/docxology/line_set). Keep
+access-aware scope references current without merging evaluators or adding
+relative paths out of this repository.
 
 ## Test and validator gaps
 
