@@ -1,9 +1,10 @@
 # Source tree contract
 
-`src/` is a src-layout container. The only import package here is
-`golden_line/`; `src/__init__.py` is a package marker, and
-`src/golden_line.egg-info/` is generated packaging metadata when local builds
-have run.
+`src/` is a src-layout container. The only installed import package here is
+`golden_line/` and its regular subpackages. `src/__init__.py` marks the template
+source root; explicit setuptools discovery keeps it out of the wheel rather
+than installing a top-level `__init__.py`. `src/golden_line.egg-info/` is
+generated packaging metadata when local builds have run.
 
 - Keep the `pythonpath = [".", "src"]` wiring in `pyproject.toml` aligned with this layout.
 - Put implementation in `src/golden_line/`. Do not move evaluator or artifact logic into `scripts/` or `tests/`.

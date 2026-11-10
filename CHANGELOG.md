@@ -19,6 +19,9 @@
   historical artifacts remain tied to their original producers.
 - Inspect Git state and source bytes without optional index refreshes; evidence
   collection leaves a stat-only, otherwise clean checkout's index unchanged.
+- Limit setuptools discovery to `golden_line` and its regular subpackages.
+  Retain the template source-root marker without installing a stray top-level
+  `__init__.py` beside the public package.
 
 ## 0.6.2 — 2026-11-08
 
