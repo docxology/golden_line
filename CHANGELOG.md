@@ -17,8 +17,9 @@
 - Clarify that evidence-record export validates the bundled aspiration registry,
   not custom registries. Archive, intake, and envelope schemas are unchanged;
   historical artifacts remain tied to their original producers.
-- Inspect Git state and source bytes without optional index refreshes; evidence
-  collection leaves a stat-only, otherwise clean checkout's index unchanged.
+- Inspect Git state and source bytes without optional index refreshes or cached
+  filesystem-monitor shortcuts; leave a stat-only checkout's index unchanged
+  and report stable dirty source separately from a clean release candidate.
 - Limit setuptools discovery to `golden_line` and its regular subpackages.
   Retain the template source-root marker without installing a stray top-level
   `__init__.py` beside the public package.
