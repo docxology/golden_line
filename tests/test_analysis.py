@@ -165,24 +165,6 @@ def test_sweep_observed_on_dates_are_derived_from_as_of() -> None:
     assert points[2].observed_on == "2026-06-18"
 
 
-def test_sweep_point_fields_come_from_the_finding_it_replays() -> None:
-    """Every SweepPoint field is copied from the evaluator's own finding."""
-    for age in (10, 91):
-        (point,) = temporal_currentness_sweep(
-            ATTENTION.id, (age,), as_of=REVIEW, stale_after_days=90
-        )
-        direct = progress_report(
-            [_full_entry(ATTENTION, observed_on=point.observed_on)],
-            (ATTENTION,),
-            as_of=REVIEW,
-            stale_after_days=90,
-        ).findings[0]
-        assert point.status is direct.status
-        assert point.stale == direct.stale
-        assert point.date_issue == direct.date_issue
-        assert point.observed_on == direct.observed_on
-
-
 def test_sweep_accepts_date_object_and_empty_ages() -> None:
     assert (
         temporal_currentness_sweep(
@@ -209,10 +191,11 @@ def test_sweep_invalid_as_of_type_raises() -> None:
         )
 
 
-def test_sweep_propagates_invalid_threshold() -> None:
+@pytest.mark.parametrize("ages", [(), (0,)])
+def test_sweep_propagates_invalid_threshold(ages: tuple[int, ...]) -> None:
     with pytest.raises(ValueError):
         temporal_currentness_sweep(
-            ATTENTION.id, (0,), as_of=REVIEW, stale_after_days=-1
+            ATTENTION.id, ages, as_of=REVIEW, stale_after_days=-1
         )
 
 

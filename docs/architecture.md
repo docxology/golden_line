@@ -130,7 +130,8 @@ a score:
   unclassified horizon raises rather than being silently dropped.
 - `temporal_currentness_sweep` replays one fully-marked, counter-signal-free
   entry through the real evaluator across a range of observation ages, exposing
-  the `TOWARD` → `INQUIRY` currentness boundary.
+  the `TOWARD` → `INQUIRY` currentness boundary. Review dates and staleness
+  controls are admitted before iteration, including a valid empty trajectory.
 - `report_overview` regroups an existing `HorizonReport` by status with intake
   and ignored-token totals, adding no claim the findings did not carry.
 

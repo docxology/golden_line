@@ -22,6 +22,9 @@
 - Limit setuptools discovery to `golden_line` and its regular subpackages.
   Retain the template source-root marker without installing a stray top-level
   `__init__.py` beside the public package.
+- Validate staleness controls before temporal sweeps, including empty age
+  sequences, instead of letting an empty sweep bypass the evaluator's control
+  admission. Valid empty sweeps still return an empty trajectory.
 
 ## 0.6.2 — 2026-11-08
 

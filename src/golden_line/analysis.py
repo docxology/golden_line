@@ -28,7 +28,7 @@ from dataclasses import dataclass
 from datetime import date, timedelta
 
 from .models import Aspiration, HorizonEntry, HorizonReport, HorizonStatus
-from .progress import progress_report
+from .progress import _validate_staleness_threshold, progress_report
 from .registry import GOLDEN_ASPIRATIONS, find_aspiration
 from .validation import _calendar_date
 
@@ -187,12 +187,13 @@ def temporal_currentness_sweep(
     ``as_of`` is required so the sweep is reproducible: supply a calendar
     date object or exact ASCII YYYY-MM-DD text, not a datetime or another ISO
     spelling. ``aspiration_id`` must exist in ``aspirations`` or ``ValueError``
-    is raised.
+    is raised. Staleness controls are validated even when ``ages`` is empty.
     """
     aspiration = find_aspiration(aspiration_id, aspirations)
     if aspiration is None:
         raise ValueError(f"unknown aspiration id: '{aspiration_id}'")
     review_date = _sweep_review_date(as_of)
+    _validate_staleness_threshold(stale_after_days)
 
     points: list[SweepPoint] = []
     for age in ages:
