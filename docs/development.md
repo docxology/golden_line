@@ -65,6 +65,10 @@ reported separately from cleanliness. Run it on the committed release tree.
 Rendering is recorded as `not_run` by this local runner and requires a separate
 external-toolchain receipt.
 
+Source observations disable optional Git index writes and the filesystem-monitor
+cache per command. The collector reads current bytes and dirtiness without
+changing the host Git configuration or refreshing the source index.
+
 Python 3.10–3.15 are supported without runtime dependencies beyond the standard
 library. Release timestamps use `timezone.utc`, available throughout that range,
 with the same timezone-aware ISO representation on every supported interpreter.

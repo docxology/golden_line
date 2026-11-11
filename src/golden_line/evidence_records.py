@@ -2,7 +2,7 @@ import json
 from dataclasses import asdict, dataclass
 
 from .registry import GOLDEN_ASPIRATIONS
-from .validation import MAX_COLLECTION_SIZE
+from .validation import MAX_COLLECTION_SIZE, _is_scalar_text
 
 EVIDENCE_SCHEMA = "golden-line.evidence/1.0"
 
@@ -33,8 +33,8 @@ class AspirationConflict:
 
 
 def _text(value: object, name: str) -> None:
-    if type(value) is not str or not value.strip():
-        raise ValueError(f"{name} must be nonblank text")
+    if type(value) is not str or not _is_scalar_text(value) or not value.strip():
+        raise ValueError(f"{name} must be nonblank Unicode scalar text")
 
 
 def _texts(value: object, name: str, *, required: bool = False) -> None:
@@ -57,6 +57,9 @@ def canonical_evidence_records(
     References identify claims and sources; their contents remain unverified.
     These records never enter progress_report or override another instrument.
     A decision_owner names the human review role, not a machine authorization.
+    IDs and tokens are validated only against bundled GOLDEN_ASPIRATIONS.
+    This is not a custom-registry exporter, even for reused default IDs;
+    retain custom-registry evidence separately.
     """
     registry = {item.id: item for item in GOLDEN_ASPIRATIONS}
     seen: set[str] = set()

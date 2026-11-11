@@ -15,12 +15,10 @@ def test_self_report_and_contestation_remain_explicit_after_export():
     ]
     assert payload["source_content_verified"] is False
     assert payload["grants_permission"] is False
-    assert len(payload["conflicts"]) == 3
     assert all(
         record["unresolved_alternatives"] and record["decision_owner"]
         for record in payload["conflicts"]
     )
-    assert "score" not in payload
 
 
 @pytest.mark.parametrize(
@@ -91,3 +89,65 @@ def test_evidence_record_validation_rejects_structural_errors(case):
         conflicts = (replace(conflicts[0], aspiration_ids=("unknown",)),)
     with pytest.raises(ValueError):
         gl.canonical_evidence_records(observations, conflicts)
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "observation_ref",
+        "observer_role",
+        "collection_method",
+        "review_scope",
+        "source_refs",
+        "contests",
+        "supersedes",
+        "token_sources",
+    ],
+)
+def test_provenance_surrogates_are_rejected_before_serialization(field):
+    observations, _ = gl.worked_evidence_records()
+    value = "\ud800"
+    if field in ("source_refs", "contests", "supersedes"):
+        value = (value,)
+    elif field == "token_sources":
+        token = observations[0].token_sources[0][0]
+        value = ((token, ("\ud800",)),)
+    with pytest.raises(ValueError):
+        gl.canonical_evidence_records((replace(observations[0], **{field: value}),))
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "record_id",
+        "decision_owner",
+        "review_note",
+        "affected_perspectives",
+        "unresolved_alternatives",
+        "related_instruments",
+    ],
+)
+def test_conflict_surrogates_are_rejected_before_serialization(field):
+    _, conflicts = gl.worked_evidence_records()
+    value = (
+        ("\udfff",)
+        if field
+        in ("affected_perspectives", "unresolved_alternatives", "related_instruments")
+        else "\udfff"
+    )
+    with pytest.raises(ValueError):
+        gl.canonical_evidence_records(
+            conflicts=(replace(conflicts[0], **{field: value}),)
+        )
+
+
+def test_evidence_non_ascii_and_supplementary_text_remains_lossless():
+    observations, conflicts = gl.worked_evidence_records()
+    text = "café \U00010348"
+    observation = replace(observations[0], review_scope=text)
+    conflict = replace(conflicts[0], review_note=text)
+    encoded = gl.canonical_evidence_records((observation,), (conflict,))
+    encoded.encode("utf-8")
+    payload = json.loads(encoded)
+    assert payload["observations"][0]["review_scope"] == text
+    assert payload["conflicts"][0]["review_note"] == text

@@ -103,7 +103,7 @@ def test_discarded_contradiction_retained_separately_from_native_digest():
     envelope = gl.report_envelope(report)
     envelope_json = gl.canonical_envelope(envelope)
     native_only = gl.decode_archive(gl.canonical_report(report), envelope_json)
-    assert native_only.intake_archive == ()
+    assert native_only.intake_archive is None
     assert native_only.findings == report.findings
     restored = gl.decode_archive(gl.canonical_archive(report), envelope_json)
     assert restored == report
@@ -152,3 +152,48 @@ def test_original_native_fixture_decodes_without_digest_migration():
     )
     report = gl.decode_archive(fixture["report"], fixture["envelope"])
     assert gl.report_digest(report) == fixture["envelope"]["report_ref"]
+
+
+@pytest.mark.parametrize(
+    "entries",
+    [[], [None], [gl.HorizonEntry(A.id, frozenset(A.markers))]],
+)
+def test_native_only_custody_is_unavailable_not_an_evaluated_empty_log(entries):
+    original = gl.progress_report(entries, as_of="2026-10-20")
+    envelope = gl.canonical_envelope(gl.report_envelope(original))
+    native = gl.canonical_report(original)
+    restored = gl.decode_archive(native, envelope)
+    assert restored.intake_archive is None
+    assert gl.canonical_report(restored) == native
+    assert restored.intake_notes == original.intake_notes
+    for export in (gl.canonical_archive, gl.intake_digest):
+        with pytest.raises(ValueError, match="custody is unavailable"):
+            export(restored)
+    complete = gl.decode_archive(gl.canonical_archive(original), envelope)
+    assert complete == original
+    assert complete.intake_archive is not None
+    if not entries:
+        assert complete.intake_archive == ()
+        assert complete != restored
+
+
+@pytest.mark.parametrize("identifier", [A.id, "local-direction"])
+def test_custom_registry_archive_checks_retained_fields_not_default_vocabulary(
+    identifier,
+):
+    aspiration = replace(A, id=identifier, markers=("local marker",))
+    entry = gl.HorizonEntry(
+        aspiration.id,
+        frozenset(("local marker", "undeclared \U00010348")),
+        frozenset(("undeclared counter",)),
+        note="révisé \U00010348",
+        observed_on="2026-10-20",
+    )
+    report = gl.progress_report([entry], (aspiration,), as_of="2026-10-20")
+    restored = gl.decode_archive(
+        gl.canonical_archive(report),
+        gl.canonical_envelope(gl.report_envelope(report)),
+    )
+    assert restored == report
+    assert restored.findings[0].status is gl.HorizonStatus.TOWARD
+    assert restored.findings[0].ignored_markers == ("undeclared \U00010348",)

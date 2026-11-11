@@ -26,7 +26,12 @@ from .models import (
 )
 from .registry import GOLDEN_ASPIRATIONS
 from .serialization import registry_digest
-from .validation import MAX_COLLECTION_SIZE, validate_registry
+from .validation import (
+    MAX_COLLECTION_SIZE,
+    _calendar_date,
+    _is_scalar_text,
+    validate_registry,
+)
 from .version import REGISTRY_VERSION
 
 #: The stages :func:`progress_report` runs, in order. Named here so the count
@@ -66,13 +71,13 @@ class IntakeClassification:
 
 
 def _review_date(as_of: str | date | None) -> date:
-    """Resolve the review date; a string must be a valid ISO date."""
+    """Resolve the review date; strings must be ASCII YYYY-MM-DD."""
     if as_of is None:
         # Deliberate local calendar date: a review date is a local-day fact,
         # not an instant, so timezone semantics do not apply.
         return date.today()  # noqa: DTZ011
     if isinstance(as_of, str):
-        return date.fromisoformat(as_of)
+        return _calendar_date(as_of)
     if type(as_of) is date:
         return as_of
     raise TypeError("as_of must be an ISO date string, a date, or None")
@@ -98,17 +103,17 @@ def _normalize_entry(entry: Any, index: int) -> tuple[HorizonEntry | None, str |
     """
     if not isinstance(entry, HorizonEntry):
         return None, f"entry #{index} was set aside: expected a HorizonEntry record"
-    if not isinstance(entry.aspiration_id, str) or not entry.aspiration_id.strip():
+    if not _is_scalar_text(entry.aspiration_id) or not entry.aspiration_id.strip():
         return (
             None,
             f"entry #{index} was set aside: aspiration_id must be non-blank text",
         )
-    if not isinstance(entry.note, str):
+    if not _is_scalar_text(entry.note):
         return (
             None,
             f"entry #{index} for '{entry.aspiration_id}' was set aside: note must be text",
         )
-    if not isinstance(entry.observed_on, str):
+    if not _is_scalar_text(entry.observed_on):
         return None, (
             f"entry #{index} for '{entry.aspiration_id}' was set aside: observed_on must be text"
         )
@@ -128,7 +133,7 @@ def _normalize_entry(entry: Any, index: int) -> tuple[HorizonEntry | None, str |
             ):
                 raise TypeError
             tokens = tuple(value)
-            if not all(isinstance(token, str) for token in tokens):
+            if not all(_is_scalar_text(token) for token in tokens):
                 raise TypeError
             normalized[field_name] = frozenset(tokens)
         except (TypeError, ValueError):
@@ -267,7 +272,7 @@ def _staleness(
             True,
         )
     try:
-        observed_on = date.fromisoformat(entry.observed_on)
+        observed_on = _calendar_date(entry.observed_on)
     except ValueError:
         return (
             False,
@@ -395,6 +400,11 @@ def progress_report(
     ``progress_report(entries)`` remains the compact call form. The optional
     staleness parameters add temporal review, while the returned report always
     records registry and review provenance for reproducible comparison.
+    ``as_of`` strings must be exact ASCII YYYY-MM-DD calendar dates; calendar
+    date objects are accepted, but datetimes are not. Noncanonical observation
+    dates cannot establish enabled currentness. Surrogate-bearing entry text
+    is malformed and set aside before membership or duplicate handling.
+    Fresh evaluation always retains available intake, including an empty tuple.
     """
     aspiration_list = validate_registry(aspirations)
     _validate_staleness_threshold(stale_after_days)
