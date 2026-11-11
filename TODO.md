@@ -139,3 +139,7 @@ whether a marker is true in the world.
   still require human review; the evaluator does not aggregate disagreements.
 - Run the external publication engine's rendered PDF/HTML audit whenever the
   manuscript is published or that engine changes.
+
+## Workflowz review — 2026-11-10
+
+Coverage note: this read-only review found no concrete, packet-grounded improvement that survived contextual inspection. It covered the supplied project guidance, README, TODO, package/development configuration, runtime pin, and the listed source/test excerpts; it did not inspect every line of the 142-file repository or execute the suite, so this is not a whole-repository correctness certification. Re-review on a concrete failure or source change.
