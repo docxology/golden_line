@@ -63,6 +63,10 @@ manuscript is the long form of that map. This work only links to those
 boundaries and does not copy their prose or code; none of those repositories
 has to be present for anything in this one to run.
 
+![Golden Line cover illustration: attention before production, useful transfer across a bridge, ordinary repair, and technical capability held inside human flourishing](docs/assets/golden-line-cover-readme.jpg)
+
+![Golden Line record-flow architecture: staged HorizonEntry intake and IntakeDisposition sidecar custody, 9-entry GOLDEN_ASPIRATIONS registry and 7 structural invariants, 3-stage progress_report evaluator with temporal window and counter-signal precedence, and directional readings, canonical_archive digests, and line.report-envelope/1.0 witness envelopes](docs/assets/architecture-overview.svg)
+
 ## Common report envelope
 
 For co-registration beside the other line instruments, `report_envelope` wraps
