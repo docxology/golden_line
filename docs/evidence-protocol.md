@@ -67,7 +67,7 @@ deterministic SVG + PNG + JSON registries
         ↓
 check_artifacts.py
         ↓
-template PDF/HTML rendering and release audit
+template PDF, HTML, and EPUB rendering and release audit
 ```
 
 Run `uv run python scripts/build_figures.py` and then

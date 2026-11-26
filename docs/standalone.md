@@ -15,8 +15,8 @@ Links to them are orientation, not dependency.
 
 ## What it can do alone
 
-All four canonical gates in [`docs/development.md`](docs/development.md) run
-from the copy alone, offline:
+After installing the locked environment, the [local checks](development.md)
+run offline without any sibling project. They include:
 
 - the test suite with its coverage floor,
 - the registry structural battery,
@@ -29,11 +29,10 @@ hard requirement of the PNG step and fails loudly when absent.
 
 ## What it cannot do alone
 
-It cannot produce the typeset PDF/HTML manuscript. Rendering, rendered-output
+The PDF, HTML, and EPUB require the external engine. Rendering, rendered-output
 validation, and the strict publication audit belong to the separate publication
 engine at [`docxology/template`](https://github.com/docxology/template), which
-you clone wherever you like — see `docs/development.md` for the
-path-independent invocation. The generated publishing-status block in
+you clone wherever you like — use the [pinned render recipe](development.md#rendering-the-manuscript-external-toolchain). The generated publishing-status block in
 `README.md` is produced by that same toolchain and cannot be regenerated from
 this repository; `docs/manuscript/config.yaml` is the source of truth it renders.
 
@@ -59,8 +58,7 @@ repository rather than a relative path out of this one.
 ## Validation
 
 Use the canonical local validation commands in
-[`docs/development.md`](docs/development.md). Generated figures must be rebuilt
+[development guide](development.md). Generated figures must be rebuilt
 before the artifact gate; `output/` is ignored and disposable.
 
-The local artifact gate is necessary but not sufficient. Rendered PDF/HTML
-outputs must also pass the template engine's validation before publication.
+The local artifact gate is necessary but not sufficient. The rendered PDF, HTML, and EPUB must also pass the template engine's validation before publication.

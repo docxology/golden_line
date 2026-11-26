@@ -7,6 +7,11 @@ Golden Line is a small, inspectable directional instrument. The registry is in
 `src/golden_line/analysis.py`; and the reproducible figure builders are in the
 `src/golden_line/figures/` package (invoked through `scripts/build_figures.py`).
 
+- [Standalone guide](standalone.md) for a fresh checkout and its boundaries.
+- [Manuscript source](manuscript/README.md) and [pinned render recipe](development.md#rendering-the-manuscript-external-toolchain).
+- [Claim boundaries](claim_boundaries.md) and [optional evidence records](evidence-records.md).
+- [Open work](TODO.md), [release index](releases/README.md), and the [changelog](../CHANGELOG.md).
+
 - [architecture.md](architecture.md) — module map, the staged reporting flow,
   the descriptive-analysis layer, and digest semantics.
 - [invariants.md](invariants.md) — the seven structural checks and their

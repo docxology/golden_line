@@ -59,7 +59,7 @@ deterministic SVG, PNG, and JSON registries
         ↓
 check_artifacts.py
         ↓
-template PDF/HTML render and release audit
+template PDF, HTML, and EPUB render and release audit
 ```
 
 `check_artifacts.py` verifies the registry version and digest, the expected

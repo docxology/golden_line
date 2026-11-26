@@ -1,8 +1,10 @@
 # Development
 
-Use the standard-library implementation through `uv`:
+Use uv and Python 3.11 or newer. The CI matrix exercises Python 3.11 through
+3.15. Install librsvg before running the local checks:
 
 ```bash
+uv sync --locked
 uv run pytest tests/ --cov=src --cov-branch --cov-report=term-missing
 uv run python scripts/check_registry.py
 uv run python scripts/build_figures.py
@@ -69,13 +71,6 @@ Source observations disable optional Git index writes and the filesystem-monitor
 cache per command. The collector reads current bytes and dirtiness without
 changing the host Git configuration or refreshing the source index.
 
-Python 3.10–3.15 are supported without runtime dependencies beyond the standard
-library. Release timestamps use `timezone.utc`, available throughout that range,
-with the same timezone-aware ISO representation on every supported interpreter.
-The Python 3.10 requirement applies to test imports and the release-evidence CLI
-as well as the evaluator. Do not remove an interpreter from CI to hide a runtime
-compatibility defect.
-
 The no-sibling-checkout CI matrix runs the declared supported Python releases
 with a locked dependency resolution and archives evidence keyed by source SHA,
 including failed runs. A fresh checkout needs only this repository, uv, and
@@ -98,7 +93,7 @@ artifacts. Refresh them with `uv run python scripts/build_figures.py` and
 The figure build requires librsvg as described above.
 
 `docs/releases/v0.4.0.md`, `docs/releases/v0.5.0.md`,
-`docs/releases/v0.6.0.md`, and `docs/reviews/2026-10-20.md` are historical
+`docs/releases/v0.6.0.md`, `docs/releases/v0.6.1.md`, and `docs/reviews/2026-10-20.md` are historical
 receipts, not current verification.
 Keep their original wording and identities, including original British spelling.
 Likewise, `tests/fixtures/native_report_v040.json` is a historical digest-bound
@@ -111,48 +106,42 @@ refreshes an old release's evidence.
 
 ## Rendering the manuscript (external toolchain)
 
-The typeset PDF and HTML are the one thing this repository cannot produce by
-itself. Rendering is done by a separate publication engine,
-<https://github.com/docxology/template>, which you clone wherever you like.
-This is a declared external dependency: without it, the four gates above still
-pass and the package, tests, and figures are all still real; you simply have no
-rendered PDF or HTML.
+Render the [canonical manuscript](manuscript/README.md) with the external
+[docxology/template](https://github.com/docxology/template) engine. Run the
+local validation and figure build above first. Install Python 3.14 for the
+pinned engine, Pandoc with a compatible `pandoc-crossref`, and XeLaTeX
+with its packages on `PATH`.
 
-Nothing below assumes a particular directory layout. Set the two roots to
-wherever the two repositories actually live:
+Run from the root of a committed Golden Line checkout named `golden_line`.
+Use an unused location for the engine clone:
 
 ```bash
-GOLDEN_LINE_ROOT=$(pwd)                 # this repository, from its root
-TEMPLATE_ROOT=${TEMPLATE_ROOT:-$HOME/src/template}
+GOLDEN_LINE_ROOT="$(pwd -P)"
+TEMPLATE_ROOT="$GOLDEN_LINE_ROOT/../golden-line-render-template"
+git clone https://github.com/docxology/template.git "$TEMPLATE_ROOT"
+git -C "$TEMPLATE_ROOT" switch --detach 87704feae0a4490ef7dad9c931d268e8c30273c2
 
-git clone https://github.com/docxology/template.git "${TEMPLATE_ROOT}"   # once
-
-# Make this repository visible to the engine under a qualified project name.
-# External sources require a managed lifecycle leaf for provenance validation.
-mkdir -p "${TEMPLATE_ROOT}/projects/working"
-ln -sfn "${GOLDEN_LINE_ROOT}" "${TEMPLATE_ROOT}/projects/working/golden_line"
-
-cd "${TEMPLATE_ROOT}"
-uv run python scripts/pipeline/stage_03_render.py --project working/golden_line
-uv run python scripts/pipeline/stage_04_validate.py --project working/golden_line
-uv run python -m infrastructure.validation.cli pdf \
-  projects/working/golden_line/output/pdf/golden_line_combined.pdf
+cd "$TEMPLATE_ROOT"
+uv sync --locked --no-dev --python 3.14
+mkdir -p projects/working
+ln -s "$GOLDEN_LINE_ROOT" projects/working/golden_line
+uv run --no-sync python scripts/pipeline/stage_03_render.py --project working/golden_line --skip-manuscript-hydration
+uv run --no-sync python scripts/pipeline/stage_04_validate.py --project working/golden_line
 ```
 
-The qualified name is the path under `projects/` (`working/golden_line` here).
-The lifecycle alias supplies a repository boundary for rendered provenance;
-it does not change this repository's public visibility. A bare direct-child
-link can render but fails the current engine's provenance validation.
-Use a Git-backed checkout or detached worktree of the engine: current rendered
-provenance also binds cached stage implementation files, which an archive-only
-export cannot supply.
+The lifecycle alias supplies the project path for provenance. The hydration
+flag preserves the authored source. Keep both Git indexes available for the
+provenance checks. The project checkout receives:
 
-The engine's strict `publication-audit` and rendered methods gates are
-public-release checks that run in the engine checkout, not here. Their
-repository-boundary findings describe where a project is linked from, not
-whether its evaluator or manuscript is sound. Do not weaken the public
-validator or describe this project as published; use the local artifact gate
-plus the rendered PDF/HTML validation above.
+- `output/pdf/golden_line_combined.pdf`
+- `output/web/index.html`
+- `output/epub/golden_line_combined.epub`
+- `output/reports/validation_report.json` and
+  `output/reports/rendered_provenance.json`
+
+Stage 04 checks the rendered structure and source provenance. The engine's
+strict publication audit is a separate release check. These checks do not
+establish the truth of an observation or the usefulness of an aspiration.
 
 The manuscript keeps its compact publication geometry in
 `docs/manuscript/config.yaml` (`metadata.geometry: "left=0.33in,right=0.33in,top=0.58in,bottom=0.58in"`).

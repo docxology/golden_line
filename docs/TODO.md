@@ -82,12 +82,12 @@
   instruments' envelopes, cross-line relations, append-only history) is a
   separate work by design and is deliberately not implemented in this
   repository. Golden Line's contribution is the envelope export above; see
-  [docs/correspondence.md](docs/correspondence.md).
+  [correspondence](correspondence.md).
 
 ## Current validation evidence
 
 The applicable evidence boundary is the four local commands named in
-[`docs/development.md`](docs/development.md) — the test suite (which includes
+[development guide](development.md) — the test suite (which includes
 the print-legibility gate over the figures), the registry battery, the
 deterministic figure build, and the artifact gate — followed by rendered
 PDF/HTML validation in a checkout of the external publication engine
