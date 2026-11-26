@@ -169,38 +169,14 @@ Line for positive operating discipline, and White Line for absence,
 unknowability, and restraint. A Golden Line status cannot substitute for any of
 those instruments.
 
-## Configuration and source of truth
+## Documentation
 
-The live metadata is in `docs/manuscript/config.yaml`; its standalone shape is shown
-in `docs/manuscript/config.yaml.example`. Registry and evaluator truth lives in
-`src/golden_line/`, while generated figures and registry snapshots live under
-`output/figures/` and must be rebuilt rather than hand-edited.
-
-## Rendering: one declared external dependency
-
-Everything this repository claims for itself runs from this repository alone —
-the package, the test suite, the registry battery, the deterministic figure
-build, and the artifact gate. No network, no sibling project.
-
-Only the typeset PDF/HTML manuscript needs an outside tool: the publication
-engine at [`docxology/template`](https://github.com/docxology/template), which
-you clone wherever you like. That is a declared external dependency, not a
-hidden one, and the path-independent invocation is in
-[`docs/development.md`](docs/development.md). Without it you still get the
-package, the tests, the figures, and the artifact gate; you do not get a
-rendered PDF or HTML.
-
-## Validation and publication boundaries
-
-The local artifact gate checks source-to-figure/manuscript consistency and is
-the gate this repository owns. The template renderer and its PDF/HTML
-validation check rendered structure and belong to the external toolchain, so a
-checkout without that toolchain cannot run them — that is a stated limit, not a
-passing result. The strict public publication audit likewise runs in the
-template checkout, and its repository-path findings are not evidence that the
-evaluator or manuscript is unsound. None of these gates proves that an
-aspiration is universally correct or that a directional reading is a safety or
-permission decision.
+- [Documentation index](docs/README.md) for the instrument, its setup,
+  evidence boundaries, and release history.
+- [Manuscript source](docs/manuscript/README.md) for publication configuration,
+  ordered sections, bibliography, and cover.
+- [Local validation and pinned render recipe](docs/development.md) for
+  figure generation, native evidence, and PDF, HTML, and EPUB outputs.
 
 ## Publication and rendering
 
@@ -254,15 +230,11 @@ third-party dependencies. The figure build additionally needs one system tool,
 `apt-get install librsvg2-bin`); `scripts/build_figures.py` raises a clear
 error rather than degrading silently when it is missing.
 
-Run the four canonical local gates in [`docs/development.md`](docs/development.md).
-The executable contract is covered by the `tests/` suite, run with
-`uv run pytest tests/ --cov=src --cov-branch --cov-report=term-missing`.
-`check_artifacts.py` is the local source-to-artifact boundary: it verifies that
-generated JSON, SVG, PNG, figure labels, registry digests, and manuscript
-citations still agree. Rendered PDF/HTML validation belongs to the external
-publication engine at [`docxology/template`](https://github.com/docxology/template),
-cloned wherever you like, and runs after the local artifact chain passes; the
-path-independent invocation is in [`docs/development.md`](docs/development.md).
+Install the locked development environment with `uv sync --locked`.
+The [development guide](docs/development.md) lists the native checks and the
+commands to render and validate the manuscript. The native artifact gate
+binds the generated figures and manuscript references to the registry and
+figure code.
 
 See [AGENTS.md](AGENTS.md) for the working contract.
 
